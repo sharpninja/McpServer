@@ -1,0 +1,43 @@
+# TR-MCP-AUDIT
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-AUDIT-001
+
+**Audited Copilot Client** — `AuditedCopilotClient` decorates `ICopilotClient`. Before each Copilot invocation: determines affected workspaces, creates `in_progress` session log entries per workspace. After invocation: logs `completed` entries with result and actions taken. Action type: `copilot_invocation`. Registered as DI decorator so all server-initiated Copilot calls are audited.
+**Status:** ✅ Complete
+
+**Covered by:** `AuditedCopilotClient`, `Program.cs` (`ICopilotClient` decorator wiring), `McpStdioHost` (`ICopilotClient` decorator wiring), `CopilotServiceCollectionExtensions`
+Scope: layer-1+
+
+## TR-MCP-AUDIT-002
+
+**Versioned compressed generic audit payloads** — Add nullable versioned GZip UTF-8 columns for the four generic audit JSON payloads on SQLite, SQL Server, and PostgreSQL. Preserve existing text columns and read legacy rows without a historical rewrite.
+**Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] SQLite, PostgreSQL and SQL Server migrations add nullable versioned GZip UTF-8 storage for all four generic audit JSON payloads.
+- [ ] Existing text columns remain readable, and migration does not rewrite historical text rows.
+
+## TR-MCP-AUDIT-003
+
+**Restricted SQL Server audit runtime role** — The SQL Server migration creates a runtime role with ordinary application DML but denies update and delete on both audit ledgers and writes to EF migration history. With AutoMigrate false, HTTP and stdio startup reject pending migrations before serving runtime work.
+**Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The SQL Server migration creates a runtime role with ordinary application DML and denies UPDATE and DELETE on both audit ledgers and writes to EF migration history.
+- [ ] With AutoMigrate=false, HTTP and stdio startup reject pending migrations before serving runtime work.
+
+## TR-MCP-AUDIT-004
+
+**Append-only unversioned audit delivery and export policy** — Project history excludes secrets and automatic operational audit. This does NOT make audit local-only: every host retains permanent local audit and an append-only outbox delivers sanitized records to the hub unversioned ledger independently of project commits. AuditRecord key=(OriginNodeId,RecordId UUID); fields ProjectId,EntityKind,EntityId,OriginSequence int64,OccurredUtc,Actor,Action,PayloadVersion,PayloadHash,Payload. POST audit/batches validates token/project, inserts atomically by key and returns per-record durable receipts. Same key/hash is already_received; same key/different hash=409 audit_id_conflict. No UPDATE/DELETE permission. Local pruning is forbidden. Migration backfills TODO and generic audit history with counts/hashes and receipts. Credential values are excluded at capture, not silently replicated.
+**Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given batchE1 was accepted and its reply lost, when retried, then one row and the same payload-hash receipt remain.
+- [ ] Given E1 key with a changed payload, when submitted, then409 audit_id_conflict performs no overwrite.
+- [ ] Given a wiki export or project clone, when generated, then it excludes credentials and operational audit rows while independent hub delivery remains enabled.
+

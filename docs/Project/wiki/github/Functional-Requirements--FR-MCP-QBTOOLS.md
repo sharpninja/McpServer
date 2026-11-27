@@ -1,0 +1,59 @@
+# FR-MCP-QBTOOLS
+
+[Back to Functional Requirements](Functional-Requirements)
+
+## FR-MCP-QBTOOLS-001 QBAgent external file tools
+
+QBAgent exposes agent-side external tools read_file, write_file, edit_file, and list_files that operate on the workspace through the MCP client (server RepoFileService), so the server path-traversal/reparse/allowlist safety governs all file access from both planes.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] read_file/write_file/edit_file/list_files are registered as non-mcp_ external AITools and execute in the QBAgent loop.
+- [ ] All four route through the MCP client to the server RepoFileService; path traversal and out-of-root access are rejected server-side.
+
+## FR-MCP-QBTOOLS-002 QBAgent run_powershell tool
+
+QBAgent exposes a run_powershell external tool backed by the in-process HostedPowerShellSessionManager runspace, returning output/error/exit streams.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] run_powershell executes a command in a hosted runspace and returns captured output and error streams.
+
+## FR-MCP-QBTOOLS-003 QBAgent run_bash tool (optional Git Bash)
+
+QBAgent exposes an optional run_bash external tool that resolves bash.exe (Git for Windows) from PATH via ProcessRunner; when bash is unavailable it returns a structured unavailable result rather than failing the agent. PowerShell remains primary.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] When bash.exe is present, run_bash executes a command and returns stdout/stderr/exit code.
+- [ ] When bash.exe is absent, run_bash returns available=false without throwing.
+
+## FR-MCP-QBTOOLS-004 QBAgent git tool (full, push to origin)
+
+QBAgent exposes a git external tool supporting status, diff, log, branch, add, commit, checkout, push, and reset via ProcessRunner. Push targets the existing origin remote name only; arbitrary remotes/refspecs from the model are rejected. Mutating git on the internal plane is transaction-gated.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Read subcommands (status/diff/log/branch) run against the workspace repo and return output.
+- [ ] add/commit/checkout/reset/push are supported; push targets origin only and never a non-origin remote.
+- [ ] Unknown subcommands are rejected.
+
+## FR-MCP-QBTOOLS-005 Server-side mcp_repo_edit, mcp_bash, mcp_git tools
+
+The MCP tool adapter exposes server-side mcp_repo_edit, mcp_bash, and mcp_git tools (mcp_ prefix) executed server-side by QuadBrain via the internal-tool executor; mutating variants are transaction-gated. One core implementation per capability is shared with the agent-side external tools.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] mcp_repo_edit/mcp_bash/mcp_git are present in the adapter tool surface with mcp_ prefix.
+- [ ] Mutating mcp_ tools are gated through the turn transaction coordinator and share the single core capability with the external plane.
+
+## FR-MCP-QBTOOLS-006 RepoFileService targeted edit
+
+IRepoFileService gains EditAsync(relativePath, oldString, newString, expectedOccurrences?) performing a targeted string replacement with the same path-safety, audit, and change-event behavior as Write; ambiguous or missing matches fail; transactional compensation reuses the snapshot/restore path.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A unique oldString is replaced; a missing oldString fails; an ambiguous match fails unless replaceAll/expectedOccurrences is set.
+- [ ] Transaction-gated EditAsync rolls back to the original content when the transaction is rejected.
+
+## FR-MCP-QBTOOLS-007 QBAgent registers full tool and skill surface
+
+QBAgent registers the full external tool set (file/powershell/bash/git) plus the skill tools on every run via baseOptions.ChatOptions.Tools, and injects the skill discovery list into the system prompt.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every QBAgent run exposes the external tool set and the skill tools to the Agent Framework loop.
+

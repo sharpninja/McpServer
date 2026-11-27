@@ -1,0 +1,48 @@
+# TR-MCP-AGENT-PARITY
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-AGENT-PARITY-010
+
+**TR-MCP-AGENT-PARITY-010** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+**Covered by:** FR: FR-MCP-AGENT-PARITY-001
+**Status:** deferred
+Scope: layer-1+
+
+## TR-MCP-AGENT-PARITY-011
+
+**TR-MCP-AGENT-PARITY-011** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+**Covered by:** FR: FR-MCP-AGENT-PARITY-002
+**Status:** deferred
+Scope: layer-1+
+
+## TR-MCP-AGENT-PARITY-012
+
+**TR-MCP-AGENT-PARITY-012** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+**Status:** deferred
+Scope: layer-1+
+
+## TR-MCP-AGENT-PARITY-013
+
+**TR-MCP-AGENT-PARITY-013** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+**Status:** deferred
+Scope: layer-1+
+
+## TR-MCP-AGENT-PARITY-020
+
+**TR-MCP-AGENT-PARITY-020** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+**Status:** deferred
+Scope: layer-1+
+
+## TR-MCP-AGENT-PARITY-020-027
+
+**TR-MCP-AGENT-PARITY-020-027** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+**Status:** deferred
+Scope: layer-1+
+
+## TR-MCP-AGENT-PARITY-030
+
+**TR-MCP-AGENT-PARITY-030** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+**Status:** deferred
+Scope: layer-1+
+

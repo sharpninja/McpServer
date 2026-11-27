@@ -1,0 +1,19 @@
+# TEST-MCP-QBOLLAMA
+
+[Back to Testing Requirements](Testing-Requirements)
+
+## TEST-MCP-QBOLLAMA
+
+### TEST-MCP-QBOLLAMA-001
+
+QuadBrainOllamaEndpointIntegrationTests exercise the OpenAI-compatible QuadBrain endpoint against a real local Ollama server that OllamaServerFixture adopts or starts (FR-MCP-QBOLLAMA-002), proving FR-MCP-QBOPENAI-001 runs the normal Creativity, Logic and Arbiter workflow without faking the LLM calls, on Windows and on Linux once InstallOllama has provisioned Ollama (TR-MCP-NUKE-016).
+
+**Acceptance Criteria:**
+- [ ] ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots (prompts "Hello" and "Create Hello World in C++"): with the local Ollama default model assigned to all four slots, each prompt triggers the normal Creativity, Logic and Arbiter workflow through POST /v1/chat/completions and returns non-empty content; every brain call uses that model at the Ollama endpoint, and the session log captures the brain outputs on the turn.
+- [ ] QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse (prompt "Hello"): QBAgent displays the QuadBrain response it received, never a placeholder; its transcript names the model QuadBrain and the QBrainAi endpoint and never the Ollama model id or endpoint.
+- [ ] ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn: content, reasoning and reasoning_content outputs are persisted to the turn's processing dialog.
+- [ ] The class runs against a real local Ollama: OllamaServerFixture adopts a server already answering or starts one from a discovered executable and stops only what it started (FR-MCP-QBOLLAMA-002); on LAB-OMARCHY the executable is the one InstallOllama provisions (TR-MCP-NUKE-016; PLAN-SESSIONTRIAGEFIX-001 B13, triage-report-680916ed).
+
+### TEST-MCP-QBOLLAMA-002
+
+Validates FR-MCP-QBOLLAMA-002 and TR-MCP-QBOLLAMA-002 through fake-driven unit tests of OllamaServerController that run in the default gate without a real Ollama binary. Cases: (1) a probe that succeeds immediately reports WasAlreadyRunning true and StartedByController false and never invokes the launcher; (2) StopAsync after that case does not terminate the pre-existing server; (3) a probe that fails then succeeds invokes the launcher exactly once, reports StartedByController true, and polls until reachable; (4) a resolver returning no executable throws an InvalidOperationException whose message names the InstallOllama target and never invokes the launcher; (5) a probe that never succeeds throws after the configured timeout and terminates the process the controller started, leaving no orphan; (6) StopAsync is idempotent and terminates a controller-started process exactly once across repeated calls.

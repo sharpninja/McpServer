@@ -17,7 +17,10 @@ You are setting up QBrain.AI for an operator. Your job is to obtain, install, co
    - `setup-choices.manifest` (YAML or JSON)
    - `setup-implementation.plan` (Markdown or YAML)
 3. Every later step loads those files and follows them. Do not re-ask answered questions unless the operator changes a choice.
-4. **PowerShell-only + mandatory PowerShell.MCP.** Use PowerShell 7 (`pwsh`) for all Windows and Linux automation after PowerShell exists. For every ordinary `pwsh` invocation, route through **PowerShell.MCP >= 1.14.0** (`execute_command` / host-qualified name such as `mcp__powershell__execute_command` or `mcp__pwsh__execute_command`). **Obtain substep (Windows):** assert `Get-Command pwsh`; then `Get-InstalledPSResource PowerShell.MCP` (or `Get-Module -ListAvailable PowerShell.MCP`) and require version **>= 1.14.0**; if missing/below, `Install-PSResource PowerShell.MCP -Version 1.14.0 -Scope CurrentUser` (or newer) / environment-sanctioned bootstrap; re-assert version before any other setup step. If it cannot be installed or the host tool is unavailable, stop with `POWERSHELL_MCP_UNAVAILABLE` rather than spawning ad-hoc unmanaged shells. Invoke native OS utilities only *through* that PowerShell.MCP/`pwsh` path (e.g. `systemctl`, `apt-get`, `journalctl`, `ss`). Do not author bash/sh/cmd playbooks for ordinary setup steps. Do not use Python. **Only exception:** installing PowerShell itself on a host that lacks `pwsh` (documented one-time bootstrap below).
+4. **PowerShell-only; PowerShell.MCP on Windows.** Use PowerShell 7 (`pwsh`) for all Windows and Linux automation after PowerShell exists.
+   - **Windows:** route every ordinary `pwsh` invocation through **PowerShell.MCP >= 1.14.0** (`execute_command` / host-qualified name such as `mcp__powershell__execute_command` or `mcp__pwsh__execute_command`). **Obtain substep (Windows):** assert `Get-Command pwsh`; then `Get-InstalledPSResource PowerShell.MCP` (or `Get-Module -ListAvailable PowerShell.MCP`) and require version **>= 1.14.0**; if missing/below, `Install-PSResource PowerShell.MCP -Version 1.14.0 -Scope CurrentUser` (or newer) / environment-sanctioned bootstrap; re-assert version before any other setup step. If it cannot be installed or the host tool is unavailable, stop with `POWERSHELL_MCP_UNAVAILABLE` rather than spawning ad-hoc unmanaged shells.
+   - **Linux:** run ordinary automation as `pwsh -NoProfile -NonInteractive` directly; PowerShell.MCP routing is not required on Linux, and its absence there is not `POWERSHELL_MCP_UNAVAILABLE`.
+   - Invoke native OS utilities only *through* `pwsh` (on Windows, through PowerShell.MCP) (e.g. `systemctl`, `apt-get`, `journalctl`, `ss`, `tar`). Do not author bash/sh/cmd playbooks for ordinary setup steps. Do not use Python. **Only exception:** installing PowerShell itself on a host that lacks `pwsh` (documented one-time bootstrap below).
 5. After plugins exist, call MCP only through the host-matched plugin (`lib/repl-invoke.ps1` or `skills/*/scripts/invoke.ps1`). Do not default to raw `:7147` REST or a broken box connector.
 6. If an intake combination is unsupported or blocked pending validation, stop, explain the conflict, and propose remediation. Do not improvise a third path.
 7. Never publish or paste private operator profiles / add-profile skills into public repos.
@@ -58,18 +61,18 @@ Ask these questions one group at a time. Collect follow-ups for each answer.
 
 #### D. Service installation target
 
-- Choose one: `WindowsService` | `systemd` | `linux-publish-swap` | `other`
+- Choose one: `WindowsService` | `systemd` | `other`
 - Follow-ups:
   - WindowsService: service name (default `QBrainAi`), install path (default `C:\ProgramData\QBrainAi`), port (default `7147`), **runAs** (supported by `UpdateService` today: `LocalSystem` only). If operator wants NetworkService/custom: stop with `WINDOWS_RUNAS_UNSUPPORTED` -- UpdateService/EnsureServiceRegistration sets ImagePath/start mode only and does not provision alternate accounts/credentials.
-  - systemd: **blocked pending validation** (no `sd_notify` / `Type=notify`). Stop with `SYSTEMD_PENDING_VALIDATION` or redirect to `other` (`service-other`) / stop-only. Do **not** redirect to `linux-publish-swap` (also blocked).
-  - linux-publish-swap: **blocked pending inventory/validation** (`LINUX_PUBLISH_SWAP_PENDING_VALIDATION`). Prior draft recipes were not executable end-to-end; do not select this as the primary service playbook until a validated lifecycle lands. Redirect to `other` only with operator-owned, tested commands, or stop.
-  - other: describe exactly (IIS, Docker, manual console, Scheduled Task, etc.). On Linux, this is the only non-blocked service kind until publish-swap is validated.
+  - systemd (Linux): `./build.ps1 UpdateService` updates an **existing** systemd unit (see `service-systemd`). Ask: unit name (default `mcpserver.service`), install path (default `/opt/mcpserver/app`), port (default `7147`), recovery archive root (default `/var/backups/mcpserver`), service account (the unit's `User=`; recorded in `service.runAs`, never changed by UpdateService), and whether the unit already exists and is loaded. The product does not provision the account or the unit: if the unit is missing, the operator provisions both (operator-owned, recorded in the plan) to the `service-systemd` preconditions before Install, or setup stops with `SYSTEMD_UNIT_UNSUPPORTED`.
+  - publish/swap on Linux (an operator asking for the earlier `linux-publish-swap` kind): superseded by `systemd`, because UpdateService publishes before it stops the unit, then replaces and restores in place. Redirect to `systemd` with `LINUX_PUBLISH_SWAP_SUPERSEDED`; do not run publish/swap scripts.
+  - other: describe exactly (IIS, Docker, manual console, Scheduled Task, etc.).
 
 #### E. Host, workspace, and plugin roots
 
 - Host OS: `windows` | `linux` (typed field; do not infer solely from service kind)
-- MCP workspace path (example on lab: `F:\github\QBrainAi`)
-- Plugin root(s) for selected agents (example: `F:\github\mcpserver-grok-plugin`)
+- MCP workspace path (example on lab: `F:\github\QBrainAi`; Linux lab: `/home/sharpninja/github/McpServer`)
+- Plugin root(s) for selected agents (example: `F:\github\mcpserver-grok-plugin`; on Linux, an absolute path such as `/home/<operator>/github/<plugin-repo>`)
 - Endpoint: scheme/host/port (default port `7147` unless intake overrides); record as `endpoint.port` / `endpoint.baseUrl`
 - Product/version pin if known (GitVersion / deployment version string)
 
@@ -122,14 +125,14 @@ storage:
     #   authMode: integrated|sql
 workspacePath: <path>
 service:
-  kind: windowsService|systemd|linux-publish-swap|other
-  name: <string>                 # Windows service / unit name
-  installPath: <path>            # e.g. C:\ProgramData\QBrainAi or /opt/mcpserver
+  kind: windowsService|systemd|other
+  name: <string>                 # Windows service name, or systemd unit name (e.g. mcpserver.service)
+  installPath: <path>            # e.g. C:\ProgramData\QBrainAi or /opt/mcpserver/app
   port: 7147
-  runAs: LocalSystem|<linux-user>|unsupported
-  executable: <string or null>   # Windows: QBrainAi.Support.Mcp.exe
-  runtimeDir: <path or null>     # Linux publish-swap: directory containing DLL + appsettings.yaml (often <installPath>/current)
-  details: {}
+  runAs: LocalSystem|<linux-user>|unsupported   # Windows: LocalSystem only; systemd: the unit's User= account (kept by UpdateService)
+  executable: <string or null>   # Windows: QBrainAi.Support.Mcp.exe; Linux: QBrainAi.Support.Mcp (extensionless apphost)
+  runtimeDir: null               # unused; it served the superseded linux-publish-swap kind
+  details: {}                    # systemd: backupRoot (default /var/backups/mcpserver)
 playbooks:
   agents: [<playbook-id>, ...]   # one per selected family
   agentCombo: agent-single|agent-multi
@@ -148,7 +151,7 @@ Must include:
 2. Ordered steps: Obtain -> Install -> Configure -> Verify
 3. For each step: commands branched by selected playbooks, expected evidence, status (`pending|done|blocked`), stop condition
 4. Verify criteria that reference typed manifest fields (endpoint, provider, workspace, service exe/config, per-agent smoke)
-5. Rollback / remediation notes for failed smoke (bounded retries; Windows: `Update-McpService.ps1 -Restore` when applicable)
+5. Rollback / remediation notes for failed smoke (bounded retries; Windows: `Update-McpService.ps1 -Restore` when applicable; Linux: UpdateService has no binary rollback, so return to a previous build by rerunning it with `--skip-build --publish-source <previous publish>`; its recovery archive restores preserved configuration and data when an update fails)
 
 #### Populated plan sketch (example -- Legion Grok + WindowsService + sqlserver)
 
@@ -170,6 +173,32 @@ Must include:
 ## Verify (fail-closed)
 - [ ] GET /health with nonce -> 200 + byte-for-byte nonce; storage field reachable
 - [ ] Service Running; installPath contains approved manifest generatedBy build/Build.UpdateService.cs or scripts\Update-McpService.ps1
+- [ ] Plugin todo.query + memory.list/get type=result
+- [ ] Compare live provider/workspace/port/identity to manifest; mismatch -> STOP
+```
+
+#### Populated plan sketch (example -- Linux Claude Code + systemd + postgresql)
+
+```markdown
+# setup-implementation.plan (example)
+## Summary
+- host.os: linux; endpoint.port: 7147; workspace: /home/<operator>/github/QBrainAi
+- agents: [agent-claude-code / Claude]; storage: storage-postgresql (provider postgresql); service: service-systemd (mcpserver.service, runAs mcpserver)
+## Obtain
+- [ ] Clone/pull workspace + mcpserver-claude-code-plugin -> evidence: git rev-parse HEAD
+- [ ] `./build.ps1 InstallReplTool` -> evidence: `qbrain-ai-repl --version`
+- [ ] GNU tar + systemctl present -> evidence: first line of `tar --version` names GNU tar; `Get-Command systemctl`
+## Configure-before-start (required before UpdateService)
+- [ ] Unit `mcpserver.service` loaded and meeting the service-systemd preconditions, or the operator-owned provisioning step (account, unit, DataFolder directory, `systemctl daemon-reload`) recorded and done
+- [ ] Write `/opt/mcpserver/app/appsettings.yaml`: Provider=postgresql; omit empty PostgreSql.ConnectionString; set `Mcp:RepoRoot` + primary `Workspaces[]` entry to workspacePath (replace lab-specific defaults)
+- [ ] Bind the secret as `Mcp__Database__PostgreSql__ConnectionString` in the unit's root-owned EnvironmentFile (mode 0600); validate the name is present without printing the value
+- [ ] Plugin env prepared: CLAUDE_PLUGIN_ROOT / PLUGIN_AGENT_NAME=Claude / MCP_WORKSPACE_PATH
+## Install (starts service)
+- [ ] One elevated (root) pwsh script at the workspace root: `./build.ps1 UpdateService --skip-version-bump --service-name mcpserver.service --install-path /opt/mcpserver/app --port 7147`
+- [ ] Evidence: `.mcpservice-deployment.json`; apphost `QBrainAi.Support.Mcp`; the logged recovery archive path + SHA256 under /var/backups/mcpserver
+## Verify (fail-closed)
+- [ ] GET /health with nonce -> 200 + byte-for-byte nonce; storage field reachable
+- [ ] Unit active; Type simple|exec; User = service.runAs; MainPID exe = /opt/mcpserver/app/QBrainAi.Support.Mcp; listener on 7147 owned by MainPID
 - [ ] Plugin todo.query + memory.list/get type=result
 - [ ] Compare live provider/workspace/port/identity to manifest; mismatch -> STOP
 ```
@@ -339,15 +368,32 @@ Common keys (non-secret shapes only in manifest):
 
 #### `service-systemd`
 
-- **Blocked pending validation** (`SYSTEMD_PENDING_VALIDATION`). Product source has no `sd_notify` / systemd integration; do not ship `Type=notify` units.
-- Action: refuse systemd as the primary service playbook until a tested unit exists. Redirect to `service-other` with operator-owned commands, or stop. Do **not** redirect to `service-linux-publish-swap` (also blocked pending validation).
+- **Normal path (Linux):** the Linux branch of Nuke `UpdateService` (`build/Build.UpdateService.cs`, `build/LinuxServiceHelper.cs`) updates an **existing** systemd unit while preserving live state. Requirements FR-MCP-SERVICEUPDATE-001, TR-MCP-SERVICEUPDATE-001 and TR-MCP-NUKE-015; it was used for the lab deployment on 2026-09-29 (`docs/plans/2026-09-28-cross-platform-update-service.md`). Their acceptance criteria are not yet marked satisfied and IMPL-SERVICEUPDATE-001 is still open; say so in the plan.
+- Defaults: unit `mcpserver.service`, install path `/opt/mcpserver/app`, port `7147` (used by the health checks), recovery archive root `/var/backups/mcpserver` (`--linux-backup-root`), apphost **`QBrainAi.Support.Mcp`** (extensionless), runtime `linux-x64` or `linux-arm64` by host architecture. No launcher is published on Linux.
+- Commands (from repo root, one elevated script; the target requires effective UID 0):
+  - `./build.ps1 UpdateService --skip-version-bump --service-name <unit> --install-path <path> --port <port>`
+  - Elevation example (from the target's own doc comment): `sudo --chdir . pwsh -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 UpdateService --skip-version-bump ...`
+  - Prepared publish: add `--skip-build --publish-source /absolute/path/to/publish`. The directory must hold the `QBrainAi.Support.Mcp` ELF apphost for the host architecture, executable, with no symbolic links; the target checks that before stopping anything. Its own publish is self-contained single-file; a framework-dependent publish would also need a .NET runtime the service account can use.
+  - Pass `--skip-version-bump`: when the target builds, it otherwise edits and `git add`s `GitVersion.yml`. Without `--skip-build` the elevated run compiles and publishes in the checkout as root; record that in the plan.
+- **Unit preconditions** (UpdateService checks them before it stops anything; any failure is `SYSTEMD_UNIT_UNSUPPORTED`):
+  1. The unit is installed and loaded (`LoadState=loaded`); its name ends in `.service`.
+  2. `Type=simple` or `Type=exec`. Do **not** use `Type=notify`: the updater would accept it, but the product never calls `sd_notify`, so the start would wait out the unit's timeout.
+  3. `WorkingDirectory` equals the install path, and a single `ExecStart` directly runs `<installPath>/QBrainAi.Support.Mcp` (no wrapper or shell). A 1.x unit naming `McpServer.Support.Mcp` in the same directory is accepted and retargeted on update (TR-MCP-QBRAIN-006).
+  4. No filesystem namespace remapping: no `RootDirectory`, `RootImage`, `BindPaths`, `BindReadOnlyPaths`, `TemporaryFileSystem`, `MountImages`, `ExtensionImages`, `ExtensionDirectories`, and no `PrivateTmp=yes`.
+  5. `<installPath>/appsettings.yaml` exists as a regular file, and no other `appsettings*` `.json`/`.yaml`/`.yml` overlay sits beside it.
+  6. No data, instance or content-root override (`DataFolder`, `Mcp:DataDirectory`, `MCP_INSTANCE`, `Mcp:Instances:*`, `--instance`, content root) in `Environment=`, `PassEnvironment=`, any `EnvironmentFile=`, the running process environment or its arguments. Database connection variables are allowed.
+  7. Every `EnvironmentFile=` not marked optional (`-`) exists; the configured `DataFolder` directory exists when it lies outside the install path.
+  8. GNU `tar` and `systemctl` are present; install, publish, backup and lock paths are absolute, not symbolic links (nor their ancestors), and do not overlap.
+- **First install on a fresh host:** the product does not provision the service account or the unit (`docs/USER-GUIDE.md`). The operator provisions both to the preconditions above (operator-owned, recorded in the plan), creates the install path with the Configure-before-start `appsettings.yaml` and the `DataFolder` directory, and runs `systemctl daemon-reload`; then UpdateService publishes, copies and starts. The only update receipt is the existing lab unit; a first install onto a newly provisioned unit has not been exercised, so treat its first run as part of Verify.
+- **runAs:** the unit's `User=`/`Group=`. Apart from the 1.x apphost retarget, UpdateService keeps the unit, its drop-ins, environment files, account, arguments and boot policy unchanged. Record `service.runAs` from `User=`.
+- **Config authority / order:** the same rule as Windows. UpdateService validates the stage and the unit, stops the unit, archives the preserved state (`appsettings.yaml`, the `DataFolder`, the unit file, its drop-ins and environment files), replaces the application files, restores the archive, runs `systemctl daemon-reload`, **starts the unit**, then requires `active` with `/proc/<MainPID>/exe` equal to the deployed apphost, `/health`, and strict workspace health (at least one enabled workspace checked and healthy, none failed), and writes `.mcpservice-deployment.json`. Provider, secrets and workspace YAML must therefore be in place before Install. Bind secrets in a root-owned `EnvironmentFile` (mode 0600) on the same primary keys as Windows (for example `Mcp__Database__SqlServer__ConnectionString`); never print its contents.
+- Rollback: there is **no binary rollback**. A run that reaches the archive step retains `<backupRoot>/<timestamp>-<id>/preserved-state.tar`; a successful run logs its path and SHA256, and a failure names the retained directory. If an update fails after the archive was made and hashed, UpdateService stops the unit and restores the preserved state before it throws. To return to an earlier build, rerun it with `--skip-build --publish-source <previous publish>`. External SQL databases are not exported.
+- Health: unit active + apphost/PID match + `/health` nonce + storage reachable + MCP smoke.
 
-#### `service-linux-publish-swap`
+#### `service-linux-publish-swap` (superseded)
 
-- **Blocked pending inventory/validation** (`LINUX_PUBLISH_SWAP_PENDING_VALIDATION`).
-- Reason: product has a lab note (publish/swap to `/opt/mcpserver`) but this draft does not yet ship a Parser-valid, permission-complete, repeated-upgrade-safe PowerShell lifecycle with PID/log binding. Do not invent one during setup.
-- Action: refuse this playbook; choose `service-other` with operator-supplied tested commands, or stop setup on Linux until inventory closes.
-- systemd remains separately blocked (`SYSTEMD_PENDING_VALIDATION`).
+- Superseded by `service-systemd` (`LINUX_PUBLISH_SWAP_SUPERSEDED`): UpdateService publishes before it stops the unit, then replaces the application files and restores the preserved state in place. Redirect an operator who asks for publish/swap to `service-systemd`; do not run or invent publish/swap scripts.
+
 #### `service-other`
 
 - Operator description drives the plan (Docker, console, Task Scheduler, etc.)
@@ -361,18 +407,18 @@ Common keys (non-secret shapes only in manifest):
 |------|-----------|--------|
 | `SQLITE_MULTI_AGENT` | SQLite + more than one agent | Caution / redirect to MSSQL or PostgreSQL when concurrent writers expected; continue only with informed risk note in `unsupportedFlags` (pending stronger topology evidence) |
 | `SYSTEMD_ON_WINDOWS` | systemd on Windows host | Refuse; choose WindowsService or other |
-| `WINDOWS_SERVICE_ON_LINUX` | WindowsService on Linux | Refuse; choose `service-other` (operator-owned) or stop -- not linux-publish-swap (blocked) |
-| `SYSTEMD_PENDING_VALIDATION` | systemd selected as primary | Refuse/redirect until a tested unit exists; use `service-other` or stop -- not linux-publish-swap (blocked) |
+| `WINDOWS_SERVICE_ON_LINUX` | WindowsService on Linux | Refuse; choose `systemd` (UpdateService) or `service-other` (operator-owned) |
+| `SYSTEMD_UNIT_UNSUPPORTED` | systemd selected and the unit is missing or fails a `service-systemd` precondition (not loaded, `Type=notify`, ExecStart not the direct apphost, WorkingDirectory != installPath, namespace remapping, config overlay, data/instance/content-root override, missing required EnvironmentFile or DataFolder) | Stop before UpdateService; the operator provisions or corrects the unit (operator-owned), runs `systemctl daemon-reload`, then rerun |
 | `MISSING_PLUGIN_ROOT` | Agent selected, no plugin path and clone denied | Stop configure until plugin available |
 | `AGENT_FAMILY_UNSUPPORTED` | Cursor/other without operator-owned procedure | Stop or remove family |
 | `AGENT_PLAYBOOK_UNVERIFIED` | Cowork/OpenCode activation unclear | Stop, redirect, or remove |
 | `STORAGE_PROVIDER_UNSUPPORTED` | Chosen storage not in this build | Stop; switch storage or build |
 | `SECRET_IN_MANIFEST` | Password written into manifest | Redact, rewrite manifest, rotate if exposed |
 | `VERIFY_MISMATCH` | Live endpoint/provider/workspace/exe != manifest | Fail-closed stop; bounded remediation then re-verify |
-| `VERIFY_EVIDENCE_UNAVAILABLE` | Cannot obtain required proof (ImagePath, Provider, health version, listener PID bind) | Block success; treat as failed verify |
+| `VERIFY_EVIDENCE_UNAVAILABLE` | Cannot obtain required proof (ImagePath or systemd MainPID apphost, Provider, health version, listener PID bind) | Block success; treat as failed verify |
 | `WINDOWS_RUNAS_UNSUPPORTED` | WindowsService runAs not LocalSystem | Refuse; UpdateService does not set alternate accounts |
-| `POWERSHELL_MCP_UNAVAILABLE` | PowerShell.MCP cannot be installed/used | Stop ordinary automation until resolved |
-| `LINUX_PUBLISH_SWAP_PENDING_VALIDATION` | linux-publish-swap selected as primary | Refuse; use `service-other` with operator-owned tested commands, or stop until validated lifecycle exists |
+| `POWERSHELL_MCP_UNAVAILABLE` | PowerShell.MCP cannot be installed/used on a Windows host | Stop ordinary automation until resolved (not raised on Linux, which runs `pwsh` directly) |
+| `LINUX_PUBLISH_SWAP_SUPERSEDED` | Operator asks for the earlier linux-publish-swap kind | Redirect to `systemd` (UpdateService); do not run publish/swap scripts |
 
 ---
 
@@ -386,25 +432,25 @@ Typical steps (branch in plan); all via `pwsh` unless installing `pwsh` itself:
 4. Ensure `dotnet` SDK/runtime as required. **REPL acquisition (pin ONE primary path for the dry-run; do not thrash versions):**
    - **Primary (required default):** from workspace root run `./build.ps1 InstallReplTool` (Nuke target DependsOn PackReplTool). PackageId is **`QBrainAI.Repl`**; ToolCommandName / executable is **`qbrain-ai-repl`**. Verify: `qbrain-ai-repl --version`. Do **not** `dotnet tool install -g qbrain-ai-repl` (command name is not the PackageId). Do **not** use plugin `ensure-repl` / GitHub-release / Codex `setup.sh` as the ordinary dry-run path (those dual paths thrash versions and Codex bash conflicts with PowerShell-only).
    - **Secondary / non-default only** (local-feed policy understood, and recorded as non-default in the plan): run Pack first (`./build.ps1 PackReplTool` or `scripts\Pack-ReplTool.ps1`) so `local-packages` has the nupkg, **then** either `scripts\Install-ReplTool.ps1` or `dotnet tool install -g QBrainAI.Repl` (with version/source). Plain `Install-ReplTool.ps1` without Pack fails on an empty feed. Record which path was used in obtain evidence.
-5. Storage prerequisites per storage playbook
+5. Storage prerequisites per storage playbook; for `service-systemd`, GNU `tar` and `systemctl` (UpdateService refuses without them)
 6. Record obtain evidence in the plan checklist
 
 ## Phase 2: Install
 
-**Execution order (WindowsService):** complete Phase 3 configure-before-start items (Provider, omit-empty connection keys, service secret env, RepoRoot/Workspaces rewrite) **before** any UpdateService elevation. Phase numbers are section labels; on Windows the configure-before-start work precedes Install because UpdateService starts the service at the end of deploy.
+**Execution order (WindowsService and systemd):** complete Phase 3 configure-before-start items (Provider, omit-empty connection keys, service secret env, RepoRoot/Workspaces rewrite) **before** any UpdateService elevation. Phase numbers are section labels; on both platforms the configure-before-start work precedes Install because UpdateService starts the service at the end of deploy.
 
 1. Windows: elevated `./build.ps1 UpdateService` (or `scripts\Update-McpService.ps1`) with real `--service-name` / `--install-path` / `--port`; expect `QBrainAi.Support.Mcp.exe` + `.mcpservice-deployment.json`. **Only after** Phase 3 config/secrets/workspace yaml+env are staged for that installPath.
-2. Linux: do not run blocked `linux-publish-swap` / `systemd` playbooks. `service-other` only with operator-owned commands already recorded in the plan.
-3. Do not treat install as complete until binaries and (Windows) deployment manifest are in place
+2. Linux (`service-systemd`): elevated `./build.ps1 UpdateService --skip-version-bump` with real `--service-name` / `--install-path` / `--port` against a loaded unit that meets the `service-systemd` preconditions; expect `<installPath>/QBrainAi.Support.Mcp` + `.mcpservice-deployment.json` + the logged recovery archive. **Only after** Phase 3 config/secrets/workspace yaml + the unit's EnvironmentFile are staged for that installPath. `service-other` only with operator-owned commands already recorded in the plan.
+3. Do not treat install as complete until binaries and the deployment manifest (UpdateService on either platform) are in place
 4. Storage/workspace configuration must already be applied for the start that Install triggers
 
-## Phase 3: Configure (mostly before Install start on Windows)
+## Phase 3: Configure (mostly before Install start)
 
 1. Set env vars from manifest (plugin roots, identity, workspace) for operator/plugin sessions
-2. Wire storage **before UpdateService starts**: set `Mcp:Database:Provider`; bind secrets on primary env keys under the **service** account; **omit** empty YAML connection-string keys
+2. Wire storage **before UpdateService starts**: set `Mcp:Database:Provider`; bind secrets on primary env keys under the **service** account (Linux: in the unit's root-owned EnvironmentFile); **omit** empty YAML connection-string keys
 3. **Workspace registry (fresh host):** in the same installed/staged `appsettings.yaml`, set `Mcp:RepoRoot` to the absolute `workspacePath`, and ensure `Mcp:Workspaces` contains that path with `IsPrimary: true`, `IsEnabled: true` (remove or disable unrelated lab defaults such as foreign drive letters). Plugin `MCP_WORKSPACE_PATH` does **not** register the server workspace. Do not hand-author trust markers; after service up, run the plugin marker/trust bootstrap so the selected workspace can satisfy marker checks. If registration/marker evidence cannot be obtained -> `VERIFY_EVIDENCE_UNAVAILABLE` / stop.
 4. Apply process note (bind now only if API available; else leave deferred follow-up)
-5. Windows: UpdateService starts at end of Install -- steps 2-3 must already be on disk/env. Linux primary service playbooks are blocked; `service-other` only with operator-owned start after the same config rules.
+5. Windows and systemd: UpdateService starts the service at the end of Install -- steps 2-3 must already be on disk/env (Linux: `<installPath>/appsettings.yaml`, the DataFolder directory and the unit's EnvironmentFile). `service-other` only with operator-owned start after the same config rules.
 6. Update plan statuses
 
 ## Phase 4: Verify (fail-closed)
@@ -412,14 +458,19 @@ Typical steps (branch in plan); all via `pwsh` unless installing `pwsh` itself:
 Run in order; stop on first hard failure. Session-log bootstrap must **not** be treated as proof of a log write (current bootstrap is an idempotent no-op). Use built-in `throw` / exit codes - do not depend on Pester `Should` unless Pester is an explicit prerequisite.
 
 1. **Trusted marker / nonce:** plugin trust/bootstrap against `endpoint.baseUrl` `/health`; require HTTP 200 and **byte-for-byte nonce echo**. Signature failure -> `MCP_UNTRUSTED`. Record health JSON `version` vs `product.version` when pinned; if unreadable -> `VERIFY_EVIDENCE_UNAVAILABLE`.
-2. **Endpoint:** live port/baseUrl must equal manifest. Listener checks use manifest port, count matches, and (Windows) join OwningProcess to service PID (step 3). Never mask failures.
+2. **Endpoint:** live port/baseUrl must equal manifest. Listener checks use manifest port, count matches, and join the listener to the service PID (Windows OwningProcess, step 3; Linux `ss` pid, step 4). Never mask failures.
 3. **Service identity (Windows) - exact ImagePath + StartName + PID join:**
    - `Get-Service` Status must equal `Running` (capture object; do not use empty-pipeline `$?`).
    - Win32_Service PathName must match the **strict canonical UpdateService form** with **balanced quotes on both tokens** and **no trailing/duplicate args**: `"<installPath>\QBrainAi.Support.Mcp.exe" --urls "http://+:<port>"`. Quoting is atomic (both exe and URL fully quoted -- UpdateService always quotes). Reject optional/unbalanced quotes, unquoted paths (especially with spaces), `.exe.old`, prefix ports (`71470`), exe-as-later-arg, and duplicate `--urls`. Compare captured exe via GetFullPath equality and URL string equality.
    - StartName must be LocalSystem / NT AUTHORITY\SYSTEM. Existing alternate accounts are not fixed by UpdateService -> fail.
    - ProcessId > 0; listeners on manifest port must have OwningProcess equal to that PID.
    - Files: exe, `.mcpservice-deployment.json` with approved `generatedBy`, `appsettings.yaml`, no legacy `appsettings.json`.
-4. **Service identity (Linux):** `systemd` and `linux-publish-swap` are blocked. For `service-other`, still require operator PID<->listener join on manifest port via `ss` through pwsh.
+4. **Service identity (Linux systemd) - unit state + apphost + PID join** (run elevated: another account's `/proc/<pid>/exe` and `ss` process columns are visible only to root):
+   - `systemctl show <unit> --property=LoadState,ActiveState,Type,User,WorkingDirectory,MainPID` through pwsh: `LoadState=loaded`, `ActiveState=active`, `Type` simple or exec, `User` equals `service.runAs`, `WorkingDirectory` equals `installPath`.
+   - `MainPID` > 0 and `readlink -f /proc/<MainPID>/exe` equals `<installPath>/QBrainAi.Support.Mcp` (the same check UpdateService makes).
+   - Listeners on the manifest port (`ss -ltnpH "sport = :<port>"`) must name `pid=<MainPID>`.
+   - Files: apphost, `.mcpservice-deployment.json`, `appsettings.yaml`, no `appsettings.json`.
+   - For `service-other`, still require operator PID<->listener join on manifest port via `ss` through pwsh.
 5. **Provider/DB (effective config):**
    - Installed yaml `Mcp:Database:Provider` must equal `storage.provider`, but yaml alone is never sufficient effective identity (Sqlite ConnectionString can override DataSource; env/instance/CLI overlays apply).
    - Require a **resolved** provider + non-secret database identity with provenance covering active overrides. Prefer product diagnostics/redacted connection summary if available.
@@ -458,7 +509,7 @@ Run in order; stop on first hard failure. Session-log bootstrap must **not** be 
 - [ ] `setup-implementation.plan` written and acknowledged
 - [ ] Obtain complete (`./build.ps1 InstallReplTool` primary; PackageId QBrainAI.Repl; command qbrain-ai-repl)
 - [ ] Configure-before-start complete (Provider + omit-empty connection keys + secret env binding + RepoRoot/Workspaces rewrite for foreign Workspaces) BEFORE service start
-- [ ] Install complete (Windows: UpdateService; or `service-other` with operator-owned commands only -- NOT linux-publish-swap / systemd)
+- [ ] Install complete (Windows: UpdateService; Linux: UpdateService against a loaded systemd unit that meets the `service-systemd` preconditions; or `service-other` with operator-owned commands only -- NOT publish/swap scripts)
 - [ ] Verify smoke green (nonce, endpoint, provider, workspace, per-agent)
 - [ ] Receipt delivered
 
@@ -469,8 +520,9 @@ Run in order; stop on first hard failure. Session-log bootstrap must **not** be 
 - Production multi-tenant deploy hardening
 - Publishing add-profile / private operator profiles
 - Full process-drift enforcement (see MCP-PROCESS-001); setup only records process choice
-- Claiming a validated product systemd unit (blocked pending validation)
-- Claiming a validated linux-publish-swap lifecycle (blocked pending inventory)
+- Provisioning the Linux service account or systemd unit (the product updates an existing unit only; provisioning is operator-owned)
+- `Type=notify` systemd units (the product does not call `sd_notify`)
+- Publish/swap scripts on Linux (superseded by UpdateService)
 - MSIX packaging (./build.ps1 PackageMsix / Package-QBrainAiMsix.ps1) as a setup path
 - Keycloak / IdP helper scripts as part of ordinary setup
 - Maintainer SyncAgentPlugins / plugin-core sync during operator first-install
@@ -488,6 +540,8 @@ When the operator's answers match the PAYTON-LEGION2 lab:
 - Endpoint port: 7147
 - Still run full intake; do not skip questions because this pattern is familiar
 
+For the LAB-OMARCHY Linux pattern (systemd unit `mcpserver.service`), see "Reference Linux pattern" under Linux-specific examples.
+
 ---
 
 End of DRAFT core. OS-specific command appendices follow. Revise after Legion dry-runs with at least two intake variants.
@@ -496,30 +550,115 @@ End of DRAFT core. OS-specific command appendices follow. Revise after Legion dr
 
 ## Linux-specific examples
 
-**Status: service playbooks `systemd` and `linux-publish-swap` are blocked pending validation/inventory.**
+Use when `host.os: linux`. Ordinary automation runs as `pwsh -NoProfile -NonInteractive` directly (hard rule 4; no PowerShell.MCP routing on Linux). The service path is `service-systemd` (UpdateService against an existing unit) or `service-other`.
 
-Use this section only for:
-- Installing PowerShell 7 (pre-pwsh exception) and PowerShell.MCP
-- Obtaining/cloning workspace + plugins via `pwsh`
-- `service-other` when the operator supplies tested start/stop/log/health commands
-- Storage client prerequisites invoked through pwsh
+### Reference Linux pattern (example / lab)
 
-Do **not** treat any prior publish-swap/unit snippets as an approved product path. If intake selected those service kinds, stop with `SYSTEMD_PENDING_VALIDATION` or `LINUX_PUBLISH_SWAP_PENDING_VALIDATION`.
+Non-secret unit properties observed on LAB-OMARCHY on 2026-10-27:
 
-### Obtain notes (Linux, pwsh)
+- Unit: `mcpserver.service` in `/etc/systemd/system`, enabled, `Type=simple`, `Restart=on-failure`, `NoNewPrivileges=yes`, two drop-ins, two required EnvironmentFiles under `/etc/mcpserver/`
+- Account: `User=mcpserver`, `Group=mcpserver`
+- Install path and WorkingDirectory: `/opt/mcpserver/app`
+- ExecStart: `/opt/mcpserver/app/McpServer.Support.Mcp --urls http://0.0.0.0:7147` (the 1.x apphost name; UpdateService retargets it to `QBrainAi.Support.Mcp` when it next updates the unit, TR-MCP-QBRAIN-006)
+- Endpoint port: 7147
+- Still run full intake; do not skip questions because this pattern is familiar
+
+### Obtain (Linux, pwsh)
 
 ```powershell
-# After pwsh + PowerShell.MCP exist:
+# After pwsh exists (no PowerShell.MCP routing on Linux):
 $env:PATH = "$HOME/.dotnet/tools:$env:PATH"
 # Clone into operator-chosen paths (dedicated dirs only; never chown /opt itself)
 # PRIMARY: From workspace: ./build.ps1 InstallReplTool ; qbrain-ai-repl --version
 # PackageId QBrainAI.Repl -- never dotnet tool install -g qbrain-ai-repl
-# Secondary only after PackReplTool: scripts\Install-ReplTool.ps1 (non-default; empty feed fails)
+# Secondary only after PackReplTool: scripts/Install-ReplTool.ps1 (non-default; empty feed fails)
+# service-systemd prerequisites (UpdateService refuses without them):
+if (-not ((tar --version | Select-Object -First 1) -match 'GNU tar')) { throw 'GNU tar is required' }
+Get-Command systemctl -ErrorAction Stop | Out-Null
 ```
 
-### Verify notes (Linux `service-other` only)
+### Configure-before-start (Linux, systemd) -- required BEFORE UpdateService
+
+UpdateService **starts the unit** at the end of Install, and refuses before stopping anything when a `service-systemd` precondition fails. Stage these first, never printing secret values:
+
+- `<installPath>/appsettings.yaml`: Provider, omit-empty connection keys, `Mcp:RepoRoot` and the primary `Mcp:Workspaces` entry set to `workspacePath`; no other `appsettings*` overlay beside it.
+- The `DataFolder` directory, writable by the service account, when it lies outside the install path.
+- Secrets in a root-owned EnvironmentFile (mode 0600) that the unit references, on the primary key (for example `Mcp__Database__PostgreSql__ConnectionString`). No `DataFolder`, `Mcp__DataDirectory`, `MCP_INSTANCE`, `Mcp__Instances__*` or content-root names in it.
+- Fresh host only: the operator-owned account and unit meeting the `service-systemd` preconditions, then `systemctl daemon-reload`.
+
+Example non-secret `appsettings.yaml` database + workspace block for PostgreSQL:
+
+```yaml
+Mcp:
+  RepoRoot: /home/<operator>/github/QBrainAi
+  Workspaces:
+    - Path: /home/<operator>/github/QBrainAi
+      IsPrimary: true
+      IsEnabled: true
+      # Remove or disable unrelated lab defaults on fresh hosts.
+  Database:
+    Provider: postgresql
+    # OMIT PostgreSql.ConnectionString; bind Mcp__Database__PostgreSql__ConnectionString in the unit's EnvironmentFile.
+```
+
+### Install + systemd (approved path only)
+
+**Only after** Configure-before-start:
+
+```powershell
+Set-Location <workspacePath>
+# One elevated (root) script; the target requires effective UID 0. For example:
+# sudo --chdir . pwsh -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 UpdateService --skip-version-bump --service-name mcpserver.service --install-path /opt/mcpserver/app --port 7147
+# Prepared publish instead of building as root:
+# ... UpdateService --skip-build --skip-version-bump --publish-source /absolute/path/to/publish --service-name mcpserver.service --install-path /opt/mcpserver/app --port 7147
+# Success ends with the "Linux update verified" log line naming the unit, PID, recovery archive path and SHA256.
+```
+
+Do **not** document raw `systemctl stop` / copy / `systemctl start` sequences as an alternative; they skip the preconditions, the recovery archive and the deployment manifest.
+
+### Verify (Linux systemd)
+
+Run elevated: another account's `/proc/<pid>/exe` and `ss` process columns are visible only to root.
+
+```powershell
+$unit = 'mcpserver.service'      # manifest.service.name
+$port = 7147                     # manifest.endpoint.port
+$install = '/opt/mcpserver/app'  # manifest.service.installPath
+$runAs = 'mcpserver'             # manifest.service.runAs
+
+$props = @{}
+$lines = @(systemctl show $unit --no-pager --property=LoadState,ActiveState,Type,User,WorkingDirectory,MainPID)
+if ($LASTEXITCODE -ne 0) { throw "systemctl show failed for $unit" }
+foreach ($line in $lines) { $key, $value = $line -split '=', 2; $props[$key] = $value }
+if ($props['LoadState'] -ne 'loaded' -or $props['ActiveState'] -ne 'active') { throw "Unit state $($props['LoadState'])/$($props['ActiveState'])" }
+if ($props['Type'] -notin @('simple', 'exec')) { throw "Unit Type=$($props['Type'])" }
+if ($props['User'] -ne $runAs) { throw "Unit User=$($props['User'])" }
+if ($props['WorkingDirectory'] -ne $install) { throw "WorkingDirectory=$($props['WorkingDirectory'])" }
+$mainPid = [int]$props['MainPID']
+if ($mainPid -le 0) { throw 'MainPID missing' }
+$expectedExe = Join-Path $install 'QBrainAi.Support.Mcp'
+$actualExe = readlink -f "/proc/$mainPid/exe"
+if ($actualExe -ne $expectedExe) { throw "MainPID exe=$actualExe; expected $expectedExe" }
+foreach ($file in @('QBrainAi.Support.Mcp', '.mcpservice-deployment.json', 'appsettings.yaml')) {
+  if (-not (Test-Path -LiteralPath (Join-Path $install $file))) { throw "$file missing" }
+}
+if (Test-Path -LiteralPath (Join-Path $install 'appsettings.json')) { throw 'appsettings.json present' }
+$listeners = @(ss -ltnpH "sport = :$port" | Where-Object { $_ -match "pid=$mainPid," })
+if ($listeners.Count -lt 1) { throw "No listener on $port owned by PID $mainPid" }
+# Provider/DB: require resolved identity with provenance; yaml alone insufficient
+# Trust/nonce against endpoint.baseUrl; per-agent smokes (Phase 4)
+```
+
+### Verify notes (Linux `service-other`)
 
 Operator-owned process must still satisfy Phase 4: trust/nonce against manifest endpoint, Provider effective-config rules, PID-listener join on manifest port via `ss` through pwsh (not `Get-NetTCPConnection`), per-agent smokes.
+
+### Linux conflict reminders
+
+- `WINDOWS_SERVICE_ON_LINUX`: refuse WindowsService
+- `SYSTEMD_UNIT_UNSUPPORTED`: stop before UpdateService until the operator provisions or corrects the unit
+- `LINUX_PUBLISH_SWAP_SUPERSEDED`: redirect publish/swap requests to UpdateService
+- Elevate only for UpdateService and the Verify checks that read another account's process; plugin smokes run as operator identity
 
 ---
 ## Windows-specific examples

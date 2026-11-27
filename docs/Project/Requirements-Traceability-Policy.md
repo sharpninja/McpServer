@@ -4,7 +4,9 @@ Date: 2026-03-05
 
 This policy defines how requirement IDs are represented and validated across project documents.
 
-## Canonical Sources
+## Requirements Store and Document Projections
+
+The workspace's MCP requirements store is authoritative for live records. These project documents provide the Markdown inputs for the repository's traceability checks:
 
 - Functional requirements: `Functional-Requirements.md`
 - Technical requirements: `Technical-Requirements.md`
@@ -22,11 +24,11 @@ This policy defines how requirement IDs are represented and validated across pro
 
 ## Validation Rule
 
-- Use `scripts/Validate-RequirementsTraceability.ps1` to validate:
+- Run `./build.ps1 ValidateTraceability` to validate:
   - FR coverage in mapping and matrix
   - TR coverage in matrix via explicit IDs or range rows
   - TEST coverage in matrix via explicit IDs
-- Default mode fails on FR coverage gaps and reports TR/TEST gaps as warnings; use `-StrictTrAndTestCoverage` to fail on TR/TEST gaps.
+- Default mode fails on FR coverage gaps and reports TR and TEST gaps as warnings. Use `--strict-tr-and-test-coverage` to fail on TR and TEST gaps. The Nuke target also reports use-case Realizes coverage from the SQLite source when available.
 
 ## Intentional Numbering Gaps
 

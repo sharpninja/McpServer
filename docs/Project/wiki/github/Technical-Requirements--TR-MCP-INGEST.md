@@ -1,0 +1,25 @@
+# TR-MCP-INGEST
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-INGEST-001
+
+Pluggable ingestors for repo/session/external/github/issues.
+**Covered by:** FR: FR-MCP-003, FR-MCP-005, FR-MCP-006, FR-SUPPORT-010
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-INGEST-002
+
+**Markdown Session Log Parser** — `MarkdownSessionLogParser.TryParse` recognizes Markdown files with a `# Session Log - {title}` or `# Copilot Session Log - {title}` header and parses them into `UnifiedSessionLogDto`. Extracts date, status, branch, model, duration, and known sections (Session Overview, Changes Made, Technical Requirements, Testing, etc.) as a summary entry. Individual `### Request` subsections are parsed as separate `UnifiedRequestEntryDto` entries. `NormalizeToStructuredText` produces a structured plain-text representation for FTS5 and vector embedding.
+**Covered by:** FR: FR-MCP-006, FR-MCP-024
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-INGEST-003
+
+**Direct Website URL Ingestion** — Add `WebsiteIngestor` with a dedicated `HttpClient` and bounded crawl behavior. Only `http`/`https` URLs are allowed. SSRF protections block localhost, loopback, RFC1918, and link-local targets (including DNS-resolved IPs). Redirects are bounded and re-validated at each hop. Per-request controls include max pages, max depth, max bytes per page, force refresh, and optional GraphRAG index trigger. Ingested pages upsert as `SourceType=external-web` with canonical URL source keys and deterministic document IDs.
+**Covered by:** FR: FR-MCP-065
+**Status:** pending
+Scope: layer-1+
+

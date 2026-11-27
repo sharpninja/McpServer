@@ -1,0 +1,29 @@
+# TEST-MCP-AUTH
+
+[Back to Testing Requirements](Testing-Requirements)
+
+## TEST-MCP-AUTH
+
+### TEST-MCP-AUTH-010
+
+Given the auth-token subsystem is initialized, when a request hits a workspace-independent /mcpserver/* route with an unknown or missing API key and no X-Workspace-Path, then WorkspaceAuthMiddleware returns 401. This is a regression test (previously returned 503).
+
+**Acceptance Criteria:**
+- [x] Unknown API key with unresolved workspace returns 401.
+- [x] Missing API key with unresolved workspace returns 401.
+- [x] Empty RepoRoot fallback path with unresolved workspace returns 401.
+
+### TEST-MCP-AUTH-011
+
+When WorkspaceTokenService.IsInitialized is false, WorkspaceAuthMiddleware returns 503 with a Retry-After header and a JSON body.
+
+**Acceptance Criteria:**
+- [x] Uninitialized subsystem returns 503 with Retry-After header and JSON body.
+
+### TEST-MCP-AUTH-012
+
+WorkspaceTokenService.IsInitialized is false before any token is generated and true after GenerateToken.
+
+**Acceptance Criteria:**
+- [x] IsInitialized returns false before any token is generated.
+- [x] IsInitialized returns true after GenerateToken.

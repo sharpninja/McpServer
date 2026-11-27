@@ -1,5 +1,6 @@
 # Documentation Index
 
+- [Requirements wiki export and setup](MCP-SERVER.md#requirements-wiki-export)
 - [Wiki export manifest](wiki.yaml)
 - [Byrd Development Process v4](Development-Process-draft-v4.md)
 - [QBrain.AI User Documentation](USER-GUIDE.md)
@@ -39,3 +40,4 @@
 - [Scratch Workspace Integration Tests](context/scratch-workspace-integration-tests.md)
 - [Claude Hook Validation Skill Export](claude-hook-validation-skill.md)
 - [Project Requirements](Project/Requirements-Matrix.md)
+- [Requirements traceability policy](Project/Requirements-Traceability-Policy.md)

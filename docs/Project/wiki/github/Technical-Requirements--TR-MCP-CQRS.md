@@ -1,0 +1,44 @@
+# TR-MCP-CQRS
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-CQRS-001
+
+**Standalone CQRS Library** — `McpServer.Cqrs` published as NuGet package `SharpNinja.McpServer.Cqrs`. Targets `net9.0`. Zero external dependencies beyond `Microsoft.Extensions.Logging.Abstractions` and `Microsoft.Extensions.DependencyInjection.Abstractions`. Provides: `ICommand<TResult>`, `IQuery<TResult>`, `ICommandHandler<TCommand, TResult>`, `IQueryHandler<TQuery, TResult>`, `Dispatcher`, `CallContext`, `CorrelationId`, `Result<T>`, `IPipelineBehavior`, and DI registration extensions. All dispatched calls are async (`Task<Result<T>>`).
+**Status:** ✅ Complete - 37 unit tests passing
+
+**Covered by:** `McpServer.Cqrs` project
+Scope: layer-1+
+
+## TR-MCP-CQRS-002
+
+**Decimal Correlation IDs** — `CorrelationId` uses format `{baseId}.{counter}` where `baseId` is a random 8-digit long (stable for the entire call tree) and `counter` is a thread-safe (`Interlocked.Increment`) incrementing integer. Each pipeline step or handler call advances the counter. `CorrelationId.Parse(string)` reconstitutes from string. Propagated via HTTP headers (`X-Correlation-Id`).
+**Status:** ✅ Complete
+
+**Covered by:** `CorrelationId`
+Scope: layer-1+
+
+## TR-MCP-CQRS-003
+
+**Dispatcher as ILoggerProvider with Context Registry** — `Dispatcher` implements `ILoggerProvider` and maintains a `ConcurrentDictionary<long, CallContext>` of active contexts keyed by `CorrelationId.BaseId`. `DispatcherLogger` (created by the provider) extracts correlation IDs from log scopes, looks up the `CallContext`, and enriches structured log entries with decomposed fields: `correlationId`, `correlationBaseId`, `correlationStep`, `operationName`, `userId`, `roles`, `elapsed`. `CallContext` implements `ILogger` and captures log entries to an internal list.
+**Status:** ✅ Complete
+
+**Covered by:** `Dispatcher`, `DispatcherLogger`, `CallContext`
+Scope: layer-1+
+
+## TR-MCP-CQRS-004
+
+**Automatic Result Monad Logging** — After handler execution, the Dispatcher inspects the `Result<T>`: success results logged at `Debug` level with elapsed time; failures with `Exception` logged at `Error` level with exception details; failures without exception logged at `Warning` level. Dispatch calls themselves logged at `Debug` with full call context. All logging includes decomposed correlation ID fields.
+**Status:** ✅ Complete
+
+**Covered by:** `Dispatcher`
+Scope: layer-1+
+
+## TR-MCP-CQRS-005
+
+**Pipeline Behaviors** — `IPipelineBehavior` wraps handler execution with pre/post processing. Behaviors receive the request, `CallContext`, and a `next` delegate. Behaviors can short-circuit by returning `Result<T>.Failure()` without calling `next`. Registration order determines execution order (outermost first). Built-in behaviors: `LoggingBehavior`, `ValidationBehavior`.
+**Status:** ✅ Complete
+
+**Covered by:** `IPipelineBehavior`, `Dispatcher`
+Scope: layer-1+
+

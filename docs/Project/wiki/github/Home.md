@@ -7,6 +7,7 @@
   - [Testing Requirements](Testing-Requirements)
   - [Traceability Mapping](TR-per-FR-Mapping)
   - [Requirements Matrix](Requirements-Matrix)
+  - [Requirements Traceability Policy](Requirements-Traceability-Policy)
 - Case Studies
   - [Triage Plugin Code Quality Case Study](Case-Studies/Triage-Plugin-Code-Quality-Case-Study)
 - User Guides

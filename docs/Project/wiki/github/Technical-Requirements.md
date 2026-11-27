@@ -1,10 +1,76 @@
 # Technical Requirements (QBrain.AI)
 
-## []
+## Requirement groups
 
-**[]** — Placeholder requirement backfilled for TODO link [].
-**Status:** pending
-Scope: layer-1+
+- [TR-API](Technical-Requirements--TR-API)
+- [TR-GRAPHRAG-ADHOC](Technical-Requirements--TR-GRAPHRAG-ADHOC)
+- [TR-MCP-AGENT](Technical-Requirements--TR-MCP-AGENT)
+- [TR-MCP-AGENT-PARITY](Technical-Requirements--TR-MCP-AGENT-PARITY)
+- [TR-MCP-API](Technical-Requirements--TR-MCP-API)
+- [TR-MCP-ARCH](Technical-Requirements--TR-MCP-ARCH)
+- [TR-MCP-AUDIT](Technical-Requirements--TR-MCP-AUDIT)
+- [TR-MCP-AUTH](Technical-Requirements--TR-MCP-AUTH)
+- [TR-MCP-BATCH](Technical-Requirements--TR-MCP-BATCH)
+- [TR-MCP-BYRD](Technical-Requirements--TR-MCP-BYRD)
+- [TR-MCP-CFG](Technical-Requirements--TR-MCP-CFG)
+- [TR-MCP-COMP](Technical-Requirements--TR-MCP-COMP)
+- [TR-MCP-CQRS](Technical-Requirements--TR-MCP-CQRS)
+- [TR-MCP-DATA](Technical-Requirements--TR-MCP-DATA)
+- [TR-MCP-DB](Technical-Requirements--TR-MCP-DB)
+- [TR-MCP-DIR](Technical-Requirements--TR-MCP-DIR)
+- [TR-MCP-DOC](Technical-Requirements--TR-MCP-DOC)
+- [TR-MCP-EVT](Technical-Requirements--TR-MCP-EVT)
+- [TR-MCP-FEDERATION](Technical-Requirements--TR-MCP-FEDERATION)
+- [TR-MCP-GH](Technical-Requirements--TR-MCP-GH)
+- [TR-MCP-HEALTH](Technical-Requirements--TR-MCP-HEALTH)
+- [TR-MCP-HELP](Technical-Requirements--TR-MCP-HELP)
+- [TR-MCP-HOSTILEREVIEW](Technical-Requirements--TR-MCP-HOSTILEREVIEW)
+- [TR-MCP-HTTP](Technical-Requirements--TR-MCP-HTTP)
+- [TR-MCP-HVPIPE](Technical-Requirements--TR-MCP-HVPIPE)
+- [TR-MCP-HYGIENE](Technical-Requirements--TR-MCP-HYGIENE)
+- [TR-MCP-INGEST](Technical-Requirements--TR-MCP-INGEST)
+- [TR-MCP-LOG](Technical-Requirements--TR-MCP-LOG)
+- [TR-MCP-MEMORY](Technical-Requirements--TR-MCP-MEMORY)
+- [TR-MCP-MT](Technical-Requirements--TR-MCP-MT)
+- [TR-MCP-NUKE](Technical-Requirements--TR-MCP-NUKE)
+- [TR-MCP-PERSIST](Technical-Requirements--TR-MCP-PERSIST)
+- [TR-MCP-PLUGIN](Technical-Requirements--TR-MCP-PLUGIN)
+- [TR-MCP-PLUGINCORE](Technical-Requirements--TR-MCP-PLUGINCORE)
+- [TR-MCP-QA](Technical-Requirements--TR-MCP-QA)
+- [TR-MCP-QBEXEC](Technical-Requirements--TR-MCP-QBEXEC)
+- [TR-MCP-QBRAIN](Technical-Requirements--TR-MCP-QBRAIN)
+- [TR-MCP-QBSKILLS](Technical-Requirements--TR-MCP-QBSKILLS)
+- [TR-MCP-QBTOOLS](Technical-Requirements--TR-MCP-QBTOOLS)
+- [TR-MCP-QUAD](Technical-Requirements--TR-MCP-QUAD)
+- [TR-MCP-REPL](Technical-Requirements--TR-MCP-REPL)
+- [TR-MCP-REQ](Technical-Requirements--TR-MCP-REQ)
+- [TR-MCP-REQAC](Technical-Requirements--TR-MCP-REQAC)
+- [TR-MCP-REQACPLUGIN](Technical-Requirements--TR-MCP-REQACPLUGIN)
+- [TR-MCP-REQEXPORT](Technical-Requirements--TR-MCP-REQEXPORT)
+- [TR-MCP-REQSCOPE](Technical-Requirements--TR-MCP-REQSCOPE)
+- [TR-MCP-SEC](Technical-Requirements--TR-MCP-SEC)
+- [TR-MCP-SESSIONLIFE](Technical-Requirements--TR-MCP-SESSIONLIFE)
+- [TR-MCP-SESSIONLOG](Technical-Requirements--TR-MCP-SESSIONLOG)
+- [TR-MCP-SESSIONLOGSAN](Technical-Requirements--TR-MCP-SESSIONLOGSAN)
+- [TR-MCP-SKILLS](Technical-Requirements--TR-MCP-SKILLS)
+- [TR-MCP-SVC](Technical-Requirements--TR-MCP-SVC)
+- [TR-MCP-TODO](Technical-Requirements--TR-MCP-TODO)
+- [TR-MCP-TPL](Technical-Requirements--TR-MCP-TPL)
+- [TR-MCP-TR](Technical-Requirements--TR-MCP-TR)
+- [TR-MCP-TRANSCRIPT](Technical-Requirements--TR-MCP-TRANSCRIPT)
+- [TR-MCP-TRIAGE](Technical-Requirements--TR-MCP-TRIAGE)
+- [TR-MCP-TRIAGESTORE](Technical-Requirements--TR-MCP-TRIAGESTORE)
+- [TR-MCP-TUN](Technical-Requirements--TR-MCP-TUN)
+- [TR-MCP-USECASE](Technical-Requirements--TR-MCP-USECASE)
+- [TR-MCP-VOICE](Technical-Requirements--TR-MCP-VOICE)
+- [TR-MCP-WEB](Technical-Requirements--TR-MCP-WEB)
+- [TR-MCP-WIKIEXPORT](Technical-Requirements--TR-MCP-WIKIEXPORT)
+- [TR-MCP-WS](Technical-Requirements--TR-MCP-WS)
+- [TR-SUPPORT](Technical-Requirements--TR-SUPPORT)
+- [TR-SUPPORT-CORE](Technical-Requirements--TR-SUPPORT-CORE)
+- [TR-TRIAGE-CLIENT](Technical-Requirements--TR-TRIAGE-CLIENT)
+- [TR-WEB-SEC](Technical-Requirements--TR-WEB-SEC)
+- [TR-WEB-UI](Technical-Requirements--TR-WEB-UI)
 
 ## TR-01
 
@@ -214,6 +280,7 @@ Scope: layer-1+
 ## TR-MCP-ACKRECOVERY-001
 
 **Deploy compatible guarded session runtime** — Deploy pinned b53ce6b8 server and paired REPL through Nuke. Preserve configuration, data, permissions and rollback evidence. Existing serializable service transaction supplies atomic terminal-history protection; existing DTOs preserve modern persistence/title receipts.
+**Covered by:** FR: FR-MCP-ACKRECOVERY-001; TEST: TEST-MCP-ACKRECOVERY-001
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -238,7 +305,7 @@ Scope: layer-1+
 
 ## TR-MCP-AGENT-003
 
-**Agent REST API** — `AgentController` at `/mcpserver/agents` with endpoints for: definition CRUD (`/definitions`), workspace agent CRUD (root), ban/unban (`/{agentId}/ban`, `/{agentId}/unban`), lifecycle events (`/{agentId}/events`), and YAML validation (`/validate`). Mutation endpoints require `[Authorize(Policy = "AgentManager")]` (JWT). Read endpoints use standard workspace API key auth.
+**Agent REST API** — `AgentController` at `/qbrainai/agents` with endpoints for: definition CRUD (`/definitions`), workspace agent CRUD (root), ban/unban (`/{agentId}/ban`, `/{agentId}/unban`), lifecycle events (`/{agentId}/events`), and YAML validation (`/validate`). Mutation endpoints require `[Authorize(Policy = "AgentManager")]` (JWT). Read endpoints use standard workspace API key auth.
 **Covered by:** `AgentController`, `IAgentService`, `AgentService`
 **Status:** pending
 Scope: layer-1+
@@ -391,12 +458,6 @@ Scope: layer-1+
 **Status:** deferred
 Scope: layer-1+
 
-## TR-MCP-AGENT-PARITY-020..027
-
-**TR-MCP-AGENT-PARITY-020..027** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
-**Status:** deferred
-Scope: layer-1+
-
 ## TR-MCP-AGENT-PARITY-020-027
 
 **TR-MCP-AGENT-PARITY-020-027** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
@@ -496,6 +557,9 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] SQLite, PostgreSQL and SQL Server migrations add nullable versioned GZip UTF-8 storage for all four generic audit JSON payloads.
+- [ ] Existing text columns remain readable, and migration does not rewrite historical text rows.
 
 ## TR-MCP-AUDIT-003
 
@@ -503,6 +567,9 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The SQL Server migration creates a runtime role with ordinary application DML and denies UPDATE and DELETE on both audit ledgers and writes to EF migration history.
+- [ ] With AutoMigrate=false, HTTP and stdio startup reject pending migrations before serving runtime work.
 
 ## TR-MCP-AUDIT-004
 
@@ -518,6 +585,7 @@ Scope: layer-1+
 ## TR-MCP-AUDITACTION-001
 
 **Validate tool execution actions at session write boundaries** — Recognize tool_execution case-insensitively without rewriting caller data. Require nonnegative order, nonblank description and nonblank status for this action type. Preserve status vocabulary for host lifecycle compatibility. Validate actions selected for persistence before whole-session submit, turn upsert, turn replacement or actions-section replacement changes tracked session/turn state. Preserve last-wins duplicate request IDs and retained terminal history: losing duplicate payloads and skipped late snapshots remain ignored. Unrelated section replacements ignore action payloads. Preserve zero as a valid explicit tool_execution order, regardless of collection position. Keep unrelated legacy/custom action validation unchanged. Do not synthesize designDecisions or decision dialog from actions; document the recognized type in docs/context/action-types.md.
+**Covered by:** FR: FR-MCP-AUDITACTION-001; TEST: TEST-MCP-AUDITACTION-001
 **Status:** pending
 Scope: layer-1+
 
@@ -538,7 +606,7 @@ Scope: layer-1+
 ## TR-MCP-AUTH-003
 
 **Device Authorization Flow for CLI Clients** — OIDC `mcp-director` client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Provider claim mapping ensures `mcp-server-api` appears in token audience and includes `realm_roles`.
-**Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`, `McpServer.Director`
+**Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`, `QBrainAi.Director`
 **Status:** pending
 Scope: layer-1+
 
@@ -967,6 +1035,17 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-EMBEDDING-001
+
+**Real model-backed embedding integration fixture** — Bind the FR-MCP-004 embedding-vector-contract to a test-owned model and vocabulary so every original integration case executes its assertions without depending on a user model cache.
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] All four original EmbeddingServiceTests cases retain their identities and inputs, require an available real model, and execute the shared assertions for FR-MCP-004 embedding-vector-contract.
+- [x] The fixture owns one unique temporary root, records source URLs and artifact hashes and lengths, supplies ModelPath explicitly, disables implicit auto-download, and deletes only its owned root after disposing the service. Cleanup retries only transient I/O failures a bounded number of times and surfaces the final failure and any non-I/O failure.
+- [x] Missing, corrupt or unloadable model or vocabulary artifacts fail fixture setup and cannot make an original case pass through an early return.
+- [x] The fixture does not read from or write to the user home or default model cache, and it does not call the production downloader as a fixture workaround.
+
 ## TR-MCP-EVT-001
 
 **In-Process Change Event Bus** — `ChannelChangeEventBus` SHALL be registered as a singleton `IChangeEventBus` and provide fan-out publish/subscribe semantics to independent subscribers using bounded channels (capacity 1000) with non-blocking publish behavior. When a subscriber buffer is full, delivery to that subscriber SHALL be rejected and logged at warning level instead of silently discarding already queued events.
@@ -1032,99 +1111,266 @@ Scope: layer-1+
 
 ## TR-MCP-FEDERATION-001
 
-**TR-MCP-FEDERATION-001** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-001.
+**autonomous local execution contract** — Local request routing binds immutable ProjectId, NodeId and Branch to one DbContext and branch write gate. Dolt-mode domain requests never invoke LocalProxy forwarding or wait for the hub. Existing local authentication remains mandatory; federation reference-token introspection is not a dependency of local work. Result fields distinguish local persistence, version commit and publication.
+**Covered by:** FR: FR-MCP-174; TEST: TEST-MCP-222
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given A/main=C0 and the hub link is down, when A changes TODO T1.title from old to local, then the local API succeeds, a local reread returns local, and no hub request or history commit occurs.
+- [ ] Given H/main=C0 and the gateway is stopped, when H edits T1.title, then H persists it locally while remote/main remains C0.
+- [ ] Given the prior offline edit, when the application and Dolt restart, then T1.title remains local and main remains C0 until an explicit version commit.
 
 ## TR-MCP-FEDERATION-002
 
-**TR-MCP-FEDERATION-002** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-002.
+**explicit version commits and publication boundary contract** — POST /qbrainai/federation/projects/{projectId}/branches/{branch}/commits accepts requestId UUID, expectedHead, expectedWorkingSet, leaseFence, author and message. Success is 201 with commitHash and publicationState=committed_locally. Persist requestId in the Dolt commit trailer. Retry returns the original hash. Head/fingerprint/fence mismatch is HTTP409 with head_changed/working_set_changed/lease_lost. SaveChanges and control.poll never create version commits.
+**Covered by:** FR: FR-MCP-175; TEST: TEST-MCP-223
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given main=C0 and remote=C0, when SaveChanges persists T1.title=draft, then main and remote stay C0 and no publication intent is emitted.
+- [ ] Given that draft and a valid preview, when commit request R1 succeeds, then main=A1, the reply says committed_locally, and one recoverable publication intent targets A1.
+- [ ] Given B has a draft and desired head A1, when B polls, then outcome=waiting_local_work, B/main=C0 and the draft value is unchanged.
+- [ ] Given A1 committed while disconnected and a crash before intent persistence, when A restarts, then history scanning rediscovers A1 exactly once and publishes it after reconnect.
 
 ## TR-MCP-FEDERATION-003
 
-**TR-MCP-FEDERATION-003** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-003.
+**logical project enrollment and initial clone contract** — ProjectEnrollment stores ProjectId UUID, NodeId, ownerSubjectId, normalized local path, schemaVersion and subscriptions. POST /qbrainai/federation/enroll accepts an authenticated pre-provisioned node client plus operator-authorized owner binding. Body ProjectId must be allowed by token scope fed.project.{ProjectId}.enroll and durable membership. Paths stay host-local; no default-workspace fallback. A nonempty clone destination returns409 target_not_empty.
+
+Server: project discovery, scoped enrollment and structured refusal diagnostics. Plugin: project discovery/selection, enrollment progress and explicit actionable diagnostics.
+**Covered by:** FR: FR-MCP-176; TEST: TEST-MCP-224
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given LAB path /home/sharpninja/github/McpServer and LEGION path F:/github/McpServer, when both enroll as ProjectId Atlas, then both reference Atlas and retain their distinct local paths.
+- [ ] Given target has TODO X, when clone is requested, then409 target_not_empty leaves X and all target files unchanged.
+- [ ] Given node A has only Atlas membership, when it enrolls or clones SecretProject, then403 unauthorized_project returns no rows, objects or project existence details.
+- [ ] Given Atlas is discoverable but A has a nonempty destination, when each plugin selects Atlas and attempts enrollment/clone, then it displays ProjectId, selected branch and409 target_not_empty with remediation; no database is overwritten and no different project is selected.
 
 ## TR-MCP-FEDERATION-004
 
-**TR-MCP-FEDERATION-004** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-004.
+**branches across server and plugin context contract** — Branch APIs create/list/select/merge using ProjectId, branch and sessionId. Each pooled connection is opened for an explicit branch and verified before use. Merge accepts expectedSourceHead and expectedTargetHead; stale values yield409 head_changed. Reserved refs upload/, integration/ and review/ are inaccessible to ordinary editing credentials. Branch deletion fails409 branch_busy while leases, reviews or recovery pins reference it.
+**Covered by:** FR: FR-MCP-177; TEST: TEST-MCP-225
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given main T1.title=main and feature/search T1.title=feature, when alternating pooled reads run100 times, then each returns only its selected value.
+- [ ] Given main=C0 and feature/search=F1, when F1 publishes, then remote feature=F1 and all main heads remain C0.
+- [ ] Given a preview for main=C0 and feature=F1 but feature advances to F2, when merge submits the old preview, then409 head_changed creates no commit and changes no ref.
 
 ## TR-MCP-FEDERATION-005
 
-**TR-MCP-FEDERATION-005** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-005.
+**bidirectional committed-history exchange contract** — Node upload authority is limited to its candidate namespace in an isolated upload repository. POST /qbrainai/federation/publication/accept accepts projectId, branch, requestId, candidateHead, expectedPublishedHead and hubEpoch. Gateway validates authorization, ancestry, schema and domain invariants before the sole fenced publisher advances the public ref without force. Token validation occurs at the gateway; native Dolt remotesapi is loopback-only and never trusts a node bearer token directly. Transport/procedure enforcement is a Ph0 proof gate.
+**Covered by:** FR: FR-MCP-178; TEST: TEST-MCP-226
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given C0 contains T1.title=old,T1.description=old,T2.priority=low, when A1 changes title=A, B1 changes description=B and H1 changes T2.priority=high, then merges M1(A1,B1), M2(M1,H1) converge all heads to M2 with values A,B,high and all three commits in ancestry.
+- [ ] Given H has an uncommitted title draft at C0, when A publishes A1, then remote=A1, H remains C0 with its draft, and B can accept A1.
+- [ ] Given A1 and B1 descend from C0, when both accept requests expect C0, then one succeeds and the other receives409 head_changed; after merge M1 publishes, both A1 and B1 remain ancestors.
 
 ## TR-MCP-FEDERATION-006
 
-**TR-MCP-FEDERATION-006** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-006.
+**hub control table and polling contract** — SyncSubscription key=(NodeId,ProjectId,Branch) contains HubEpoch UUID, PublishedHead, PublishedGeneration int64, DesiredGeneration int64, ReportedGeneration int64, WorkerEpoch int64, AcceptedHead, Outcome and timestamps. POST control/poll is read-only. POST control/report includes all epochs and observed generation; stale worker=409 stale_worker_epoch, stale hub=409 hub_epoch_changed. Poll every30s with20% jitter; commit/reconnect/on-demand wake immediately. Backoff1s doubling to60s. Generation ordering is valid only within HubEpoch. Restore generates a new non-reused random epoch before listeners reopen.
+**Covered by:** FR: FR-MCP-179; TEST: TEST-MCP-227
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given desired=7 and reported=6, when poll runs twice, then both responses request7 and stored reported remains6.
+- [ ] Given desired becomes8 while report7 is in flight, when report7 arrives, then reported=7, desired=8 and the subscription remains pending.
+- [ ] Given remote=A1 but control still names C0 after a crash, when reconciliation runs, then it records A1 and advances desired generation without producing another commit.
+- [ ] Given a node remembers epoch E1 generation90 and the hub restores a backup at generation40, when the hub reopens, then epoch E2 differs from E1; E1 reports fail409 hub_epoch_changed and no head is force-reset. Node A1 is retained until verified ancestry recovery republishes missing history.
 
 ## TR-MCP-FEDERATION-007
 
-**TR-MCP-FEDERATION-007** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-007.
+**reviewed conflicts and valid merges contract** — Review record key=ReviewId UUID; fields ProjectId,Branch,baseHeads[],localHead,incomingHead,candidateRef,conflictingCells[],validationErrors[],createdUtc,lastNotifiedUtc,resolution,actor. GET conflicts and status expose it. Resolve binds exact heads and returns409 stale_review if changed. Safe TODO policy: identical concurrent values collapse; edits to different cells may merge only if invariants pass; duplicate immutable child IDs deduplicate only when bytes agree. Status, priority, title, description, dependency deletions and same-cell disagreements always require review; no timestamp last-writer-wins. Notify immediately in status and durable operator inbox; warn at15min, escalate at24h, repeat at most hourly; no email/Slack sent implicitly. Same-branch dependent commits wait; unrelated branches/projects continue.
+**Covered by:** FR: FR-MCP-180; TEST: TEST-MCP-228
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given base priority=low, A1 priority=high and B1 priority=medium, when B integrates A1, then needs_review shows low/medium/high, B/main remains B1 and no public ref is overwritten.
+- [ ] Given A1 deletes T1 and B1 edits T1.title, when histories merge, then needs_review retains B1 and the deleted/edited alternatives for review.
+- [ ] Given separate commits add T1 dependsOn T2 and T2 dependsOn T1, when Dolt merges without cell conflicts, then domain validation records dependency_cycle and leaves the prior valid live head unchanged.
+- [ ] Given a resolution preview binds local=B1 and incoming=A1, when incoming advances to A2, then resolve returns409 stale_review with no merge commit.
+- [ ] Given unresolved needs_review at12:00, when the clock reaches12:15, then plugins/status and the operator inbox show warning with ReviewId and age900s; at24h severity is critical, with at most one repeat per hour.
+- [ ] Given Atlas/main is blocked by review R1, when Atlas/feature publishes F2 and another project publishes X1, then both succeed while Atlas/main remains unchanged.
+- [ ] Given A changes title and B changes description with no domain violation, when merge runs, then both values survive; competing priority or completion edits produce needs_review instead of choosing a timestamp winner.
 
 ## TR-MCP-FEDERATION-008
 
-**TR-MCP-FEDERATION-008** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-008.
+**recovery without lost or repeated work contract** — OperationReceipt binds requestId, node, project, branch, hubEpoch, candidate/result hashes and outcome. Durable refs pin candidates/reviews before receipt completion. Worker claims are fenced by WorkerEpoch; reconnect never trusts stored generation across HubEpoch. Fetch may advance remote-tracking refs, never dirty live refs. Restore first disables ingress, restores compatible data/control/audit checkpoints, creates new epoch, then re-advertises verified heads; node-held missing commits are uploaded and ancestry-validated before normal synchronization resumes.
+
+Server: durable operation resume/status/safe cancellation. Plugin: expose resume, status and cancel with completed-versus-pending effects; never claim cancellation reverses published history.
+
+HubRestoreFromOlderBackup is first owned by Ph5 (epoch/remote/control), extended by Ph6 (integration/review/audit resend), and repeated as isolated real-host acceptance in Ph8. Restore is tested, never assumed from successful backup creation.
+**Covered by:** FR: FR-MCP-181; TEST: TEST-MCP-229
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given remote accepted A1 and reply was lost, when request R1 retries, then it returns A1 and the existing receipt; no A2 commit is created.
+- [ ] Given worker epoch changes4 to5, when epoch4 reports success, then409 stale_worker_epoch leaves current receipt and desired state unchanged.
+- [ ] Given B/main=C0 with title=draft, when A1 is fetched, then outcome=waiting_local_work, main stays C0 and title remains draft; at15min status/inbox shows the age warning.
+- [ ] Given B supports schema1 and incoming S1 requires schema2, when sync runs, then409 incompatible_schema leaves B's live data/head unchanged and records the required version.
+- [ ] Given source and destination have different schema versions and an incoming change has a verified equivalent data effect on the destination, when synchronization applies that change, then the destination stores the intended typed values, preserves unrelated stored values and relationships, and advances the permitted ref with the expected ancestry and receipt. Applying the operation requires no schema migration or binary replacement solely to match version numbers.
+- [ ] Given operation R1 published A1 but its local reply was lost, when a plugin resumes, reads status and requests cancellation, then it shows publishedHead=A1 and a durable cancellation outcome for remaining work; it never claims A1 was rolled back or creates a second commit.
 
 ## TR-MCP-FEDERATION-009
 
-**TR-MCP-FEDERATION-009** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-009.
+**collision-resistant and preserved identity contract** — Generated IDs use immutable two-character creator tags and durable branch-independent sequences with per-family grammar fixed in Ph0. Alias key=(ProjectId,OriginNodeId,EntityKind,LegacyId) maps permanently to CanonicalId; ambiguous unqualified lookup returns409 ambiguous_legacy_id. Historical text/commits are not rewritten. Migration duplicate candidates use normalized title/description/dependency features, returning similarity score plus evidence, never auto-merging. Human ID reservations are unique(ProjectId,EntityKind,HumanId) at the hub, bound to node/requestId. Offline nodes use generated provisional IDs; an unreserved human ID is not publishable.
+
+Server: provenance, scoped aliases, collision evidence and reservation outcomes. Plugin: expose provenance/collision diagnostics and the authorized resolution path without rewriting historical references.
+**Covered by:** FR: FR-MCP-182; TEST: TEST-MCP-230
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given tags LA and LG and both counters start1, when both create a TODO, then generated IDs differ and both records survive reconciliation.
+- [ ] Given LA allocated sequence42, when main reverts and another branch creates a record, then its sequence is greater than42.
+- [ ] Given LAB and LEGION have different entities named TODO-7, when migration resolves the collision, then scoped aliases resolve each original identity and every relational reference follows its reviewed canonical mapping; historical text remains byte-identical.
+- [ ] Given existing IMPL-UNITGREEN-001 and old TODO references, when imported and read by their original IDs, then they resolve through permanent aliases without rewriting commits, PR text, session logs, memories or documents.
+- [ ] Given LAB TODO-7 and LEGION TODO-91 share normalized title Fix login, description and dependency set, when migration plan runs, then it emits a duplicate candidate with both IDs and evidence; until explicit review, neither is merged or deleted.
+- [ ] Given human ID IMPL-UNITGREEN-001 is unreserved, when two nodes reserve it concurrently, then exactly one receives201 and the other409 human_id_reserved; retry by the winning requestId returns the same reservation.
+- [ ] Given an offline-created provisional TODO requesting an unreserved human ID, when it reconnects and publishes, then409 human_id_unreserved retains the local record until reservation or reviewed alias resolution.
+- [ ] Given LAB TODO-7 and LEGION TODO-91 are a duplicate candidate, when each plugin opens identity review, then both origin IDs, canonical/provisional IDs, similarity evidence and reservation outcome are visible; no alias or row changes before an authorized decision.
 
 ## TR-MCP-FEDERATION-010
 
-**TR-MCP-FEDERATION-010** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-010.
+**first-party plugin federation contract contract** — All plugins call typed server/client/MCP/REPL contracts; no raw SQL/CLI fallback. Status DTO includes projectId, branch, localHead, publishedHead, observedUtc, dirty, ahead, behind, publicationState, incomingTarget, connectivity, reviewCount, oldestReviewAgeSeconds, waitingLocalWorkAgeSeconds, auditPendingCount, hubEpoch, workerEpoch. Capability contract version1 is negotiated; unknown version=409 unsupported_contract. Administrative maintenance.preflight/attest/status and migration commands share the same typed service as Nuke. Stable error envelope={code, message, requestId, projectId, branch, retryable, details}; status codes are locked in the technical contract appendix.
+
+Technical contract appendix (TR-MCP-FEDERATION-010): all below routes are under /qbrainai/federation unless the commits route specifies the project/branch path. Every mutation requires requestId UUID and authenticated subject; node network requests additionally carry the project-scoped reference token. Responses carry contractVersion=1 and the stable error envelope. Path/body ProjectId mismatch is403 unauthorized_project. No endpoint accepts credentials in URL, argv or persisted receipts.
+
+Read/status routes: GET capabilities returns200 {contractVersion,capabilities}; GET projects/{projectId}/status returns200 the status DTO; GET projects/{projectId}/branches returns200 {items:[{name,head,dirty,publishedHead}]}; GET conflicts and GET conflicts/{reviewId} return200 review records filtered by membership. POST control/poll returns200 {hubEpoch,subscriptions}; reads never acknowledge work. POST control/report validates observed generation and worker epoch, returns200 the durable receipt or409 the named fence error. Poll/report use control scope; reads use read scope.
+
+Mutation routes: POST enroll returns201 the enrollment (or200 the same idempotent enrollment); POST projects/{projectId}/branches creates201 {branch,head}; POST projects/{projectId}/branches/select returns200 {sessionId,branch,head} after local lease validation; POST projects/{projectId}/branches/{branch}/commits returns201 {commitHash,publicationState}, or200 the same commit on retry. POST publication/accept returns200 {requestId,hubEpoch,publishedHead,publishedGeneration,receiptId} only after the guarded ref update is durable. POST branches/merge and POST conflicts/{reviewId}/resolve bind expected heads and return201 the new commit; a conflict returns202 {outcome:needs_review,reviewId} while the live head stays unchanged. Share/merge/publication require publish scope plus branch permission. Enrollment requires enroll scope and the operator owner-binding approval.
+
+POST audit/batches accepts {requestId,projectId,records:[AuditRecord]}, returns200 {receipts:[{originNodeId,recordId,payloadHash,outcome,receivedUtc}]}, and requires audit scope. Every record must match the token/project and batch ProjectId. Any invalid record rejects the whole batch before insert. Exact duplicate is already_received; payload mismatch is409 audit_id_conflict. POST ids/reservations accepts {requestId,projectId,entityKind,humanId,nodeId}, requires publish scope and returns201 the reservation or200 its exact retry; another owner gets409 human_id_reserved. POST maintenance/preflight and POST maintenance/attest, GET maintenance/status and POST migration/{plan|dry-run|run|resume|verify|export-project|export-todos|cutover|abort}, GET migration/status are operator-only local service operations. They are exposed through typed clients and Nuke, never public node-admin capabilities. A long migration returns202 {migrationId,status}; status/verify return200 a receipt, and a denied readiness check never performs cutover.
+
+Stable failure mapping:401 invalid_token;403 unauthorized_project;409 head_changed, working_set_changed, lease_lost, branch_busy, stale_review, stale_worker_epoch, hub_epoch_changed, ambiguous_legacy_id, human_id_reserved, human_id_unreserved, target_not_empty, maintenance_not_ready, migration_source_changed, migration_verification_failed, incompatible_schema, unsupported_contract, publication_required, request_id_conflict, audit_id_conflict and waiting_local_work (the last also a 200 outcome in poll/report; see outcome fields);422 secret_detected, dependency_cycle and unsupported_provider;501 unsupported_capability;503 identity_unavailable or remote_unavailable. TLS rejection produces the local transport code tls_peer_untrusted with no HTTP response and no request sent. Missing required fields return400 invalid_request. Missing authorized resources return404 not_found; project authorization precedes existence disclosure. Malformed/unsupported token is401; valid token lacking project rights is403.
+
+Outcome fields are not HTTP errors: committed_locally, already_received, already_applied, waiting_local_work and needs_review remain visible through200 status/report responses (already_applied is the migration-journal idempotency outcome for a rerun completed batch, distinct from the audit-ledger already_received). A requested live mutation blocked by drafts returns409 waiting_local_work; an integration that durably creates review returns202 needs_review. dependency_cycle is a validationErrors entry on that review as well as422 for a directly invalid local mutation. retryable=true is restricted to transient503/transport failures; all stale-head/fence/review errors require reread and a fresh validated action. Idempotent retries with the same requestId but different payload return409 request_id_conflict. No automatic retry creates a different commit.
+
+Test fixtures capture actual content hashes as symbols C0,A1,B1,H1,M1,M2,S1 rather than hardcoding unstable engine hashes. Each symbol is immutable within the run manifest. Given/When/Then compares exact hash equality, specified parent sets, row values, status codes and error codes against that manifest; a successful result must never be inferred solely from an empty queue. Capture UTC timestamps and a fake clock for exact15-minute/24-hour age boundaries. All plan phase IDs use Ph0-Ph8; priority values remain separate.
+
+Plugin completeness is checked by PluginEnrollmentDiagnostics, PluginRecoveryControls, PluginIdentityDiagnostics, PluginLeastPrivilegeDenial, PluginEffectBoundary and PluginEditingOwnership in their mapped contracts. Ph7 owns their plugin bindings; earlier phases own server behavior. Standalone and explicit DirectProxy compatibility remain under FR-MCP-077/TR-MCP-FED-001; this does not reinstate versioned LocalProxy forwarding.
+**Covered by:** FR: FR-MCP-183; TEST: TEST-MCP-231
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given one fixture for commit R1, conflict R2 and migration R3, when each installed first-party plugin calls its wrapper, then normalized IDs, heads, error codes and audit agent identity match the typed client result.
+- [ ] Given server lacks federation contract1, when a plugin invokes commit, then unsupported_contract is shown and no raw SQL or shell fallback executes.
+- [ ] Given a cached leaseFence4 and session branch feature, when reconnect discovers fence5, then the plugin retains visible context but refuses writes with lease_lost until reacquired.
+- [ ] Given a branch observation is older than24h, when status is displayed, then stale=true and observedUtc are visible; the branch, drafts and refs are not deleted.
 
 ## TR-MCP-FEDERATION-011
 
-**TR-MCP-FEDERATION-011** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-011.
+**portable data versus host-local state contract** — Project history excludes secrets and automatic operational audit. This does NOT make audit local-only: every host retains permanent local audit and an append-only outbox delivers sanitized records to the hub unversioned ledger independently of project commits. AuditRecord key=(OriginNodeId,RecordId UUID); fields ProjectId,EntityKind,EntityId,OriginSequence int64,OccurredUtc,Actor,Action,PayloadVersion,PayloadHash,Payload. POST audit/batches validates token/project, inserts atomically by key and returns per-record durable receipts. Same key/hash is already_received; same key/different hash=409 audit_id_conflict. No UPDATE/DELETE permission. Local pruning is forbidden. Migration backfills TODO and generic audit history with counts/hashes and receipts. Credential values are excluded at capture, not silently replicated.
+**Covered by:** FR: FR-MCP-184; TEST: TEST-MCP-232
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given credentials and local machine paths exist in operational storage, when a project is cloned, then none appears in its versioned tables or history.
+- [ ] Given A performs an offline TODO edit and creates audit E1, when connectivity returns without a Dolt commit, then hub audit contains exactly E1, A retains E1, and main/remote remain C0.
+- [ ] Given E1 was stored but its receipt was lost, when the same batch retries, then exactly one E1 exists and the same hash receipt returns; changed payload under E1 returns409 audit_id_conflict.
+- [ ] Given source has100 TODO audit and20 generic audit rows, when seed/join audit backfill verifies, then all120 records have matching payload hashes and hub receipts; missing one blocks cutover.
+- [ ] Given an explicitly promoted sanitized session with turns, actions, dialog, commits/files, PlanFile and TodoId, when cloned, then every promoted child and relationship matches the source snapshot; automatic capture still uses the audit channel.
+- [ ] Given accepted head changes C0 to A1, when the derived index rebuild completes, then queries read A1 values and no C0 cache is served under the A1 key.
+- [ ] Given main=C0 is clean, when heartbeat, audit and automatic session capture run, then Dolt working-set fingerprint remains unchanged.
+- [ ] Given agent1 owns the editing lease, when agent2 logs a session action, then its local audit persists without acquiring or changing agent1's lease.
+- [ ] Given a promoted snapshot contains a fixture secret detected by the configured detector, when commit preview runs, then422 secret_detected creates no commit and outputs no secret value.
+- [ ] Given unique fixture canaries are injected through protected secret references, when commands, retries and failures execute on both hosts, then scans of argv, receipts, logs, chat/audit payloads, memory stores, generated files, Git staged blobs/new commits and Dolt working sets/new history find zero canary values. Scanner diagnostics and rejected commit previews also contain zero values; no secret is added to history to test the detector.
 
 ## TR-MCP-FEDERATION-012
 
-**TR-MCP-FEDERATION-012** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-012.
+**scoped authorization and offline behavior contract** — Reuse existing Duende IdentityServer. Provision client fed.node.{NodeId} per single-user node, bound to ownerSubjectId through authenticated operator enrollment. Client credentials issue short-lived reference access tokens; audience qbrain-federation and scopes fed.project.{ProjectId}.{read|publish|control|audit|enroll}; protected actions additionally require server membership/branch permission. Gateway introspects without positive caching for each new request and rechecks before publication commit; unavailable identity returns503 identity_unavailable. Revoke through IdentityServer: disable client and remove its persisted reference grants. Gateway rejects inactive tokens401 invalid_token; do not invent a revocation ledger. Native remotesapi uses gateway-held credentials over loopback; clients cannot access it directly. Ph0 proves token injection/relay including redirects/object URLs, project isolation and no public-ref bypass.
+
+Server: least-privilege capabilities plus server-side authorization on every call. Plugin: show available rights and explicit denial; capability display never substitutes for authorization.
+
+Ph0 B5 binds the exact restored Duende 7.4 patch and matching source-tag/API references, and proves issuance, introspection, grant removal and revocation against that binary. General/v8 documentation alone cannot close B5.
+**Covered by:** FR: FR-MCP-185; TEST: TEST-MCP-233
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given A has a valid Atlas token, private-backend access across the lab link fails. A read-only token attempting a public-main mutation receives unauthorized_project. A publish-authorized token attempting a raw public-ref update outside publication.accept receives publication_required. HTTP endpoints return HTTP 403 and 409, respectively. Native remotesapi gRPC returns PermissionDenied and FailedPrecondition, respectively. All three cases leave remote/main at C0.
+- [ ] Given a token has Atlas.read and lacks SecretProject scope, a remote fetch for SecretProject returns unauthorized_project and sends zero objects. HTTP endpoints return HTTP 403 and native remotesapi gRPC returns PermissionDenied.
+- [ ] Given A holds a reference token, when IdentityServer disables A and revokes its grants before acceptance, then accept returns401 invalid_token and remote/main is unchanged.
+- [ ] Given hub/IdentityServer is unreachable and a valid authorized local user, when a local TODO edit is requested, then it succeeds; an unauthorized local user still receives403.
+- [ ] Given ordinary editing SQL credentials, when remote administrative procedures or public-ref writes are attempted, then permission is denied and no object publication occurs.
+- [ ] Given IdentityServer revocation completes, new fetch and publish requests with the old token both return invalid_token before transfer or ref mutation. HTTP endpoints return HTTP 401 and native remotesapi gRPC returns Unauthenticated.
+- [ ] Given both services run, when LAB probes10.42.0.143:3306 and LEGION probes10.42.0.214:3306, then both connections fail; local127.0.0.1:3306 health succeeds.
+- [ ] Given the peer uses an unapproved SPKI or wrong SAN, when control/remote TLS connects, then tls_peer_untrusted occurs before bearer transmission.
+- [ ] Given a plugin session has Atlas.read but lacks publish, when capabilities load and a publication is nevertheless attempted, then publish is unavailable in the capability display, the request returns403 unauthorized_project, the denial is explicit and no SQL/CLI fallback or head change occurs.
 
 ## TR-MCP-FEDERATION-013
 
-**TR-MCP-FEDERATION-013** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-013.
+**Dolt fourth-provider support and schema migration contract** — Provider key dolt has a dedicated migration assembly; original provider migrations remain unchanged. Versioned project schema migrations are authored only by hub maintenance on maintenance/schema-N and distributed as history. MaintenanceReadiness binds epoch, binary/schema versions, all local branches including unpublished ones, heads, working-set hashes and attestations. Preflight must pass before Nuke swaps binaries; dirty/unattested branch=409 maintenance_not_ready. LAB uses pinned Linux image; LEGION routine Ph0 fixtures use checksum-pinned native Windows dolt.exe as a non-elevated Nuke-owned process. The actual service identity, account, ACLs and child-process start/stop/crash cleanup are separate Ph0 B1/B9 evidence collected at Task 008 before the group exit; no existing suitable service is assumed, local paths on F: and exclusive Windows file handle/named mutex ownership. All B1-B12 are evidenced on both OSs.
+**Covered by:** FR: FR-MCP-186; TEST: TEST-MCP-234
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given keys sqlite,postgresql,sqlserver,dolt, when runtime and design-time factories resolve them, then each selects its own strategy/migration history; unknown key returns unsupported_provider.
+- [ ] Given empty standalone Dolt then baseline schema1, when baseline and additive schema2 apply, then CRUD succeeds, data remains intact and repeated apply makes no further changes.
+- [ ] Given recorded hashes of the three original migration chains, when Dolt support is added, then those hashes match and all three real-provider upgrade fixtures pass.
+- [ ] Given application and project schema versions differ, when a domain operation requires storage behavior that the current combination cannot verify or represent faithfully, then it returns incompatible_schema before mutation. A verified compatible operation on the same project schema can proceed and preserves exact stored data outside its intended changes.
+- [ ] Given a versioned project at schema1, when application starts, then no EF migration executes and its Dolt head/schema remain unchanged.
+- [ ] Given B1 is unpublished on schema1 and hub S1 adds schema2 from C0, when preflight/upgrade and merge succeed, then B/main=M1 with both B1 and S1 ancestors and B1 row values preserved.
+- [ ] Given main has accepted the hub's schema update S1 and an unpublished feature has not merged S1, when a feature write can be applied faithfully under its current schema, then it can proceed under the normal branch guards. A write that needs S1 remains closed until that feature's own merge with S1 validates. The catch-up preserves the feature history, committed rows, and any protected draft.
+- [ ] Given any local branch has a draft, when Nuke preflight runs, then409 maintenance_not_ready prevents binary replacement and preserves the draft.
+- [ ] Given unpublished feature lacks an expand-schema attestation, when contract migration is requested, then it is refused even if all public remote branches are current.
+- [ ] Given a ready public main but an unattested local feature, when deployment runs, then no binary/service/schema change occurs; explicit branch attestation is required.
+- [ ] Given one Windows worker owns Atlas, when a second process starts or the owner crashes, then concurrent ownership is denied and restart recovers only after the OS releases its lock; committed rows and unpublished heads survive.
+- [ ] Given isolated disposable Atlas stores on LAB and LEGION and FED-ATLAS-H/A/B fixtures, when Ph8 partitions/reconnects each control, publication/history, audit and identity path and restarts each application/worker, Dolt, gateway, identity and control/audit component at commit/publication/report boundaries, then every matrix row records exact heads/ancestor sets/rows/drafts/refs/epoch and audit receipts matching the workflow outcome, with zero missing provider/migration/recovery rows. Missing any component/path row fails acceptance; unrelated live projects retain their provider mappings and data.
+- [ ] Given an unavailable port, exited process, or unmet SQL readiness deadline, when startup cannot establish a verified instance within its bounded retry policy, it exits nonzero with safe diagnostics and without a successful instance result. It stops any exact child it started and retains diagnostics and data in the run-owned directory.
+- [ ] Given the checksum-pinned Dolt executable and a non-elevated caller, when Nuke StartDoltTestInstance is invoked concurrently, each successful invocation starts and retains a distinct run-owned Dolt process and data directory on a distinct OS-selected loopback port, verifies SQL readiness, and exits zero with a machine-readable result containing the listening port and actual process ID. Routine startup creates no service and requests no elevation.
+- [ ] Given a successfully started instance, when Nuke StopDoltTestInstance receives exactly one of its port or process ID, it verifies current process ownership, stops only that process tree, verifies that its listener and process have exited, and retains the instance data and diagnostics. An ambiguous, unowned, or stale selector must never stop another process. Other running instances remain available.
 
 ## TR-MCP-FEDERATION-014
 
-**TR-MCP-FEDERATION-014** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-014.
+**original-provider-to-Dolt migration tool contract** — MigrationManifest binds MigrationId, mode, ProjectId, source provider/snapshot hash, schema versions, table counts, typed row hashes, alias decisions, audit backfill and immutable destination commit. Ph3 implements seed, dry-run/resume/verify and Dolt-to-new-SQLite project recovery; join is unavailable until Ph6 review/publication exist. Both lab sources are SQLite; PostgreSQL and SQL Server remain supported fixture sources. Retain originals read-only. Recovery quiesces the owner and captures every branch, including unpublished heads and dirty working sets, without creating history commits. Export one new compatible SQLite DB per branch containing ALL B2-classified versioned domains: TODO child/link/document graphs, requirements/mappings, use-case actors/flows/steps, workspace memories, portable configuration, promoted session graphs and permanent aliases. Preserve IDs, values, timestamps, versions, soft deletes and audit linkage. Manifest binds branch/head/working-set/schema/count/hash evidence; retain immutable Dolt objects/refs to preserve ancestry outside SQLite. export-todos remains a subset, never whole-project rollback acceptance. Missing domain/branch or failed validation blocks routing changes. Operator selects the verified active snapshot; others remain readable recovery artifacts. Capture host-local control/audit/outbox/IdentityServer backups at the same quiescence boundary and verify restore plus hub audit resend. Cutover requires verified receipts, explicit DEPLOY HOLD release and one-node soak before the second host.
+**Covered by:** FR: FR-MCP-187; TEST: TEST-MCP-235
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given the same fixture in SQLite,PostgreSQL,SQL Server, when seed migration runs, then counts, typed hashes, IDs, nulls, Unicode, decimals, UTC precision and FK relationships match in Dolt.
+- [ ] Given target batch1 committed before a crash but its acknowledgement was lost, when resume runs, then batch1 is recognized by journal and no duplicate rows appear.
+- [ ] Given manifest source hash S0, when source is replaced by S1 before resume, then409 migration_source_changed writes no additional target rows.
+- [ ] Given one row hash differs, when cutover is requested, then409 migration_verification_failed leaves source routing active and writes closed on the target.
+- [ ] Given verified cutover completes, when target receives a new TODO, then source backup remains present, read-only and byte-identical; the new TODO exists only in Dolt until an explicit recovery export.
+- [ ] Given seed C0 is published and join imports J1, when join completes in Ph6, then C0 is an ancestor of J1 and reviewed main M1; no second root is created.
+- [ ] Given seed T1.title=A and frozen join T1.title=B, when join planning runs, then an explicit keep/take/manual decision is required before J1 even if Dolt would fast-forward.
+- [ ] Given J1 is verified but main integration is unresolved, when cutover runs, then409 migration_verification_failed preserves source routing; only verified reviewed M1 permits cutover.
+- [ ] Given A1 adds TODO T2 after cutover, when export-sqlite targets A1, then the new SQLite DB contains T2 and all TODO children/aliases with matching hashes, while the original source remains unchanged.
+- [ ] Given only Ph3 is implemented, when mode=join is requested, then501 unsupported_capability creates no target commit or routing change.
+- [ ] Given Atlas has main=A1 with post-cutover TODO T1, requirement R1/mapping, use case U1/actor/flow/step, memory W1, portable setting K1 and promoted session S1/turn/action, plus unpublished feature=F1 and draft T2.title=draft, when export-project freezes both branches and verifies fresh SQLite snapshots plus operational backup, then all IDs/typed values/links/soft deletes match each captured working set, feature still resolves F1, T2 remains draft without a new Dolt commit, audit receipts reconcile, the retained Dolt archive contains A1/F1 ancestry and original SQLite bytes are unchanged. Omit W1 or feature in a negative control: migration_verification_failed prevents routing switch.
 
 ## TR-MCP-FEDERATION-015
 
-**TR-MCP-FEDERATION-015** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-015.
+**imported state does not repeat external effects contract** — History import and audit ingestion apply validated state, never dispatch original domain commands or external effects. EffectIdentity is stable across retries/import. Imported operational metadata is inert evidence, not an execution request. General federation apply/control is outside QuadBrain keyserver transaction gating per FR-MCP-173; actual QuadBrain operations retain their separate coordinator contract. Legacy HMAC envelopes remain isolated compatibility behavior.
+
+Server: synchronization applies data without executing external operations. Plugin: distinguish history/data synchronization from separately authorized external effects in preview, status and receipts.
+**Covered by:** FR: FR-MCP-188; TEST: TEST-MCP-236
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given A1 records an already-sent GitHub update, when B integrates A1, then B state includes the result and outbound GitHub/email invocation count is0.
+- [ ] Given accepted commit A1 and effect E1, when sync retries10 times, then the effect ledger still has one E1 and no new external dispatch occurs.
+- [ ] Given audit backfill contains command names and receipt payloads, when the hub ingests them, then they are stored as evidence and no business command executes.
+- [ ] Given QuadBrain coordinator is degraded but local authorization passes, when federation commit/control/audit operations execute, then none invokes the keyserver and valid local work succeeds.
+- [ ] Given incoming A1 contains a TODO completed state and inert historical external-action metadata, when the plugin shows synchronization success, then it labels data received with zero external operations executed; requesting an external operation requires a separate explicit authorized command and its own receipt.
 
 ## TR-MCP-FEDERATION-016
 
-**TR-MCP-FEDERATION-016** — Placeholder requirement backfilled for TODO link TR-MCP-FEDERATION-016.
+**safe shared-host editing and commit ownership contract** — BranchLease key=(ProjectId,Branch), OwnerSessionId, Fence int64, ExpiresUtc and WorkingSetFingerprint. Every live-branch mutation holds the same host-owner write gate across lease validation and transaction/commit. Expiry rejects new admission; an admitted write finishes before takeover. Isolated worker rights cover only non-live integration refs and it invokes owner API for live moves. Dirty takeover needs explicit review. Commit requestId persists in history for idempotency; preview binds exact head/fingerprint.
+
+Server: editing owner, request/release and fenced takeover contracts. Plugin: display editing owner, request/release context and offer another branch without capturing another agent draft.
+**Covered by:** FR: FR-MCP-189; TEST: TEST-MCP-237
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Given agent1 owns a draft, when agent2 commits the same branch, then409 branch_busy creates no commit and the draft remains agent1-owned.
+- [ ] Given fence4 expires and fence5 is issued, when a fence4 edit arrives, then409 lease_lost persists no row changes.
+- [ ] Given preview fingerprint W1, when the working set becomes W2, then commit with W1 returns409 working_set_changed and requires a fresh preview.
+- [ ] Given a write admitted under fence4, when expiry occurs mid-transaction, then that write finishes under the gate before fence5 takeover; a later fence4 write is rejected.
+- [ ] Given request R1 created A1 and reply was lost, when R1 retries after restart, then A1 is returned by its commit trailer and history contains no duplicate commit.
+- [ ] Given an edit holds the branch gate, when the integration worker requests a live head move, then it waits; after the edit finishes, fingerprint revalidation detects the draft and returns waiting_local_work without overwriting it.
+- [ ] Given agent1 owns A/main fence4 with a draft, when agent2 views context and requests editing, then it sees the owner and branch, receives409 branch_busy, and may select a separate feature branch; owner release/takeover requires explicit authorization and preserves the main draft without commit or discard.
 
 ## TR-MCP-FED-MEMORY-001
 
@@ -1137,14 +1383,16 @@ Scope: layer-1+
 
 ## TR-MCP-FED-PATH-001
 
-**Single request-path normalizer with injectable host platform** — Introduce one request-path normalization entry point (IWorkspacePathNormalizer backed by WorkspaceIdentityPath) with an injectable host-platform abstraction so tests can simulate a Linux host on Windows. Every resolver that receives a request-supplied workspace path uses it: TriageService.ResolveSubmittingWorkspace/ResolveEffectiveWorkspaceAsync and query methods, WorkspaceService.NormalizePath (GetAsync/Create/Init), WorkspaceResolutionMiddleware.PopulateContext, HandoffWorkspacePaths, QBrainAiMcpTools.ApplyWorkspaceOverride, WorkspaceServiceAccessor, HandoffIngestionService, WorkspaceTokenService.Normalize, TodoServiceResolver, TodoServiceFactory, EfTodoService, RequirementsDatabaseDocumentService.CreateScope/TryGetRequestWorkspacePath, HostileReviewService, TodoExecutionService, FileGitHubWorkspaceTokenStore, AgentPoolService.BuildPooledDeviceId, AuditedAgentCliClient, RepoFileService, MarkerFileService, WikiDumpService, WorkspacePolicyDirectiveParser, AgentHelpPinnedPathResolver, HandoffSourceResolver, SessionLogWorkspaceAttributionValidator. Path.GetFullPath is applied only to host-native paths. An architecture test fails on any new direct Path.GetFullPath over request-supplied workspace paths outside an explicit allowlist.
+**Single request-path normalization entry point** — Introduce one request-path normalization entry point (IWorkspacePathNormalizer backed by WorkspaceIdentityPath) with an injectable host-platform abstraction so tests can simulate a Linux host on Windows. Every resolver that receives a request-supplied workspace path uses it: TriageService.ResolveSubmittingWorkspace/ResolveEffectiveWorkspaceAsync and query methods, WorkspaceService.NormalizePath (GetAsync/Create/Init), WorkspaceResolutionMiddleware.PopulateContext, HandoffWorkspacePaths, QBrainAiMcpTools.ApplyWorkspaceOverride, WorkspaceServiceAccessor, HandoffIngestionService, WorkspaceTokenService.Normalize, TodoServiceResolver, TodoServiceFactory, EfTodoService, RequirementsDatabaseDocumentService.CreateScope/TryGetRequestWorkspacePath, HostileReviewService, TodoExecutionService, FileGitHubWorkspaceTokenStore, AgentPoolService.BuildPooledDeviceId, AuditedAgentCliClient, RepoFileService, MarkerFileService, WikiDumpService, WorkspacePolicyDirectiveParser, AgentHelpPinnedPathResolver, HandoffSourceResolver, SessionLogWorkspaceAttributionValidator. Path.GetFullPath is applied only to host-native paths. An architecture test fails on any new direct Path.GetFullPath over request-supplied workspace paths outside an explicit allowlist.
 **Covered by:** FR: FR-MCP-FED-PATH-001; TEST: TEST-MCP-FED-PATH-001
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] IWorkspacePathNormalizer.Combine treats a segment with one leading backslash as root-relative on Windows: it keeps the current root's volume, the drive (C:/) or the UNC server and share (//srv/share/), and replaces the rest of the path, on a Linux hub and a Windows host (PR 81 finding P12, PR 82 review).
 
 ## TR-MCP-FED-ROUTE-001
 
-**Scoped project resolution and legacy route isolation** — Versioned APIs require ProjectId and derive NodeId from IdentityServer client membership. Missing project=400 project_required; foreign project=403 unauthorized_project. Request paths use the syntax-aware normalizer, not host Path.GetFullPath. Legacy header lookup remains mode-scoped and never supplies fallback identity to versioned routes.
+**Scoped project resolution and legacy route isolation** — Versioned APIs require ProjectId and derive NodeId from IdentityServer client membership. Missing project=400 invalid_request; foreign project=403 unauthorized_project. Request paths use the syntax-aware normalizer, not host Path.GetFullPath. Legacy header lookup remains mode-scoped and never supplies fallback identity to versioned routes.
 **Covered by:** FR: FR-MCP-FED-ROUTE-001; TEST: TEST-MCP-FED-ROUTE-001
 **Status:** pending
 Scope: layer-1+
@@ -1153,9 +1401,15 @@ Scope: layer-1+
 
 ## TR-MCP-FED-SESSIONLOG-001
 
-**TR-MCP-FED-SESSIONLOG-001** — Placeholder requirement backfilled for TODO link TR-MCP-FED-SESSIONLOG-001.
+**Session-log federation snapshot carries the full session graph** — SessionLogFederationStateAdapter.SnapshotAsync SHALL return, for an existing session of the local store, a payload in the UnifiedSessionLogDto shape that the adapter's ApplyAsync accepts, carrying every session field and every turn with all of its fields and child collections (actions, tags, context items, processing dialog, commits with their files, design decisions, requirements discovered, files modified, blockers), equal to what the local session-log read returns for that session after the outbound session-log sanitizer. Building a snapshot reads only the local store. The snapshot version stays the session's explicit version (ContentHash, else LastUpdated in Unix milliseconds, else TurnCount).
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] For a session whose turn carries a value in every turn field and at least one item in every child collection (commits with files), the snapshot payload deserializes as UnifiedSessionLogDto and equals the local session-log read of that session field by field, child collections in order.
+- [ ] A snapshot payload is applyable: applying it through the adapter's ApplyAsync to a store without that session and then reading the session there yields a DTO equal to the source read, for values the sanitizer leaves unchanged.
+- [ ] A value the outbound session-log sanitizer redacts in the session-log read is redacted the same way in the snapshot payload.
+- [ ] Building a snapshot makes no federation data call: a session that exists only on a peer is not snapshotted, and a local session's snapshot carries only local turns.
+- [ ] A missing or soft-deleted session yields PayloadJson "null" and Version null, and an existing session's Version equals its explicit version (ContentHash, else LastUpdated in Unix milliseconds, else TurnCount), as before this requirement.
 
 ## TR-MCP-FED-WSSYNC-001
 
@@ -1261,7 +1515,7 @@ Scope: layer-1+
 ## TR-MCP-HELP-001
 
 **Agent Help options and startup validation** — AgentHelpOptions binds from the AgentHelp configuration section; AgentHelpOptionsValidator rejects unsupported execution strategies, missing transcript or incident directories, and incomplete API key wiring.
-**Covered by:** FR: FR-MCP-HELP-010; TEST: TEST-MCP-HELP-004, TEST-MCP-HELP-009
+**Covered by:** FR: FR-MCP-HELP-010, FR-MCP-RUNAS-001; TEST: TEST-MCP-HELP-004, TEST-MCP-HELP-009, TEST-MCP-HELP-005, TEST-MCP-RUNAS-001
 **Status:** completed
 Scope: layer-1+
 
@@ -1324,7 +1578,7 @@ Scope: layer-1+
 ## TR-MCP-HELP-010
 
 **GrokCliAgentExecutionStrategy one-shot grok invocation** — GrokCliAgentExecutionStrategy SHALL run grok as a one-shot process delivering the prompt via --prompt-file and capturing plain stdout, resolve the grok executable via ProcessEnvironmentService, be registered in AddAgentExecutionStrategies, and be resolvable by name grok-cli with grok-build normalizing to grok-cli; AgentHelpOptions.DefaultExecutionStrategy defaults to grok-cli.
-**Covered by:** FR: FR-MCP-HELP-011; TEST: TEST-MCP-HELP-008
+**Covered by:** FR: FR-MCP-HELP-011, FR-MCP-RUNAS-001; TEST: TEST-MCP-HELP-008, TEST-MCP-HELP-004, TEST-MCP-HELP-005, TEST-MCP-RUNAS-001
 **Status:** pending
 Scope: layer-1+
 
@@ -1412,126 +1666,147 @@ Scope: layer-1+
 ## TR-MCP-HVPIPE-001
 
 **TR-MCP-HVPIPE-001** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-001.
+**Covered by:** FR: FR-MCP-HVPIPE-001; TEST: TEST-MCP-HVPIPE-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-002
 
 **TR-MCP-HVPIPE-002** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-002.
+**Covered by:** FR: FR-MCP-HVPIPE-002; TEST: TEST-MCP-HVPIPE-002
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-003
 
 **TR-MCP-HVPIPE-003** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-003.
+**Covered by:** FR: FR-MCP-HVPIPE-003; TEST: TEST-MCP-HVPIPE-003
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-004
 
 **TR-MCP-HVPIPE-004** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-004.
+**Covered by:** FR: FR-MCP-HVPIPE-004; TEST: TEST-MCP-HVPIPE-004
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-005
 
 **TR-MCP-HVPIPE-005** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-005.
+**Covered by:** FR: FR-MCP-HVPIPE-005; TEST: TEST-MCP-HVPIPE-005
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-006
 
 **TR-MCP-HVPIPE-006** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-006.
+**Covered by:** FR: FR-MCP-HVPIPE-006; TEST: TEST-MCP-HVPIPE-006
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-007
 
 **TR-MCP-HVPIPE-007** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-007.
+**Covered by:** FR: FR-MCP-HVPIPE-007; TEST: TEST-MCP-HVPIPE-007
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-008
 
 **TR-MCP-HVPIPE-008** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-008.
+**Covered by:** FR: FR-MCP-HVPIPE-008; TEST: TEST-MCP-HVPIPE-008
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-009
 
 **TR-MCP-HVPIPE-009** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-009.
+**Covered by:** FR: FR-MCP-HVPIPE-009; TEST: TEST-MCP-HVPIPE-009
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-010
 
 **TR-MCP-HVPIPE-010** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-010.
+**Covered by:** FR: FR-MCP-HVPIPE-010; TEST: TEST-MCP-HVPIPE-010
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-011
 
 **TR-MCP-HVPIPE-011** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-011.
+**Covered by:** FR: FR-MCP-HVPIPE-011; TEST: TEST-MCP-HVPIPE-011
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-012
 
 **TR-MCP-HVPIPE-012** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-012.
+**Covered by:** FR: FR-MCP-HVPIPE-012; TEST: TEST-MCP-HVPIPE-012
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-013
 
 **TR-MCP-HVPIPE-013** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-013.
+**Covered by:** FR: FR-MCP-HVPIPE-013; TEST: TEST-MCP-HVPIPE-013
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-014
 
 **TR-MCP-HVPIPE-014** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-014.
+**Covered by:** FR: FR-MCP-HVPIPE-014; TEST: TEST-MCP-HVPIPE-014
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-015
 
 **TR-MCP-HVPIPE-015** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-015.
+**Covered by:** FR: FR-MCP-HVPIPE-015; TEST: TEST-MCP-HVPIPE-015
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-016
 
 **TR-MCP-HVPIPE-016** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-016.
+**Covered by:** FR: FR-MCP-HVPIPE-016; TEST: TEST-MCP-HVPIPE-016
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-017
 
 **TR-MCP-HVPIPE-017** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-017.
+**Covered by:** FR: FR-MCP-HVPIPE-017; TEST: TEST-MCP-HVPIPE-017
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-018
 
 **TR-MCP-HVPIPE-018** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-018.
+**Covered by:** FR: FR-MCP-HVPIPE-018; TEST: TEST-MCP-HVPIPE-018
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-019
 
 **TR-MCP-HVPIPE-019** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-019.
+**Covered by:** FR: FR-MCP-HVPIPE-019; TEST: TEST-MCP-HVPIPE-019
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-020
 
 **TR-MCP-HVPIPE-020** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-020.
+**Covered by:** FR: FR-MCP-HVPIPE-020; TEST: TEST-MCP-HVPIPE-020
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-HVPIPE-021
 
 **TR-MCP-HVPIPE-021** — Placeholder requirement backfilled for TODO link TR-MCP-HVPIPE-021.
+**Covered by:** FR: FR-MCP-HVPIPE-021; TEST: TEST-MCP-HVPIPE-021
 **Status:** pending
 Scope: layer-1+
 
@@ -1817,93 +2092,120 @@ Scope: layer-1+
 ## TR-MCP-NUKE-001
 
 **Non-interactive PowerShell hosts for Nuke automation** — The root Nuke PowerShell bootstrap and any build-owned pwsh.exe or powershell.exe child process SHALL include -NoLogo, -NoProfile, and -NonInteractive unless an invocation is explicitly documented as interactive. Live deployment guidance SHALL use the same flags.
-**Covered by:** FR: FR-MCP-110; TEST: TEST-MCP-148
+**Covered by:** FR: FR-MCP-110, FR-MCP-BUILD-001; TEST: TEST-MCP-148
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-002
 
 **TR-MCP-NUKE-002** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-002.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-005
 
 **TR-MCP-NUKE-005** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-005.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-006
 
 **TR-MCP-NUKE-006** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-006.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-007
 
 **TR-MCP-NUKE-007** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-007.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-008
 
 **TR-MCP-NUKE-008** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-008.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-009
 
 **TR-MCP-NUKE-009** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-009.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-010
 
 **TR-MCP-NUKE-010** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-010.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-011
 
 **TR-MCP-NUKE-011** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-011.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-012
 
 **TR-MCP-NUKE-012** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-012.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-015
 
 **TR-MCP-NUKE-015** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-015.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-016
 
 **TR-MCP-NUKE-016** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-016.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-017
 
 **TR-MCP-NUKE-017** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-017.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-018
 
 **TR-MCP-NUKE-018** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-018.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-NUKE-019
 
 **TR-MCP-NUKE-019** — Placeholder requirement backfilled for TODO link TR-MCP-NUKE-019.
+**Covered by:** FR: FR-MCP-BUILD-001
 **Status:** pending
 Scope: layer-1+
+
+## TR-MCP-NUKE-020
+
+**Targeted test-group runs** — The Nuke target TestGroups runs only named groups of test classes, each group in one test project, and writes one TRX per project, so that a mock gate or binding after an edit runs the changed tests through Nuke instead of the full suite. The full gate set (Test, MigrationIntegrationTests, the build's infrastructure tests, ValidateTraceability) still runs once at phase exit.
+**Covered by:** FR: FR-MCP-BUILD-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Nuke target TestGroups runs only the test groups its --test-groups array names. Each group names one test project and one or more test classes, selected by class name whatever their category. The target requires --test-run-id and writes one TRX per selected project under TestResults/<run id>. It fails when a group names an unknown project, when a group selects no case, or when any selected case fails or is skipped.
+- [x] The group filters and TRX names come from the same composition MigrationIntegrationTests uses (TR-MCP-NUKE-019 AC-3), proved by the build's infrastructure tests over that composition. The run log names each filter it ran.
+- [x] TestGroups never changes which cases Test or MigrationIntegrationTests run.
+- [x] TestGroups excludes cases tagged for the other platform with the lane's host platform clause: on a Linux host Platform!=Windows, on a Windows host Platform!=Linux, untagged cases on both (TR-MCP-NUKE-019 AC-1). A group whose classes hold only other-platform cases selects no case and fails (operator 2026-11-02: "Add both ACs (Recommended)").
+- [x] Every class a group names runs at least one case in its project's TRX; a named class that runs no case fails the target and the failure names that class (operator 2026-11-02: "Add both ACs (Recommended)"). A class counts as run only when an executed result's test, joined to its definition by test id, belongs to that class (its definition's class name is the class, as the whole name or its last segment). A definition with no executed result, a namespace segment, and a display name or argument that mentions the class do not count; a custom display name counts through its test's class (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)"; hostile validation finding R9-F1).
 
 ## TR-MCP-OPS-001
 
@@ -1914,7 +2216,7 @@ Scope: layer-1+
 
 ## TR-MCP-PATHNORM-001
 
-**Forward-slash storage keys, rekey maintenance command and startup guard** — WorkspaceIdentityPath.NormalizeLexicalPath emits '/' for Windows paths (UNC keeps leading '//'; \\?\ device prefixes stripped to drive or // form); BuildStorageKey becomes windows:C:/USERS/KINGD style. IsRemoteWindowsPath, IsNormalizedPathWithinRoot and NormalizeLocalAdministrativeShareAlias accept both separators. A ToNativePath helper produces backslash paths only for Win32 CreateFile/GetFinalPathNameByHandle, \\?\ long-path prefixes and cmd.exe arguments. Persisted data is rewritten by an explicit maintenance command --workspace-path-rekey (decision D5, 2026-10-07) modelled on McpDatabaseEncryptionTransitionCommand: required backup unless --dry-run, report with old->new mapping and before/after counts; one transaction per database with foreign keys deferred or suspended and fully re-validated (decision D6: SQLite defer_foreign_keys, SQL Server NOCHECK then WITH CHECK CHECK, PostgreSQL DEFERRABLE + SET CONSTRAINTS ALL DEFERRED); set-based UPDATE per workspace column from a mapping table limited to Windows-shaped values; C# recomputation of hashed values (federation GlobalWorkspaceId/CanonicalWorkspaceId and hub hash-keyed Workspaces rows, TriageGroups GroupKey/GroupId with repointed children, HandoffIngestionRuns ReplayIdentity); FileGitHubWorkspaceTokenStore keys rewritten. No legacy dual-key lookup (decision D7): a startup guard refuses to start while any Windows-shaped workspace id still contains a backslash. Enrolled proxies are re-enrolled once after deploy (only PAYTON-LEGION2 today). Plan: docs/plans/2026-10-07-federation-fixes.md section 4c.
+**Forward-slash storage keys, rekey maintenance command and startup guard** — WorkspaceIdentityPath.NormalizeLexicalPath emits '/' for Windows paths (UNC keeps leading '//'; \\?\ device prefixes stripped to drive or // form); BuildStorageKey becomes windows:C:/WORKSPACES/EXAMPLE style. IsRemoteWindowsPath, IsNormalizedPathWithinRoot and NormalizeLocalAdministrativeShareAlias accept both separators. A ToNativePath helper produces backslash paths only for Win32 CreateFile/GetFinalPathNameByHandle, \\?\ long-path prefixes and cmd.exe arguments. Persisted data is rewritten by an explicit maintenance command --workspace-path-rekey (decision D5, 2026-10-07) modelled on McpDatabaseEncryptionTransitionCommand: required backup unless --dry-run, report with old->new mapping and before/after counts; one transaction per database with foreign keys deferred or suspended and fully re-validated (decision D6: SQLite defer_foreign_keys, SQL Server NOCHECK then WITH CHECK CHECK, PostgreSQL DEFERRABLE + SET CONSTRAINTS ALL DEFERRED); set-based UPDATE per workspace column from a mapping table limited to Windows-shaped values; C# recomputation of hashed values (federation GlobalWorkspaceId/CanonicalWorkspaceId and hub hash-keyed Workspaces rows, TriageGroups GroupKey/GroupId with repointed children, HandoffIngestionRuns ReplayIdentity); FileGitHubWorkspaceTokenStore keys rewritten. No legacy dual-key lookup (decision D7): a startup guard refuses to start while any Windows-shaped workspace id still contains a backslash. Enrolled proxies are re-enrolled once after deploy (the Windows proxy in the original deployment). Plan: docs/plans/2026-10-07-federation-fixes.md section 4c.
 **Covered by:** FR: FR-MCP-PATHNORM-001; TEST: TEST-MCP-PATHNORM-001
 **Status:** pending
 Scope: layer-1+
@@ -2150,6 +2452,21 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-PRODUCT-003, FR-MCP-PRODUCT-004; TEST: TEST-MCP-PRODUCT-002, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-003
 **Status:** pending
 Scope: layer-1+
+
+## TR-MCP-PROFILE-001
+
+**Plugin-owned profile reload lifecycle** — Plugin core shall implement host-specific post-compaction profile reload state, dynamic context-usage measurement, exactly-once threshold delivery, and reproducible Codex hook registration without starting or mutating session-log state from the standalone hook.
+**Covered by:** FR: FR-MCP-190; TEST: TEST-MCP-238
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A shared PowerShell provider in plugin core owns compaction initialization, persistent cache state, usage parsing, and reload delivery.
+- [ ] The provider maps every official plugin host to its supported add-profile invocation syntax.
+- [ ] Codex and Claude usage are measured against a positive context window supplied by host evidence; no fixed one-million-token assumption is permitted.
+- [ ] A schema-capable compact event injects immediately; hosts that cannot inject retain a pending immediate instruction for the next prompt.
+- [ ] PostCompact processing arms reload state only and does not start a session or inject unsupported context.
+- [ ] The production provider is synchronized byte-identically into all nine official plugin repositories.
+- [ ] Codex user-hook registration is reproducible through object-first JSON mutation and preserves a backup of the prior configuration.
 
 ## TR-MCP-QA-001
 
@@ -3087,6 +3404,7 @@ Scope: layer-1+
 ## TR-MCP-RUNAS-001
 
 **TR-MCP-RUNAS-001** — Placeholder requirement backfilled for TODO link TR-MCP-RUNAS-001.
+**Covered by:** FR: FR-MCP-RUNAS-001; TEST: TEST-MCP-HELP-004, TEST-MCP-HELP-005, TEST-MCP-RUNAS-001
 **Status:** pending
 Scope: layer-1+
 
@@ -3288,10 +3606,13 @@ Scope: layer-1+
 
 ## TR-MCP-SESSIONLOGSAN-002
 
-**Sanitizer timeout fail-open is deterministically testable** — The session-log sanitizer per-rule regex evaluation SHALL be exposed through an injectable seam (RegexReplaceInvoker, defaulting to Regex.Replace in production) so its timeout fail-open behavior can be verified deterministically - forcing exactly one field/rule to raise RegexMatchTimeoutException - independent of catastrophic-backtracking wall-clock jitter. Acceptance Criteria: (AC1) with an injected invoker that raises RegexMatchTimeoutException for the pathological field, SanitizeString returns [REDACTED:{ruleId}:timeout] for that field while other fields continue to be sanitized by their rules, across repeated isolated runs (no flake); (AC2) production behavior is unchanged (default invoker is Regex.Replace). Origin: BUG-TRIAGE-081 (SessionLogSanitizerTimeoutTests flaked under scheduler jitter; the deployed 1ms->100ms budget was a mitigation, not deterministic). Validated by TEST-MCP-SESSIONLOGSAN-002.
+**Deterministic sanitizer timeout redaction and continuation** — The session-log sanitizer per-rule regex evaluation SHALL be exposed through an injectable seam (RegexReplaceInvoker, defaulting to Regex.Replace in production) so affected-field timeout redaction and continuation of other fields can be verified deterministically - forcing exactly one field/rule to raise RegexMatchTimeoutException - independent of catastrophic-backtracking wall-clock jitter. Acceptance Criteria: (AC1) with an injected invoker that raises RegexMatchTimeoutException for the pathological field, SanitizeString returns [REDACTED:{ruleId}:timeout] for that field while other fields continue to be sanitized by their rules, across repeated isolated runs (no flake); (AC2) production behavior is unchanged (default invoker is Regex.Replace). Origin: BUG-TRIAGE-081 (SessionLogSanitizerTimeoutTests flaked under scheduler jitter; the deployed 1ms->100ms budget was a mitigation, not deterministic). Validated by TEST-MCP-SESSIONLOGSAN-002.
 **Covered by:** FR: FR-MCP-SESSIONLOGSAN-001; TEST: TEST-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-002
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] With an injected RegexReplaceInvoker raising RegexMatchTimeoutException for the pathological field, SanitizeString returns [REDACTED:{ruleId}:timeout] for that field while other fields continue to be sanitized; repeated isolated runs do not depend on wall-clock jitter.
+- [ ] The production RegexReplaceInvoker defaults to Regex.Replace and preserves production sanitization behavior.
 
 ## TR-MCP-SKILLS-001
 
@@ -3695,12 +4016,6 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Valid research output creates one backlog TODO and failed output creates none.
 
-## TR-MCP-TRIAGE-004-REKEY-CANONICAL-20261115
-
-**TR-MCP-TRIAGE-004** — Placeholder requirement backfilled for TODO link TR-MCP-TRIAGE-004.
-**Status:** pending
-Scope: layer-1+
-
 ## TR-MCP-TRIAGE-005
 
 **Triage Grok runner omits CLI-rejected flags** — The triage Grok CLI runner SHALL NOT pass --model auto or --effort max, both of which the Grok CLI rejects at startup. AC1: BuildGrokArgumentList omits --model when the model is the 'auto' sentinel. AC2: effort is pinned to 'high' (HighestEffort), never 'max'. Guards BUG-TRIAGE-076 via TEST-MCP-BUGTRIAGE-043.
@@ -4022,7 +4337,6 @@ Scope: layer-1+
 ## TR-MCP-USECASE-018
 
 **Cross-platform bounded native I/O and deterministic evidence** — Use searchable Linux directory modes and descriptor-relative restoration. Isolate potentially blocking physical identity and SQLite pre-handle opens behind finitely owned platform cancellation mechanisms. Classify cancellation from direct operation evidence, and resolve repository fixtures from deterministic assembly metadata rather than mapped caller paths.
-**Covered by:** FR: FR-MCP-USECASE-016; TEST: TEST-MCP-USECASE-019
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -4037,7 +4351,6 @@ Scope: layer-1+
 ## TR-MCP-USECASE-019
 
 **Race-safe physical I/O, causal cancellation, and immutable evidence** — Resolve and validate physical filesystem identity through interruptible native handles or isolated workers whose public deadlines and accounting remain truthful; bind SQLite opening to the validated object without lexical races; attribute PostgreSQL cancellation to the actual caller cancel request; compose platform-native tests and process containment without pass-through fallbacks; and generate exact-final-HEAD evidence through a mechanically verified immutable workflow.
-**Covered by:** FR: FR-MCP-USECASE-017; TEST: TEST-MCP-USECASE-020
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -4067,6 +4380,7 @@ Scope: layer-1+
 ## TR-MCP-VERIFYPOLICY-001
 
 **Challenge-bound signed verification policy contract** — Read QBrainAi:VerificationPolicies with legacy Mcp fallback only when canonical section is absent. Select exactly one entry matching resolved workspace. Validate schema version, continuation bound 1-3, unique check ids, literal ordered argv, contained relative cwd/pathGlobs, code/doc triggers, explicit required flag, suite kind, turn/phaseGate scope and unique TODO phase selectors. Canonicalize set ordering while preserving argv order. Return SHA256 payload digest with HMAC-SHA256 binding format, fresh request challenge and digest to current marker key. Typed client verifies signature, challenge, canonical payload and workspace before exposing data. Keep generated JSON metadata and typed REPL task handling compatible with trimmed distribution.
+**Covered by:** FR: FR-MCP-VERIFYPOLICY-001; TEST: TEST-MCP-VERIFYPOLICY-001
 **Status:** pending
 Scope: layer-1+
 
@@ -4165,6 +4479,13 @@ Scope: layer-1+
 - [x] Both RequirementsDatabaseDocumentService.GenerateWikiAsync and RequirementsDocumentService.GenerateWikiAsync share the same config loader and renderer path.
 - [x] The exporter validates all configured content before calling RequirementsDocumentExportWriter so invalid config leaves existing export files unchanged.
 - [x] Generated platform side files remain managed by the exporter, including .mcp-requirements-manifest.json, GitHub _Sidebar.md and _Footer.md, and Azure .order files.
+- [ ] An optional workspace Markdown footer template supplies exactly one visible footer per exported content page, including generated, static, DocFX and group pages. GitHub uses its managed footer and the legacy format renders it inline. Sidecars and non-page assets are preserved. The shipped default credits QBrain and links to https://github.com/sharpninja/McpServer.
+- [ ] An absent footer setting preserves the legacy layout and uses the QBrain attribution in the GitHub footer. A configured missing, empty, non-Markdown, escaping, or delimiter-conflicting template fails before any export file changes.
+- [ ] Repeated exports produce one footer without changing inputs, publication Home keeps the footer after documentation links, and wiki imports preserve canonical records, acceptance criteria and mappings even when footer text resembles requirement content.
+- [ ] When enabled, deterministic, case-insensitive grouping is based on whole leading ID segments before the first digit-leading segment within each requirement kind. At least two distinct IDs are required. Invalid prefixes and singletons remain on canonical pages.
+- [ ] Each qualifying group has one safe read-only child page per eligible platform, one parent link and a link back. Canonical parent filenames, original member records and existing anchors are retained.
+- [ ] Manifests, navigation, ZIP and cleanup consume the same platform inventory. Collisions fail before writes and repeat exports remove obsolete group pages and links. Absent or disabled grouping preserves the existing layout.
+- [ ] Group pages render full typed member records and criteria with the same mapping context as the parent. Group artifacts never supply imported requirements or affect source selection when canonical inputs and timestamps are unchanged.
 
 ## TR-MCP-WIKIEXPORT-002
 
@@ -4312,6 +4633,242 @@ Scope: layer-1+
 - [ ] SessionLogController.SubmitAsync and GetByIdAsync use ValidationProblem for domain validation
 - [ ] Response shape is uniform across model binding and domain validation failures
 
+## TR-QB-AUDIT-001
+
+**Durable session auditing** — Use supported plugin lifecycle/action/decision/persistence/recovery interfaces; keep decisions distinct from actions.
+**Covered by:** FR: FR-QB-003; TEST: TEST-QB-007, TEST-QB-008, TEST-QB-009, TEST-QB-069
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-OPENS-LINKED-REQUEST-TURN-BEFORE-AGENT-WORK: Every actual user request opens a linked turn with the full request text before agent work, using a deterministic provisional title derived from the request that is never empty and never the literal User prompt; before completion the turn carries a summary title meeting completion obligation (d). TEST-QB-007: opens_linked_request_turn_before_agent_work. TDD: P1.
+- [ ] AC-QB-RECORDS-ORDERED-ACTIONS-AND-SEPARATE-DECISIONS: Outcomes/errors/cancellation/decisions retain status, ordering, and separate action/decision classification. tool_execution is emitted only after the server/REPL/plugin taxonomy prerequisite is verified. One explicit decision has the same identity and conclusion in designDecisions, decision dialog and design_decision action after replay; tool activity alone does not invent a decision. Out-of-order acknowledgments cannot reorder stored events or transfer a canceled/terminal turn outcome to another request. TEST-QB-008: records_ordered_actions_and_separate_decisions. TDD: P1.
+- [ ] AC-QB-DISTINGUISHES-CONFIRMED-AUDIT-FROM-PENDING-RECOVERY: Pending/synthetic acknowledgments are not confirmed persistence; recovery retains records and avoids duplicate application. Crash/restart at capture, pending-to-minted rebinding, submission, server commit, receipt handling and retirement retains immutable event identity, payload and per-turn order. At-least-once replay applies one logical event and never changes its request attribution. Confirmed and verified-unchanged receipts require matching root identities, event/payload and positive committed revision; duplicate requestIds and identical resubmission follow the agreed C3 outcomes. Alias recovery survives clear/restart and is not forgotten before durable consumer acknowledgment. Queued, rejected, lost, quarantined or retry-capped mandatory evidence remains visible and blocks successful completion; an empty queue cannot erase a retained rejection. TEST-QB-009: distinguishes_confirmed_audit_from_pending_recovery. TDD: P1.
+- [ ] AC-QB-PRESERVES-EXACT-REQUEST-AND-FINAL-RESULT-WITH-COMPLETE-TURN-COVERAGE: For every actual user request, including steering, the confirmed record preserves its complete request and final response text prepared for delivery, under the captured workspace, native session, MCP session and request identities, subject only to the existing secret policy and this operator-approved storage normalization: U+2013 and U+2014 become U+002D. Those two Unicode dash characters must not be stored; do not bypass the REPL normalization with escaping. After that policy, server readback is ordinally identical to the full expected text, preserving all other Unicode, Markdown, whitespace and newlines without trimming or summarization. A title or summary may be separate metadata but never substitutes for the response. Completion checks the expected request/event/result set, not only empty queues or equal counts. Missing, summarized, truncated, duplicated, misattributed or otherwise modified content blocks successful completion and remains visible for recovery. Cancellation without a final result does not invent one. Replay preserves one logical record and the same normalized full text. A crash after persistence but before delivery must not be represented as proof that the operator received the response. TEST cases: Both prohibited dash characters normalize to ASCII hyphens; literal and escaped input cannot retain prohibited dashes; existing ASCII hyphens and unrelated Unicode remain unchanged; exact whitespace/newline/Markdown response; same-count wrong request; summary substituted for result; omitted ingress event with zero pending counters; steering before/after response persistence; two sessions with identical text; timeout before/after server commit; crash before actual delivery; redaction identical on both output boundaries. TEST-QB-069: preserves_exact_request_and_final_result_with_complete_turn_coverage. TDD: P1.
+
+## TR-QB-BRANDING-001
+
+**cline-qb identity** — Define cline-qb as an independently installed derivative application in manifests/build configuration/host adapters, with its own application and storage ownership. Preserve necessary internal compatibility IDs without requiring an upstream Cline installation or modifying its installation, folders or data. AC-QB-ISOLATES-CLINE-QB-STATE-AND-GOVERNS-COMPATIBILITY-ENTRYPOINTS governs isolation and coexistence.
+**Covered by:** FR: FR-QB-018; TEST: TEST-QB-052, TEST-QB-053, TEST-QB-054
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-USES-CLINE-QB-IDENTITY-ACROSS-SHIPPED-SURFACES: CLI command/help, TUI, VS Code display, desktop labels, hub diagnostics, the hub browser dashboard and all agent-bearing examples consistently identify cline-qb. TEST-QB-052: uses_cline_qb_identity_across_shipped_surfaces. TDD: P5.
+- [ ] AC-QB-ISOLATES-CLINE-QB-STATE-AND-GOVERNS-COMPATIBILITY-ENTRYPOINTS: cline-qb is an independently installed derivative application that operates without an upstream Cline installation and coexists with one when present. It uses its own isolated state root, environment names, hub endpoint and application identifiers while keeping internal wire identifiers compatible where safe; upstream ~/.cline data and upstream extension/webview storage are never read implicitly, migrated or modified, and every retained compatibility launch path is governed. cline-qb never takes ownership of, repoints, aliases as its own storage, migrates, overwrites or deletes any Cline-owned folder or data. Installation, startup, normal operation, recovery, update and uninstall leave absent upstream roots absent and seeded Cline folders, contents, ownership, permissions and link targets unchanged; Cline remains independently usable. Product isolation does not change or redirect the operator HOME or Cline paths. Before P1 closure, every inventoried host resolver and consumer must exclude upstream user roots, redirected Documents/Cline, ~/Cline/Rules and upstream extension/webview state from automatic reads, creation, migration, cleanup and uninstall. Test absent and seeded roots, constructor/webview startup, projectless fallback/import, hooks, legacy custom-instruction migration and delayed callbacks. Retain permitted governed contribution reads from shared workspace .cline/.clinerules/.agents and vendor-neutral ~/.agents, including .clinerules/workflows in both rule and workflow discovery; compatibility reads grant no ownership and do not authorize using those locations for cline-qb-owned state or rewriting their contributions. Generic SDK defaults remain compatible through host injection. P1 establishes the runtime isolation cases; P5 owns final all-host branding, compatibility and installed-artifact acceptance. TEST-QB-053: isolates_cline_qb_state_and_governs_compatibility_entrypoints. TDD stages: P1 runtime storage isolation; P5 all-host identity and installed-artifact acceptance. Final acceptance owner P5.
+- [ ] AC-QB-CHECKS-DOCUMENTED-COMMANDS-DEFAULTS-AND-CONTRACTS: Docs accurately cover mandatory policy, no Cline Cloud, panels/settings/keys/persistence/recovery and limitations. TEST-QB-054: checks_documented_commands_defaults_and_contracts. TDD: P5, executable examples/contract assertions plus phase-closing doc review; text-search alone does not establish prose accuracy.
+
+## TR-QB-COMPLETION-001
+
+**Enforced completion obligations** — Await a pre-completion gate for completion tools, text-only replies, success events, and final delivery; verification matches current changed state.
+**Covered by:** FR: FR-QB-004; TEST: TEST-QB-010, TEST-QB-011, TEST-QB-012, TEST-QB-071
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-GATES-ALL-SUCCESSFUL-COMPLETION-PATHS: Successful final-answer payloads/success events remain withheld until required checks pass; blocked or incomplete diagnostics remain deliverable without claiming success. Test successful, correctable-incomplete and infrastructure-blocked outcomes through each final-delivery path. A corrected final attempt uses the same open request and only succeeds after every applicable obligation is verified; unchanged incomplete attempts stop at the existing bounded limit. Infrastructure failure exposes supported recovery without allowing ordinary work or discarding audit evidence. TEST-QB-010: gates_all_successful_completion_paths. TDD: P1.
+- [ ] AC-QB-BLOCKS-COMPLETION-ON-FAILED-MISSING-OR-STALE-VERIFICATION: Code/doc edits and command-made changes invalidate stale evidence; failed/missing applicable checks block completion. The signed policy selects every applicable runner from package ownership and dependency scope, including non-sdk VS Code suites, all distinct desktop runners and required native checks. Evidence binds policy digest and pre/post source fingerprints; changes during verification invalidate it. Ignored receipt churn alone does not invalidate source evidence. Baseline failures, blocked chains and required platform/credential cases remain explicit blockers until resolved or changed by an operator decision. TEST-QB-011: blocks_completion_on_failed_missing_or_stale_verification. TDD: P1.
+- [ ] AC-QB-CLASSIFIES-OPERATIONS-AND-GATES-PHASE-CLOSURE-ON-VERIFIED-HV-RECEIPT: A host-owned classifier derives phaseId and phaseClosing from trusted governed TODO/task mutations and MCP records, never model prose. It classifies operationClass from that trusted state plus source fingerprints: any working-tree content change within the verification-policy scope is development, whether made by an edit tool or command; administrative turns have unchanged source contents and only TODO, requirement or session-record effects. Administrative turns carry no verification or HV obligation; development turns complete only after required verification passes for the current fingerprint; a mutation completing a task or setting done: true on a TODO listed as phase-gated by the signed workspace verification policy is rejected without a valid HV receipt; for this workspace the policy lists QB-AGENT-001 tasks prefixed P1: through P5: and Final:, and done: true on QB-AGENT-001; TODOs without a phase-gate entry carry no HV obligation. The named test rejects forged reviewer/root identities, model-selected phase selectors, partial or missing verdict persistence, absent scores and every sub-98 value without rounding; it accepts valid lexical scores only under the agreed lossless numeric contract. Canonical task readback must match the attempted phase transition and current verified plan/base/head; read failure or mismatch leaves that transition pending. Administrative reconciliation never satisfies a product AC or silently closes a phase. TEST-QB-012: classifies_operations_and_gates_phase_closure_on_verified_hv_receipt (administrative, development, valid receipt, forged receipt, stale receipt). TDD: P1. Valid receipt: read back through the supported plugin from a completed MCP turn whose session agent identity is the configured reviewer identity (ClaudeCode), not the host identity; its stored verdict records OverallVerdict AGREE, accuracy and completeness >=98, and plan hash, base SHA and head SHA equal to the closing state. The host binds model-facing session tools to its own agentIdentity and sessionId; tool arguments cannot set agent, sourceType or sessionId. An administrator or unrestricted user-authorized shell with the raw marker key can bypass the application and forge server records; this on-disk credential bypass is outside the application-level guarantee and is documented as a limit under AC-QB-CHECKS-DOCUMENTED-COMMANDS-DEFAULTS-AND-CONTRACTS.
+- [ ] AC-QB-ISOLATES-ALL-VERIFICATION-PROCESSES-FROM-OPERATOR-APPLICATION-STATE: Every required verification fixture and its child processes use isolated application state and explicitly selected test identities, workspace, discovery endpoints and ports before application initialization. Tests must not read live operator credentials, attach to a live operator hub or change operator application state. Seeded external-state canaries and inventories remain unchanged after success, assertion failure, timeout and cancellation. Cleanup affects only resources owned by that test run. Any intentionally live integration fixture uses an explicitly provisioned test account/workspace and cannot silently inherit the operator account. Read-only compiler/package caches may be shared when they contain no operator application identity or mutable product state. TEST cases: Pre-import environment capture; account feature-flag callback; real HOME inherited by a child; parallel fixtures; wrong discovery file/port; failure and timeout cleanup; mocked negative fixture plus a real compiled positive launch; canaries outside the test root. TEST-QB-071: isolates_all_verification_processes_from_operator_application_state. TDD: P1. Staged regressions: P2, P3, P4, P5.
+
+## TR-QB-DATA-001
+
+**Safe refresh/context isolation** — Context-keyed queries/invalidation, bounded visible polling, stale/cancellation handling, and backend-only credential access.
+**Covered by:** FR: FR-QB-009; TEST: TEST-QB-025, TEST-QB-026, TEST-QB-027, TEST-QB-074, TEST-QB-076
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-ROUTES-PANEL-READS-THROUGH-SHARED-PLUGIN-SERVICE: Both hosts use the same supported plugin read service; no direct storage reads, duplicate raw-REST client, or browser MCP secrets. TEST-QB-025: routes_panel_reads_through_shared_plugin_service. TDD: P2; host regressions P3/P4.
+- [ ] AC-QB-REFRESHES-WITHOUT-OVERLAPS-OR-CROSS-CONTEXT-RESULTS: Events/reconnect/manual/configured polling refresh data without overlap; discard old-context replies; failures retain only matching-context last-good data with stale/error state. Manual refresh and events coalesce with the active request; reconnect/configuration/workspace/session changes invalidate old generations, including late successful replies after cancellation. Hiding or disposing the view stops display polling; revealing resumes in the current context. Polling bounds and default match QbrainSettings, and failed reads never become empty successes. TEST-QB-026: refreshes_without_overlaps_or_cross_context_results. TDD: P2.
+- [ ] AC-QB-KEEPS-PANEL-REFRESH-INDEPENDENT-OF-AGENT-EXECUTION: Browsing/refresh create no model calls or agent turns; hidden stops needless display polling, not audit/enforcement. TEST-QB-027: keeps_panel_refresh_independent_of_agent_execution. TDD: P2.
+- [ ] AC-QB-RENDERS-SESSION-LOG-AND-TODO-CONTENT-AS-INERT-DATA: Session Log and TODO content is displayed as data. ANSI/OSC/CSI sequences, HTML, scripts, remote resources and instruction-like text in server fields cannot execute code, alter terminal/window/clipboard state, initiate automatic network access, invoke a tool, mutate records or approve an action. Renderers safely represent such content while preserving the canonical value and existing explicit detail/copy security rules. This holds for summary, detail, error, loading-to-loaded updates and restored views in both TUI and desktop. TEST cases: OSC clipboard and hyperlink escapes; CSI cursor controls; HTML/script and remote image content; malformed Unicode; instruction-like text; status/error field injection; narrow live/restored views; explicit safe detail and copy. TEST-QB-074: renders_session_log_and_todo_content_as_inert_data. TDD: P2. Staged regressions: P3, P4.
+- [ ] AC-QB-BOUNDS-INDIVIDUAL-RECORD-AND-DETAIL-PAYLOAD-PROCESSING: A single oversized or malformed record, detail value or streamed response cannot cause unbounded transport buffering or UI work. The slice contract defines supported byte/item limits and recoverable boundary outcomes before implementation. Supported complete data remains available without silent loss; an over-limit or malformed response is explicitly failed/stale with actionable expansion or recovery behavior and is never shown as confirmed complete truncated data. Cancellation/context change releases work and prevents late rendering under another context. Ordinary navigation and governance remain responsive. TEST cases: One huge item in a small page; exact byte limit and one over; many small items; malformed encoding; endless chunk stream; cancellation midway; repeated expansion; old-context completion; full supported data remains available. TEST-QB-076: bounds_individual_record_and_detail_payload_processing. TDD: P2. Staged regressions: P3, P4.
+
+## TR-QB-DESKTOP-001
+
+**Desktop Session Log/TODO sidebar** — Isolated views/data hooks use existing typed desktop client/sidecar transport and shared context-bound contracts.
+**Covered by:** FR: FR-QB-017; TEST: TEST-QB-049, TEST-QB-050, TEST-QB-051
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-INTEGRATES-DATA-VIEWS-WITHOUT-RESETTING-DESKTOP-CHAT: Opening Session Log or TODO views keeps the active chat thread pane mounted and preserves draft, stream and scroll; existing Sessions history navigation remains unchanged. TEST-QB-049: integrates_data_views_without_resetting_desktop_chat. TDD: P4.
+- [ ] AC-QB-SCOPES-DESKTOP-DATA-TO-SELECTED-EXECUTION-CONTEXT: Local/remote environment/workspace/session scope and reconnect/stale/error behavior follow the shared service. During an active stream, switch environment/workspace/session and reconnect while a previous list/detail/settings response is delayed. The rendered result and readiness belong only to the current context; prior data is never displayed under the new context, and chat preservation follows AC-QB-INTEGRATES-DATA-VIEWS-WITHOUT-RESETTING-DESKTOP-CHAT. TEST-QB-050: scopes_desktop_data_to_selected_execution_context. TDD: P4.
+- [ ] AC-QB-PRESERVES-ACCESSIBLE-READ-ONLY-SIDEBAR-BEHAVIOR: Keyboard/mouse/detail/collapse/narrow behavior remain usable; browsing is read-only and never weakens policy. TEST-QB-051: preserves_accessible_read_only_sidebar_behavior. TDD: P4.
+
+## TR-QB-DISTRIBUTION-001
+
+**Self-contained governed distribution** — Package pinned compatible assets/entrypoints with protected update policy; test real artifacts, not source-only imports.
+**Covered by:** FR: FR-QB-019; TEST: TEST-QB-055, TEST-QB-056, TEST-QB-057
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-VERIFIES-REQUIRED-ASSETS-AND-POLICY-IN-PACKAGED-ARTIFACTS: CLI/extension/desktop/execution-host artifacts contain required plugin/skills and start governed. Verify the complete pinned asset manifest, per-file digests, licenses/provenance, executable architecture/RID and matching REPL without a shared .NET prerequisite or startup download. Required builds missing a target fail; unsupported targets fail packaging. No primary marker, private cache/receipts, credentials or test fixture/key is shipped. Record executed versus static-only target validation separately under the existing runner-availability policy, never call static inspection execution. TEST-QB-055: verifies_required_assets_and_policy_in_packaged_artifacts. TDD: P5.
+- [ ] AC-QB-REJECTS-UPSTREAM-REPLACEMENT-UPDATE-PATHS: Updates cannot replace cline-qb with ordinary Cline; automatic updating stays inactive without approved cline-qb source. Before the first implementation push, fork publication workflows are inert. Source and installed artifacts make no automatic upstream update requests and cannot replace any host identity or governed executable; any future approved update source must still preserve the required signed integration contract. TEST-QB-056: rejects_upstream_replacement_update_paths. TDD: P5.
+- [ ] AC-QB-PASSES-PACKAGED-GOVERNANCE-AND-UI-ACCEPTANCE-MATRIX: Packaged scenarios satisfy full fresh/restored settings, failure/recovery, concurrency, no-Cline-Cloud acceptance matrix. Evidence identifies each artifact digest, target, source/pin and linked UC basic/alternative flow. Fresh, restored, concurrent and failure/recovery runs exercise the installed entrypoints; all built targets without a runner retain the explicit static-only limitation and all required available-runner cases must execute. No missing required case or stale source-only receipt satisfies this criterion. TEST-QB-057: passes_packaged_governance_and_ui_acceptance_matrix. TDD: P5.
+
+## TR-QB-KEYS-001
+
+**User-definable panel bindings** — Validated modifier-aware action dispatcher shared with help/palette; aliases and reserved routing handled consistently.
+**Covered by:** FR: FR-QB-015; TEST: TEST-QB-043, TEST-QB-044, TEST-QB-045
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-SUPPORTS-CUSTOM-PANEL-BINDINGS-AND-DEFAULT-RESET: Redefine cycle/expand/shrink/focus/switch-view/refresh and restore defaults. TEST-QB-043: supports_custom_panel_bindings_and_default_reset. TDD: P3.
+- [ ] AC-QB-REJECTS-CONFLICTING-OR-INVALID-KEY-BINDINGS: Detect duplicates, alias-equivalent/invalid/reserved conflicts without silently replacing controls. TEST-QB-044: rejects_conflicting_or_invalid_key_bindings. TDD: P3.
+- [ ] AC-QB-KEEPS-SHORTCUT-HELP-AND-DISPATCH-CONSISTENT: Help/palette show actual bindings; focus-aware routing and palette fallback work when terminals swallow chords. TEST-QB-045: keeps_shortcut_help_and_dispatch_consistent. TDD: P3.
+
+## TR-QB-LAYOUT-001
+
+**Aspect-dependent TUI panel** — Deterministic full-terminal aspect resolver, minimum usable pane space, and allocated child dimensions.
+**Covered by:** FR: FR-QB-011; TEST: TEST-QB-031, TEST-QB-032, TEST-QB-033
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-SELECTS-PANEL-ORIENTATION-FROM-FULL-TERMINAL-ASPECT: Orientation uses full terminal columns/rows: at startup ratio >=2.5 selects horizontal and a lower ratio selects vertical; on every later resize, whether Visible, Compact or Hidden, horizontal switches to vertical only below 2.4 and vertical to horizontal only above 2.6; panel fit follows TUI layout, visibility, dimensions and controls target/space. TEST-QB-031: selects_panel_orientation_from_full_terminal_aspect. TDD: P3.
+- [ ] AC-QB-PRESERVES-INTERACTION-STATE-DURING-TERMINAL-RESIZE: Live resizing changes orientation without losing draft/cursor/focus/selection/streaming/scroll. TEST-QB-032: preserves_interaction_state_during_terminal_resize. TDD: P3.
+- [ ] AC-QB-FITS-CONTENT-TO-PANES-AND-HANDLES-SMALL-TERMINALS: Chat/tool contents fit allocated panes; tiny-terminal compact mode protects prompt/approval controls. At narrow and tiny allocations, including insufficient space for a compact strip, output stays within its allocated cells and controls remain reachable through the existing prompt/approval path; insufficient display room never auto-approves or loses the pending approval. Returning to usable space restores the requested layout and interaction state. TEST-QB-033: fits_content_to_panes_and_handles_small_terminals. TDD: P3.
+
+## TR-QB-LOGREAD-001
+
+**Session Log inspection** — Resolve explicit agent/MCP linkage and expose typed bounded session/turn detail reads through the supported plugin adapter.
+**Covered by:** FR: FR-QB-007; TEST: TEST-QB-019, TEST-QB-020, TEST-QB-021
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-READS-THE-EXPLICITLY-LINKED-MCP-SESSION: Inspect the active conversation's linked MCP session, not the latest unrelated session or chat transcript. TEST-QB-019: reads_the_explicitly_linked_mcp_session. TDD: P2.
+- [ ] AC-QB-PROJECTS-COMPLETE-SESSION-LOG-DETAILS: Model includes IDs/titles/statuses/interpretation/response/actions/decisions/dialog and confirmed versus pending persistence. The full projection also retains requestClass, agentReview, hostileReview, root linkage and update/persistence state where present. Detail expansion keeps actions, decisions and dialog distinct; a missing field, pending acknowledgment or failed read cannot be represented as a complete confirmed record. TEST-QB-020: projects_complete_session_log_details. TDD: P2; UI regressions P3/P4.
+- [ ] AC-QB-RETRIEVES-LARGE-LOGS-WITH-BOUNDED-DETAIL-READS: Large logs support bounded retrieval/detail expansion without omitted records or model calls. Verify default and maximum page bounds for turn lists and each detail section, stable revision across pages, and no duplicates or omitted records when new turns arrive concurrently. Wrong-context or expired cursors are rejected and restarted under the documented snapshot contract without combining revisions or substituting queryHistory. Missing supported paging capability blocks P2 acceptance. TEST-QB-021: retrieves_large_logs_with_bounded_detail_reads. TDD: P2.
+
+## TR-QB-NETWORK-001
+
+**No Cline Cloud infrastructure** — Exclude prohibited service initialization and enforce product-originated network boundary while retaining permitted execution/providers.
+**Covered by:** FR: FR-QB-006; TEST: TEST-QB-016, TEST-QB-017, TEST-QB-018, TEST-QB-061, TEST-QB-062, TEST-QB-063, TEST-QB-064, TEST-QB-065, TEST-QB-066, TEST-QB-067
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-MAKES-NO-PROHIBITED-CLINE-SERVICE-REQUESTS: Startup/settings/work/resume/reconnect/refresh make zero prohibited Cline Cloud/control/telemetry requests, including with old credentials/caches. Exercise process networking, webview/browser initialization, native updater and background callbacks from fresh and legacy configurations on every shipped host. Seed excluded credentials/caches and prove zero prohibited traffic without deleting or migrating upstream files; permitted direct-provider traffic is distinguishable from prohibited service traffic. TEST-QB-016: makes_no_prohibited_cline_service_requests. TDD: P1.
+- [ ] AC-QB-REJECTS-CLINE-CLOUD-EXECUTION-AND-CONTROL-PATHS: Hosted inference/cloud agents/account dependencies/remote config/feature flags/uploads cannot be re-enabled by settings/fallback. TEST-QB-017: rejects_cline_cloud_execution_and_control_paths. TDD: P1.
+- [ ] AC-QB-RUNS-PERMITTED-EXECUTION-WITHOUT-CLINE-ACCOUNT: Local hub, direct providers, compatible self-controlled remote hosts work without a Cline account. Include positive authenticated direct-provider execution, configured proxy use and compatible hub/remote operation; missing or invalid direct-provider credentials produce an actionable failure, never a Cline account fallback or silent provider substitution. TEST-QB-018: runs_permitted_execution_without_cline_account. TDD: P1.
+- [ ] AC-QB-PREVENTS-LEGACY-ACCOUNT-ONBOARDING-REACTIVATION: Desktop onboarding contains no Cline account sign-in, account-key, hosted recommendation, subscription-upsell or account-backed GitHub activation path. Legacy identity, enabled feature flags and a restored GitHub onboarding step cannot issue account/control requests or select a hosted provider; the operator can configure a direct provider or skip without an invented connection. TEST-QB-061: prevents_legacy_account_onboarding_reactivation. TDD: P1.
+- [ ] AC-QB-OFFERS-ONLY-COMPATIBLE-DIRECT-ONBOARDING-FORMS: A setup form offers only permitted providers whose declared authentication and required configuration it can collect. The desktop key-only form excludes hosted aliases, alternate authentication and mandatory endpoint configuration; supported providers needing those fields remain reachable through Settings. Failed save never advances or selects a fallback; successful explicit selection preserves its provider/model. TEST-QB-062: offers_only_compatible_direct_onboarding_forms. TDD: P1.
+- [ ] AC-QB-SURFACES-SCHEDULE-CATALOG-FAILURE-WITHOUT-FALLBACK: Empty, failed, delayed or disabled desktop schedule catalogs never synthesize an enabled provider or model. Catalog failures expose the error and a Settings recovery action or instruction. Excluded provider aliases are absent even in stale catalog data, and no excluded provider discovery is initiated. TEST-QB-063: surfaces_schedule_catalog_failure_without_fallback. TDD: P1.
+- [ ] AC-QB-PRESERVES-EXPLICIT-SCHEDULE-PROVIDER-MODEL-SELECTION: Schedule creation requires an explicit permitted provider and model, or a previously explicit remembered pair still available in that same provider catalog. Missing provider/model blocks submission with an actionable message and no mutation. Editing or catalog refresh preserves the existing permitted pair, without choosing the first catalog entry or borrowing another provider model. Valid direct create/update preserves that exact pair. TEST-QB-064: preserves_explicit_schedule_provider_model_selection. TDD: P1.
+- [ ] AC-QB-REQUIRES-EXPLICIT-REPLACEMENT-OF-HOSTED-SCHEDULE-SELECTION: Editing a legacy hosted schedule presents an actionable exclusion diagnostic and requires an explicit direct provider/model replacement before saving. Opening, canceling or failed validation neither activates the hosted provider nor silently rewrites the stored schedule. The replacement uses only the operator-selected permitted pair. TEST-QB-065: requires_explicit_replacement_of_hosted_schedule_selection. TDD: P1.
+- [ ] AC-QB-KEEPS-MIGRATED-SCHEDULE-MODEL-SELECTION-ATOMIC: When a schedule contains the structured modelSelection field, its provider/model pair is authoritative as a unit. Missing or malformed members remain incomplete and block saving until explicitly repaired; they never inherit a provider or model from legacy scalar fields. Schedules without the structured field retain their explicit legacy direct pair. Mixed-format and partially migrated records cannot combine identities from different provider selections. TEST-QB-066: keeps_migrated_schedule_model_selection_atomic. TDD: P1.
+- [ ] AC-QB-REQUIRES-EXPLICIT-DIRECT-DESKTOP-RECOVERY: Desktop chat composition and recovery never fetch or subscribe to hosted feature flags, activate hosted execution from legacy state, or offer account-backed recovery links. Hosted-target attempts show an actionable exclusion and leave the selected direct provider/model and stored history unchanged. Moving from an unavailable hosted history session to permitted execution requires an explicit new local or self-controlled remote session; it does not silently reinterpret the old session. Explicit local recovery preserves a permitted captured or remembered provider/model pair, leaves missing selection incomplete for Settings, and never chooses a hosted or first-catalog fallback. TEST-QB-067: requires_explicit_direct_desktop_recovery. TDD: P1.
+
+## TR-QB-PERSIST-001
+
+**Remember preferences across invocations** — Persist panel preferences only in dedicated versioned <resolved cline-qb settings root>/cline-qb-tui.json with its own typed schema (TUI layout, visibility, dimensions and controls, the persistent-preference contract), validated field-level patches under per-file interprocess lock, atomic temp-file-plus-rename, startup restore and explicit persistence errors; never in a shared global settings file.
+**Covered by:** FR: FR-QB-016; TEST: TEST-QB-046, TEST-QB-047, TEST-QB-048, TEST-QB-075
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-RESTORES-PANEL-PREFERENCES-IN-A-NEW-INVOCATION: New processes restore width/height/edges/visibility/data-view/custom keys after adjustments. TEST-QB-046: restores_panel_preferences_in_a_new_invocation. TDD: P3.
+- [ ] AC-QB-PERSISTS-REQUESTED-PREFERENCES-NOT-TRANSIENT-LAYOUT: Fit/aspect/hide/reveal cannot overwrite unrelated saved preferences. Concurrent processes patch different fields without losing either saved choice; explicit preference changes persist while transient fit does not. Crash before or after replacement leaves a complete old or new valid preference document, never a truncated mixture; restart reports any unsaved state honestly. TEST-QB-047: persists_requested_preferences_not_transient_layout. TDD: P3.
+- [ ] AC-QB-HANDLES-CORRUPT-PREFERENCES-AND-FAILED-SAVES-HONESTLY: Invalid fields recover without erasing other settings; failed saves are reported, not claimed persisted. Exercise invalid types, non-finite/fractional dimensions, malformed binding lists, corrupt/truncated files, unsupported schema versions, permission failure and interrupted saves. Preserve unrelated valid fields and recoverable original content; do not silently rewrite an unsupported version as successfully migrated. The user can recover/reset through the existing settings path. TEST-QB-048: handles_corrupt_preferences_and_failed_saves_honestly. TDD: P3.
+- [ ] AC-QB-RECOVERS-PREFERENCE-WRITE-PROGRESS-AFTER-WRITER-FAILURE: After a preference writer terminates unexpectedly at any persistence step, a new invocation can read a complete valid old or new document and make a subsequent valid save within the slice contract recovery bound, without manual deletion of abandoned coordination state. Recovery cannot steal a live writer ownership or discard unrelated valid fields. If the environment prevents recovery, report the unsaved state and keep usable last-good presentation instead of hanging or claiming persistence. The recovery bound and writer-ownership outcomes are fixed before implementation; no particular locking mechanism is prescribed. TEST cases: Kill before temporary write, during write, before/after replacement and while holding any coordination resource; restart then save; concurrent live writer; permission failure; unrelated-field preservation; bounded failure diagnostic. TEST-QB-075: recovers_preference_write_progress_after_writer_failure. TDD: P3.
+
+## TR-QB-PLUGIN-001
+
+**Built-in, non-disableable plugin** — Construct the pinned plugin through a protected integration adapter outside optional discovery/filtering. Bundle required assets, avoid duplicate SDK runtimes/dependency cycles, and reserve required contribution identities.
+**Covered by:** FR: FR-QB-001; TEST: TEST-QB-001, TEST-QB-002, TEST-QB-003, TEST-QB-068, TEST-QB-070
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-REGISTERS-BUNDLED-PLUGIN-WITHOUT-USER-ENABLEMENT: Startup automatically registers required tools, skills, and lifecycle capabilities without install/enablement prompts. TEST-QB-001: registers_bundled_plugin_without_user_enablement. TDD: P1.
+- [ ] AC-QB-REJECTS-REQUIRED-PLUGIN-DISABLE-AND-SHADOW-ATTEMPTS: Settings, flags, environment variables, tool filters, and same-name optional contributions cannot disable/replace required capabilities. The named test covers every enumerated bypass surface, optional hook input rewrites and provider-executed tools: only final authorized arguments execute; an adapter with unobservable execution is rejected unless tool execution is verifiably disabled. TEST-QB-002: rejects_required_plugin_disable_and_shadow_attempts. TDD: P1.
+- [ ] AC-QB-BLOCKS-EXECUTION-WHEN-REQUIRED-PLUGIN-IS-UNUSABLE: Missing, incompatible, incomplete, or invalid plugin assets block ordinary execution before the first model request. Pin, signed ClineQb entry, asset digest and host-platform compatibility must agree. Missing runtime prerequisites for a non-triggered skill do not block unrelated work; triggering that skill without its prerequisite blocks that workflow with an actionable diagnostic. TEST-QB-003: blocks_execution_when_required_plugin_is_unusable. TDD: P1.
+- [ ] AC-QB-ISOLATES-COMPILED-STARTUP-AND-IGNORES-UPSTREAM-OVERRIDES: Compiled desktop normal and configured-proxy startup use the selected cline-qb state and hub namespace, ignoring inherited upstream CLINE_* overrides. Executable validation uses a distinct temporary home, private state/discovery paths and OS-assigned ports, inherits no operator provider/account credentials, and cannot read or modify the operator home or attach to an operator hub. Seeded upstream canaries remain byte-identical with no new files after either readiness or a blocked startup. Missing trusted runtime identity blocks before publishing readiness; it is not accepted as a successful startup. Both positive readiness cases remain required once reviewed signed runtime dependencies are available. TEST-QB-068: isolates_compiled_startup_and_ignores_upstream_overrides. TDD: P1.
+- [ ] AC-QB-VERIFIES-COMPLETE-PINNED-POWERSHELL-RUNTIME-OFFLINE: For the approved PowerShell shared-core contract, an ordinary governed launch on a clean supported host works using the pinned, verified runtime and every mandatory startup module/asset supplied by the artifact, without a user module cache, startup installation or runtime download. Runtime, module, host-interface and platform compatibility are checked together before readiness. Missing, incompatible or shadowed prerequisites give an actionable blocked state without an ungoverned fallback. Preserve the agreed C1-C12 observable behavior through migration. P1 proves the integration on its available execution host; P5 verifies every declared package target using the existing executed-versus-static-only matrix and its honest limitations. TEST cases: Empty module cache and no network; incompatible pwsh/module/REPL versions; wrong architecture; PATH or module shadow; omitted YAML or PowerShell.MCP dependency; supported diagnostic recovery; clean packaged launch; all required target builds present. TEST-QB-070: verifies_complete_pinned_powershell_runtime_offline. TDD: P1. Staged regressions: P5.
+
+## TR-QB-PRESENTATION-001
+
+**Compact tool-invocation presentation** — Separate deterministic agent-generated display labels from immutable execution inputs/results; shared formatter plus one-row host rendering. Normalize control characters, truncate by display width, and preserve exact details/approval/copy access. Do not ask the model to summarize, reconstruct full raw inputs as default headers, or constrain stdout/stderr under this requirement.
+**Covered by:** FR: FR-QB-020; TEST: TEST-QB-058, TEST-QB-059, TEST-QB-060
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-BUILDS-COMPACT-TOOL-INVOCATION-SUMMARIES: Deterministic summaries compress long/multiline/batched/unknown-tool inputs without model cooperation. TEST-QB-058: builds_compact_tool_invocation_summaries. TDD: P2.
+- [ ] AC-QB-PRESERVES-TOOL-PAYLOADS-WHILE-COMPRESSING-PRESENTATION: Compression leaves execution inputs, model results, audit payloads, and required full-command approval/detail access unchanged under existing security policies. TEST-QB-059: preserves_tool_payloads_while_compressing_presentation. TDD: P2, host regression P3/P4/P5.
+- [ ] AC-QB-RENDERS-SINGLE-ROW-INVOCATION-HEADERS-ACROSS-HOSTS: Invocation headers occupy at most one visual row in CLI/TUI, desktop, and VS Code with narrow panes, live updates, and restored history. TEST-QB-060: renders_single_row_invocation_headers_across_hosts. TDD stages: P3 TUI/CLI rendering; P4 desktop rendering; P5 VS Code/packaged rendering. Final acceptance owner P5; do not mark this AC satisfied after only one host passes.
+
+## TR-QB-RESIZE-001
+
+**Expand/shrink panel shortcuts** — Normalize Plus/Equal/Minus, apply repeat-aware one-cell adjustments, and enforce usable limits.
+**Covered by:** FR: FR-QB-014; TEST: TEST-QB-040, TEST-QB-041, TEST-QB-042
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-RESIZES-THE-ACTIVE-DIMENSION-WITH-DEFAULT-SHORTCUTS: When visible and non-Compact, Ctrl+Plus/Ctrl+Equal expands and Ctrl+Minus shrinks one column/line by position; while Hidden/Compact these commands leave requested dimensions unchanged. TEST-QB-040: resizes_the_active_dimension_with_default_shortcuts. TDD: P3.
+- [ ] AC-QB-HANDLES-REPEAT-LIMITS-AND-AUTO-TO-EXPLICIT-RESIZE: Repeats respect limits; first Auto resize starts from displayed size and changes only that orientation to explicit. TEST-QB-041: handles_repeat_limits_and_auto_to_explicit_resize. TDD: P3.
+- [ ] AC-QB-RESIZES-WITHOUT-INPUT-OR-MODAL-INTERFERENCE: Consume resizing events without prompt/cursor edits; suspend while modal/approval owns input. Exercise emitted terminal events, not configuration strings alone. Ambiguous legacy control bytes are not guessed as resize chords, reserved input remains with its owner, and swallowed chords retain the existing palette route. TEST-QB-042: resizes_without_input_or_modal_interference. TDD: P3.
+
+## TR-QB-RUNTIME-001
+
+**Enforcement across execution paths** — Govern every application entrypoint, rebuild path, and delegate factory; verify remote-host compatibility.
+**Covered by:** FR: FR-QB-005; TEST: TEST-QB-013, TEST-QB-014, TEST-QB-015
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-REQUIRES-GOVERNANCE-ACROSS-APPLICATION-ENTRYPOINTS: All CLI modes, VS Code, desktop, hub, schedules/connectors, and agent examples cannot construct an ungoverned agent. Cover the complete named host/example inventory and every start, fork, restore, message, schedule, connector, delegate and self-invocation path, including initialization before the first chat. Required governance is installed before any auto-running entry module can create an agent; shipped self-invocation uses the governed executable and cannot escape through PATH or upstream environment overrides. TEST-QB-013: requires_governance_across_application_entrypoints. TDD: P1.
+- [ ] AC-QB-PRESERVES-GOVERNANCE-THROUGH-REBUILD-AND-DELEGATION: Resume/mode changes/rebuilding/subagents/teams preserve mandatory policy and isolated lifecycle state. TEST-QB-014: preserves_governance_through_rebuild_and_delegation. TDD: P1.
+- [ ] AC-QB-REJECTS-REMOTE-HOSTS-WITHOUT-REQUIRED-POLICY: Incompatible remote hosts are refused; no ungoverned fallback. An identity or policy-digest mismatch refuses attachment without retiring, modifying or reusing the other daemon, including during reconnect and build changes. Compatible connection still passes through the same trust and lifecycle checks. TEST-QB-015: rejects_remote_hosts_without_required_policy. TDD: P1.
+
+## TR-QB-SETTINGS-001
+
+**qbrain.ai integration settings** — Shared validated configuration/effective-state contracts, TUI tab/desktop section, and supported bootstrap/secret storage.
+**Covered by:** FR: FR-QB-010; TEST: TEST-QB-028, TEST-QB-029, TEST-QB-030
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-RENDERS-QBRAIN-INTEGRATION-CONFIGURATION-AND-STATUS: TUI qbrain.ai tab and desktop section show effective endpoint/workspace/source, connection test, trust, version, and readiness. TEST-QB-028: renders_qbrain_integration_configuration_and_status. TDD: P2; desktop composition regression P4.
+- [ ] AC-QB-PROTECTS-SECRETS-AND-REVALIDATES-CONNECTION-CHANGES: Mask secrets and keep them out of preferences/logs; connection changes follow supported bootstrap/configuration and revalidate trust without directly editing signed marker fields. Test nonempty marker keys/signatures across settings, display, diagnostics, provider-bound inputs/results and audit output, including stream-chunk splits, without corrupting backend authentication. A delayed old connection test cannot mark the new context ready; failed revalidation keeps ordinary work blocked with supported recovery. TEST-QB-029: protects_secrets_and_revalidates_connection_changes. TDD: P2. Staged P1: host output-boundary credential protection must pass before real marker/provider credentials are used; P2 retains settings UI and final acceptance.
+- [ ] AC-QB-REJECTS-SETTINGS-THAT-WEAKEN-GOVERNANCE: Settings cannot disable/skip/continue ungoverned/re-enable Cline Cloud. TEST-QB-030: rejects_settings_that_weaken_governance. TDD: P2.
+
+## TR-QB-SIZE-001
+
+**User-defined panel dimensions** — Independent requested width/height versus effective fit; include border in dimensions.
+**Covered by:** FR: FR-QB-013; TEST: TEST-QB-037, TEST-QB-038, TEST-QB-039
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-VALIDATES-INDEPENDENT-COLUMN-AND-LINE-PREFERENCES: Settings accept independent positive-integer columns/lines plus Auto and reject invalid input. TEST-QB-037: validates_independent_column_and_line_preferences. TDD: P3.
+- [ ] AC-QB-CLAMPS-EFFECTIVE-SIZE-WITHOUT-LOSING-REQUESTED-SIZE: Explicit sizes are not bound by Auto ranges and follow TUI layout, visibility, dimensions and controls target/space fit (shown at min(target, space) when space >=min(target, panel minimum), otherwise Compact); clamping or Compact never overwrites the requested size, restored when room returns. TEST-QB-038: clamps_effective_size_without_losing_requested_size. TDD: P3.
+- [ ] AC-QB-RESTORES-INDEPENDENT-AUTO-SIZING: Auto uses planned adaptive defaults; resetting one dimension leaves the other unchanged. TEST-QB-039: restores_independent_auto_sizing. TDD: P3.
+
+## TR-QB-TODOREAD-001
+
+**TODO inspection** — Supported workspace-scoped TODO query/detail models do not change active work context.
+**Covered by:** FR: FR-QB-008; TEST: TEST-QB-022, TEST-QB-023, TEST-QB-024, TEST-QB-073
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-PROJECTS-WORKSPACE-TODO-LIST-AND-DETAILS: Show IDs/title/priority/completion/remaining work/subtasks/dependencies where present. TEST-QB-022: projects_workspace_todo_list_and_details. TDD: P2.
+- [ ] AC-QB-FILTERS-AND-BROWSES-TODOS-WITHOUT-MUTATION: Filter open/completed items and select details without mutating TODOs or selecting agent active TODO. TEST-QB-023: filters_and_browses_todos_without_mutation. TDD: P2.
+- [ ] AC-QB-DISTINGUISHES-TODO-EMPTY-ERROR-AND-AGENDA-STATES: Empty/unavailable/error are distinct; MCP TODOs are not conflated with Agenda tasks. TEST-QB-024: distinguishes_todo_empty_error_and_agenda_states. TDD: P2.
+- [ ] AC-QB-RETRIEVES-COMPLETE-TODO-PAGES-UNDER-REFRESH-AND-FILTER-CHANGES: A workspace TODO list larger than one page is retrievable completely under the selected filter without silent omission or duplicate items. Concurrent insertion, update, completion or deletion during traversal produces either a coherent supported view or an explicit restart/stale outcome, never a falsely confirmed complete list. Context/filter changes invalidate late pages. Missing selected items are reported as missing rather than replaced by unrelated items. Traversal and refresh do not mutate TODOs or active work selection. Page bounds and the consistency/restart contract are defined before the read-service slice is implemented. TEST cases: Zero, one, exact-page and multiple-page lists; update/delete at a page boundary; completed filter changes; reused foreign cursor; expired traversal; late old-context page; missing selected item; no model turn or TODO mutation. TEST-QB-073: retrieves_complete_todo_pages_under_refresh_and_filter_changes. TDD: P2. Staged regressions: P3, P4.
+
+## TR-QB-TRUST-001
+
+**Trusted, workspace-bound startup** — Resolve trust/routing from actual workspace; isolate contexts instead of process-global session state; maintain guidance in provider requests.
+**Covered by:** FR: FR-QB-002; TEST: TEST-QB-004, TEST-QB-005, TEST-QB-006, TEST-QB-072
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-FAILS-CLOSED-ON-WORKSPACE-TRUST-FAILURE: Signature/nonce/health/auth failures block ordinary execution without unauthorized further probing or ungoverned fallback. TEST-QB-004: fails_closed_on_workspace_trust_failure. TDD: P1.
+- [ ] AC-QB-ISOLATES-CONCURRENT-WORKSPACE-AND-SESSION-CONTEXTS: Concurrent workspaces/sessions retain separate endpoints, credentials, session linkage, and request IDs. Steering, delayed callbacks, replay, resume and clear/end preserve the captured workspace, agent, MCP session, request and event attribution. With multiple delivered open turns an implicit write is request_ambiguous; a foreign request is request_unknown. A mint-only request is not an implicit write target; explicit valid targeting still works without canceling another open turn. TEST-QB-005: isolates_concurrent_workspace_and_session_contexts. TDD: P1.
+- [ ] AC-QB-PRESERVES-REQUIRED-GUIDANCE-AND-REJECTS-FALSE-EMPTY-RESULTS: Required skills/guidance precede work and survive requests/compaction; unavailable guidance is not false successful emptiness. Assert the complete pinned skill inventory, memory descriptor output and effective requirements in actual provider requests after prompt replacement, rebuild and compaction; successful empty memory alone permits None. Marker/bootstrap prompt text is absent, and unrelated skills do not execute automatically. TEST-QB-006: preserves_required_guidance_and_rejects_false_empty_results. TDD: P1.
+- [ ] AC-QB-INVALIDATES-LIVE-AUTHORIZATION-AFTER-TRUST-OR-POLICY-CHANGE: At each ordinary execution and completion authorization boundary, a live context whose relevant signed trust, credentials, artifact authorization or policy has changed cannot authorize new work using its previous validation. It must revalidate the applicable current state or block with supported recovery. In-flight effects and late callbacks retain their original attribution and cannot mark a replacement context ready. Recovery retains the original audit records and cannot silently rebind them to another identity. An unaffected concurrent context continues normally. Supported changes, detection boundaries and in-flight outcome rules must be specified by the slice contract before implementation. TEST cases: Marker/key/policy change between initialization and tool execution; change between verification and completion; change while a tool is already executing; delayed response from old context; failed revalidation; unrelated concurrent workspace; restart with an old outbox. TEST-QB-072: invalidates_live_authorization_after_trust_or_policy_change. TDD: P1.
+
+## TR-QB-VISIBILITY-001
+
+**Three-state panel placement** — Global visibility distinct from per-orientation edge preference; hidden reclaims space and retains panel state.
+**Covered by:** FR: FR-QB-012; TEST: TEST-QB-034, TEST-QB-035, TEST-QB-036
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-QB-CYCLES-EACH-ORIENTATION-THROUGH-TWO-EDGES-AND-HIDDEN: Flip exactly right -> left -> hidden -> right and bottom -> top -> hidden -> bottom. TEST-QB-034: cycles_each_orientation_through_two_edges_and_hidden. TDD: P3.
+- [ ] AC-QB-PRESERVES-HIDDEN-STATE-ACROSS-ASPECT-CHANGES: Hidden persists across aspect changes; reveal uses current cycle's first edge and retains dimensions/data-view state. TEST-QB-035: preserves_hidden_state_across_aspect_changes. TDD: P3.
+- [ ] AC-QB-HIDES-PRESENTATION-WITHOUT-DISABLING-GOVERNANCE: Hide returns panel focus to prompt/reclaims space without weakening governance; resize does not reveal. TEST-QB-036: hides_presentation_without_disabling_governance. TDD: P3.
+
 ## TR-SUPPORT-010E
 
 **Stateless lifecycle controller + client + tool adapters** — SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
@@ -4353,6 +4910,7 @@ Scope: layer-1+
 ## TR-SUPPORT-CORE-016
 
 **TR-SUPPORT-CORE-016** — Placeholder requirement backfilled for TODO link TR-SUPPORT-CORE-016.
+**Covered by:** FR: FR-SUPPORT-016; TEST: TEST-SUPPORT-024
 **Status:** pending
 Scope: layer-1+
 

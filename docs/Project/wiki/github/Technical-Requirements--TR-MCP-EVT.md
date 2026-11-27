@@ -1,0 +1,39 @@
+# TR-MCP-EVT
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-EVT-001
+
+**In-Process Change Event Bus** — `ChannelChangeEventBus` SHALL be registered as a singleton `IChangeEventBus` and provide fan-out publish/subscribe semantics to independent subscribers using bounded channels (capacity 1000) with non-blocking publish behavior. When a subscriber buffer is full, delivery to that subscriber SHALL be rejected and logged at warning level instead of silently discarding already queued events.
+**Covered by:** `ChannelChangeEventBus`, `IChangeEventBus`, `Program.cs`
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-EVT-002
+
+**Service-Layer Mutation Publishing** — Mutating service operations SHALL publish change events after successful persistence, with event emission wrapped in defensive try/catch and warning-level logging on publish failures.
+**Covered by:** `TodoService`, `SqliteTodoService`, `SessionLogService`, `RepoFileService`, `ToolRegistryService`, `ToolBucketService`, `WorkspaceService`, `AgentService`, `RequirementsDocumentService`, `IngestionCoordinator`, `WorkspaceProcessManager`
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-EVT-003
+
+**SSE Delivery Endpoint** — `EventStreamController` SHALL stream notifications as `text/event-stream` with `Cache-Control: no-cache` and support optional category filtering via `?category=` query parameter.
+**Covered by:** `EventStreamController`
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-EVT-004
+
+**Change Event Contract** — Change events SHALL include `Category`, `Action`, optional `EntityId`, optional `ResourceUri`, and UTC `Timestamp` to support correlation by consumers.
+**Covered by:** `ChangeEvent`, `ChangeEventActions`, `ChangeEventCategories`
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-EVT-005
+
+**Workspace Notification Category Coverage** — The notification system SHALL support at minimum the categories: `todo`, `session_log`, `repo`, `context`, `tool_registry`, `tool_bucket`, `workspace`, `github`, `marker`, `agent`, and `requirements`.
+**Covered by:** `ChangeEventCategories` and all publishing call sites in mutation services/controllers
+**Status:** pending
+Scope: layer-1+
+

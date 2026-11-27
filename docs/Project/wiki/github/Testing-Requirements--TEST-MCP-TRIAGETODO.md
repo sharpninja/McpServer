@@ -1,0 +1,19 @@
+# TEST-MCP-TRIAGETODO
+
+[Back to Testing Requirements](Testing-Requirements)
+
+## TEST-MCP-TRIAGETODO
+
+### TEST-MCP-TRIAGETODO-001
+
+TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+
+**Acceptance Criteria:**
+- [ ] TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+
+### TEST-MCP-TRIAGETODO-002
+
+GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
+
+**Acceptance Criteria:**
+- [ ] GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.

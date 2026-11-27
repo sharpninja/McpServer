@@ -1,0 +1,26 @@
+# TR-TRIAGE-CLIENT
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-TRIAGE-CLIENT-001
+
+**Typed triage dashboard client endpoints** — SharpNinja.McpServer.Client exposes typed triage dashboard and run-history methods backed by REST endpoints for queue contents, groupings, AI triage runs, results, and current status.
+**Covered by:** FR: FR-TRIAGE-001; TEST: TEST-TRIAGE-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] McpServerClient.Triage exposes methods to query the dashboard, query runs, and get an individual run.
+- [ ] REST and client request/response models preserve status, result JSON, raw output, prompt metadata, created TODO id, errors, timestamps, and workspace filters.
+- [ ] Existing QueryGroupsAsync, GetGroupAsync, and GetReportAsync remain compatible for the planned shared UI.Core view model.
+
+## TR-TRIAGE-CLIENT-002
+
+**Typed triage TODO client endpoint** — REST, service, and SharpNinja.McpServer.Client typed triage APIs expose a triage-created TODO index with TODO IDs, created-at datetimes, workspace filters, group IDs, run IDs, and current triage status context.
+**Covered by:** FR: FR-TRIAGE-002; TEST: TEST-TRIAGE-002
+**Status:** completed
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] McpServerClient.Triage exposes a typed method for querying triage-created TODOs. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
+- [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
+- [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+

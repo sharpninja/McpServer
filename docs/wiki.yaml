@@ -366,6 +366,13 @@ documents:
     platforms:
       - github
       - azure
+  - id: requirements-traceability-policy
+    title: Requirements Traceability Policy
+    source: docs/Project/Requirements-Traceability-Policy.md
+    target: Requirements-Traceability-Policy.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -376,6 +383,7 @@ navigation:
       - document: testing
       - document: mapping
       - document: matrix
+      - document: requirements-traceability-policy
   - title: Case Studies
     path: Case-Studies
     children:

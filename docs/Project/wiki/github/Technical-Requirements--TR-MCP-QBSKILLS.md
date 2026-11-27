@@ -1,0 +1,25 @@
+# TR-MCP-QBSKILLS
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-QBSKILLS-001
+
+**SKILL.md manifest model and parser** — SkillManifest + SkillManifestParser parse agentskills.io frontmatter (name+description required; optional license/version/allowed-tools) using the YAML library already used by QBAgentBootstrapper; folder model supports optional scripts/references/assets.
+**Covered by:** FR: FR-MCP-QBSKILLS-001; TEST: TEST-MCP-QBSKILLS-001, TEST-MCP-QBSKILLS-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-QBSKILLS-002
+
+**Skill storage layout and dotnet/skills vendoring** — Skills live under skills/ at the repo root; dotnet/skills is vendored at skills/vendor/dotnet-skills as a git submodule (mirroring tools/McpServerTools) or synced via a build target; the registry scans both roots path-safely via IRepoFileService.
+**Covered by:** FR: FR-MCP-QBSKILLS-003; TEST: TEST-MCP-QBSKILLS-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-QBSKILLS-003
+
+**Discovery-list injection** — Only the size-bounded discovery list (name+description per skill) is injected into the QBAgent system prompt; full SKILL.md bodies are fetched on demand via load_skill.
+**Covered by:** FR: FR-MCP-QBSKILLS-002; TEST: TEST-MCP-QBSKILLS-003
+**Status:** pending
+Scope: layer-1+
+

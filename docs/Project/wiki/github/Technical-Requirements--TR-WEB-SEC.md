@@ -1,0 +1,24 @@
+# TR-WEB-SEC
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-WEB-SEC-001
+
+**Reuse pairing and OIDC** — mcp-web SHALL authenticate with existing pairing (FR-MCP-014) and OIDC (FR-MCP-026). Do not add Prompter Hawk magic-link email auth.
+**Covered by:** FR: FR-WEB-016; TEST: TEST-WEB-016
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Unauthenticated cockpit requests redirect to the existing login/pairing flow.
+- [ ] No magic-link mailer is added for mcp-web.
+
+## TR-WEB-SEC-002
+
+**Allow/deny stored as workspace policy** — Tool and path rules SHALL persist through workspace policy APIs (FR-MCP-033 / WorkspacePolicyService), fail closed, and be editable from mcp-web.
+**Covered by:** FR: FR-WEB-013; TEST: TEST-WEB-013
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Saving rules calls the workspace policy API, not a new sidecar file format.
+- [ ] Missing policy fails closed for denied tools/paths.
+

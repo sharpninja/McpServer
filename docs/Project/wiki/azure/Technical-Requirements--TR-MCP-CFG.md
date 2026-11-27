@@ -1,0 +1,66 @@
+# TR-MCP-CFG
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-CFG-001
+
+IOptions-based configuration for all filesystem and runtime settings.
+**Covered by:** FR: FR-MCP-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-CFG-002
+
+Port selection from `Mcp:Port` with `PORT` env override.
+**Covered by:** FR: FR-MCP-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-CFG-003
+
+**Workspace Configuration Schema** — Workspace state is persisted in `appsettings.json` under `Mcp:Workspaces` (not in EF/SQLite). Each entry includes: `WorkspacePath` (required, absolute path, primary key), `Name` (required), `WorkspacePort` (required), `TodoPath` (default: `docs/todo.yaml`), `DataDirectory` (optional override for mcp.db), `TunnelProvider` (optional: `ngrok`/`cloudflare`/`frp`), `RunAs` (optional Windows identity), `IsPrimary` (default: false), `IsEnabled` (default: true), `DateTimeCreated`, `DateTimeModified`. Port uniqueness enforced; auto-assignment from `max(existing) + 1`. File written atomically via `JsonNode` patching with `IConfigurationRoot.Reload()`.
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-CFG-004
+
+**YAML Configuration Support** — `Program.cs` calls `builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true)` using `NetEscapades.Configuration.Yaml`. YAML configuration merges with and can override `appsettings.json` values. Intended for local-only overrides not committed to source control.
+**Covered by:** `Program.cs`, `NetEscapades.Configuration.Yaml`
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-CFG-005
+
+**System-Wide Default Copilot Model Propagation** — Setting the default Copilot model for all session types requires updates to three locations:
+- `CopilotClientOptions.Model` default value (in `McpServer.Common.Copilot`) - controls server-initiated CLI invocations via `ICopilotClient`. Configurable at runtime via `Mcp:Copilot:Model`.
+- `VoiceConversationOptions.CopilotModel` default value (in `McpServer.Support.Mcp/Options/`) - controls voice conversation session model. Configurable via `Mcp:Voice:CopilotModel`.
+- `AgentDefaults.GetBuiltInDefaults()` (in `McpServer.Support.Mcp/Services/`) - seed data for built-in agent type definitions including the `copilot` agent's `DefaultModelsJson`. Only affects new installations (existing agent definitions are not re-seeded).
+
+All three share the pattern of a compile-time default overridable via `IOptions<T>` configuration binding. No new infrastructure is required - this is a default-value update propagated through existing `IOptions`-based configuration (TR-MCP-CFG-001).
+
+**Status:** 🔴 Planned
+
+**Covered by:** `CopilotClientOptions`, `VoiceConversationOptions`, `AgentDefaults`
+Scope: layer-1+
+
+## TR-MCP-CFG-006
+
+**Administrative Configuration Snapshot and YAML Patch API** — `ConfigurationController` SHALL expose `GET /mcpserver/configuration` returning the current flattened `IConfiguration` view as `section:key` pairs, and `PATCH /mcpserver/configuration` accepting a flattened dictionary that patches only the submitted keys into `appsettings.yaml`.
+Persistence SHALL be delegated to a dedicated helper service that resolves the correct loaded `appsettings` file path, serializes concurrent mutations across the full read-modify-write cycle, writes YAML or JSON via temp-file-plus-atomic-replace semantics, and reloads `IConfigurationRoot` after successful updates. `WorkspaceController` global-prompt updates SHALL reuse the same helper so shared configuration writes obey the same durability and reload guarantees. The endpoints SHALL use standard JWT Bearer admin authorization and remain closed when OIDC is disabled.
+
+**Status:** ✅ Complete
+
+**Covered by:** `ConfigurationController`, `AppSettingsFileService`, `Program.cs` (JWT Bearer auth setup), `WorkspaceController` (shared appsettings helper reuse)
+Scope: layer-1+
+
+## TR-MCP-CFG-007
+
+**Encryption Configuration and Provider Settings Surface** — `Mcp:Database:Provider` and related connection-string settings SHALL support SQLite, PostgreSQL, and SQL Server selection through appsettings and environment-variable overrides. The configuration surface SHALL expose an explicit optional encryption-enabled flag plus the provider-specific connection, key, and prerequisite settings needed by the selected native at-rest encryption facility. Configuration resolution SHALL be centralized so runtime startup and design-time EF tooling can resolve the same effective provider and encryption inputs.
+**Status:** ✅ Complete
+
+**Covered by:** `src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Support.Mcp/Program.cs`, `src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs`, `src/McpServer.Support.Mcp/appsettings.yaml`, `src/McpServer.Support.Mcp/appsettings.Staging.yaml`
+Scope: layer-1+
+
+<!-- mcp-wiki-footer:begin -->
+This wiki was generated by QBrain. [Explore the QBrain project on GitHub](https://github.com/sharpninja/McpServer).
+<!-- mcp-wiki-footer:end -->

@@ -1,0 +1,26 @@
+# TEST-MCP-QBSKILLS
+
+[Back to Testing Requirements](Testing-Requirements)
+
+## TEST-MCP-QBSKILLS
+
+### TEST-MCP-QBSKILLS-001
+
+Unit tests asserting the parser requires name+description, rejects missing name, and reads optional allowed-tools.
+
+**Acceptance Criteria:**
+- [ ] Requires name+description; rejects missing name; reads optional allowed-tools.
+
+### TEST-MCP-QBSKILLS-002
+
+Unit tests asserting discovery returns name+description only, load returns the full body, and discovery includes vendored + workspace skills.
+
+**Acceptance Criteria:**
+- [ ] Discovery returns name+description only; load returns full body; both roots included.
+
+### TEST-MCP-QBSKILLS-003
+
+Unit tests asserting list_skills and load_skill are exposed as external tools and return the discovery list and named body respectively.
+
+**Acceptance Criteria:**
+- [ ] list_skills returns discovery; load_skill returns the named skill body.

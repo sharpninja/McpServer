@@ -1,0 +1,45 @@
+# TR-MCP-AUTH
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-AUTH-001
+
+**OIDC JWT Bearer Authentication** — ASP.NET Core JWT Bearer middleware configured with OIDC authority/issuer, audience (`mcp-server-api`), and optional client secret based on provider requirements. `OidcAuthOptions` bound from `Mcp:Auth` configuration section. Management endpoints (agent mutations) require `[Authorize(Policy = "AgentManager")]`; read endpoints fall back to existing API key auth. `RequireHttpsMetadata` configurable for local development.
+**Covered by:** `OidcAuthOptions`, `Program.cs`, `AgentController`
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-AUTH-002
+
+**GitHub Federation via OIDC Provider** — OIDC provider setup may configure GitHub as a social Identity Provider with `user:email read:org` scopes. First-login flow may auto-create users from GitHub accounts. GitHub username mapped to `github_username` user attribute. Setup scripts accept `--GitHubClientId` / `--GitHubClientSecret` parameters; GitHub federation is optional.
+**Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-AUTH-003
+
+**Device Authorization Flow for CLI Clients** — OIDC `mcp-director` client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Provider claim mapping ensures `mcp-server-api` appears in token audience and includes `realm_roles`.
+**Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`, `QBrainAi.Director`
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-AUTH-010
+
+**WorkspaceAuthMiddleware 503/401 gating** — The API-key branch of WorkspaceAuthMiddleware reserves StatusCodes.Status503ServiceUnavailable strictly for the case !WorkspaceTokenService.IsInitialized (no full token seeded yet); that response includes a Retry-After header and JSON body. Once the token subsystem is initialized, an unresolved workspace or non-validating/missing credential yields 401 Unauthorized.
+**Covered by:** FR: FR-MCP-132; TEST: TEST-MCP-AUTH-010, TEST-MCP-AUTH-011, TEST-MCP-AUTH-012
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Status 503 Service Unavailable is reserved for !WorkspaceTokenService.IsInitialized with Retry-After header and JSON body.
+- [x] Once token subsystem is initialized, unresolved workspace or non-validating credential yields 401 Unauthorized.
+
+## TR-MCP-AUTH-011
+
+**WorkspaceTokenService.IsInitialized** — WorkspaceTokenService exposes bool IsInitialized => !_tokens.IsEmpty (true once at least one full-access token has been generated). Consumed by WorkspaceAuthMiddleware and WorkspaceReadinessHealthCheck to distinguish genuine startup-not-ready from a credential failure.
+**Covered by:** FR: FR-MCP-132; TEST: TEST-MCP-AUTH-010, TEST-MCP-AUTH-011, TEST-MCP-AUTH-012
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] WorkspaceTokenService exposes IsInitialized property that returns true when at least one full-access token has been generated.
+- [x] IsInitialized is consumed by WorkspaceAuthMiddleware and WorkspaceReadinessHealthCheck to distinguish startup-not-ready from credential failure.
+

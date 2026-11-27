@@ -1,0 +1,23 @@
+# TR-MCP-REQAC
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-REQAC-001
+
+**Acceptance criteria persistence** — Persist requirement acceptance criteria as a nullable AcceptanceCriteriaJson column on RequirementEntity using the existing JSON-column pattern and the shared AcceptanceCriterion type. Provider migrations for SQLite, SQL Server, and PostgreSQL include the column, and create/update/read plus document generation round-trip ordered checklist criteria with checked state and evidence.
+**Covered by:** FR: FR-MCP-REQAC-001, FR-MCP-REQAC-002; TEST: TEST-MCP-REQAC-001, TEST-MCP-REQAC-002, TEST-MCP-REQAC-003, TEST-MCP-REQAC-004
+**Status:** completed
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] RequirementEntity stores requirement acceptance criteria in a nullable JSON column that reuses the shared AcceptanceCriterion contract. (evidence: docs/Project/Technical-Requirements.md)
+- [x] SQLite, SQL Server, and PostgreSQL provider migrations include the acceptance-criteria column without requiring callers to rewrite existing requirements. (evidence: docs/Project/Technical-Requirements.md)
+- [x] Requirement create/update/read paths round-trip ordered criteria, checked state, evidence text, and empty/null criteria distinctly. (evidence: docs/Project/Technical-Requirements.md)
+- [x] Requirements document generation renders persisted criteria as Markdown checklist bullets while keeping the database as the authoritative store. (evidence: docs/Project/Technical-Requirements.md)
+
+## TR-MCP-REQAC-002
+
+**Acceptance criteria markdown rendering** — Render acceptance criteria into Functional/Technical/Testing-Requirements.md; the parser remains tolerant of the block; the database remains authoritative.
+**Covered by:** FR: FR-MCP-REQAC-001; TEST: TEST-MCP-REQAC-001, TEST-MCP-REQAC-002, TEST-MCP-REQAC-003
+**Status:** pending
+Scope: layer-1+
+

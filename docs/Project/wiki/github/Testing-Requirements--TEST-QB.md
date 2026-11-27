@@ -1,0 +1,537 @@
+# TEST-QB
+
+[Back to Testing Requirements](Testing-Requirements)
+
+## TEST-QB
+
+### TEST-QB-001
+
+AC-QB-REGISTERS-BUNDLED-PLUGIN-WITHOUT-USER-ENABLEMENT: Startup automatically registers required tools, skills, and lifecycle capabilities without install/enablement prompts. TEST-QB-001: registers_bundled_plugin_without_user_enablement. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REGISTERS-BUNDLED-PLUGIN-WITHOUT-USER-ENABLEMENT: Startup automatically registers required tools, skills, and lifecycle capabilities without install/enablement prompts. TEST-QB-001: registers_bundled_plugin_without_user_enablement. TDD: P1.
+
+### TEST-QB-002
+
+AC-QB-REJECTS-REQUIRED-PLUGIN-DISABLE-AND-SHADOW-ATTEMPTS: Settings, flags, environment variables, tool filters, and same-name optional contributions cannot disable/replace required capabilities. The named test covers every enumerated bypass surface, optional hook input rewrites and provider-executed tools: only final authorized arguments execute; an adapter with unobservable execution is rejected unless tool execution is verifiably disabled. TEST-QB-002: rejects_required_plugin_disable_and_shadow_attempts. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REJECTS-REQUIRED-PLUGIN-DISABLE-AND-SHADOW-ATTEMPTS: Settings, flags, environment variables, tool filters, and same-name optional contributions cannot disable/replace required capabilities. The named test covers every enumerated bypass surface, optional hook input rewrites and provider-executed tools: only final authorized arguments execute; an adapter with unobservable execution is rejected unless tool execution is verifiably disabled. TEST-QB-002: rejects_required_plugin_disable_and_shadow_attempts. TDD: P1.
+
+### TEST-QB-003
+
+AC-QB-BLOCKS-EXECUTION-WHEN-REQUIRED-PLUGIN-IS-UNUSABLE: Missing, incompatible, incomplete, or invalid plugin assets block ordinary execution before the first model request. Pin, signed ClineQb entry, asset digest and host-platform compatibility must agree. Missing runtime prerequisites for a non-triggered skill do not block unrelated work; triggering that skill without its prerequisite blocks that workflow with an actionable diagnostic. TEST-QB-003: blocks_execution_when_required_plugin_is_unusable. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-BLOCKS-EXECUTION-WHEN-REQUIRED-PLUGIN-IS-UNUSABLE: Missing, incompatible, incomplete, or invalid plugin assets block ordinary execution before the first model request. Pin, signed ClineQb entry, asset digest and host-platform compatibility must agree. Missing runtime prerequisites for a non-triggered skill do not block unrelated work; triggering that skill without its prerequisite blocks that workflow with an actionable diagnostic. TEST-QB-003: blocks_execution_when_required_plugin_is_unusable. TDD: P1.
+
+### TEST-QB-004
+
+AC-QB-FAILS-CLOSED-ON-WORKSPACE-TRUST-FAILURE: Signature/nonce/health/auth failures block ordinary execution without unauthorized further probing or ungoverned fallback. TEST-QB-004: fails_closed_on_workspace_trust_failure. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-FAILS-CLOSED-ON-WORKSPACE-TRUST-FAILURE: Signature/nonce/health/auth failures block ordinary execution without unauthorized further probing or ungoverned fallback. TEST-QB-004: fails_closed_on_workspace_trust_failure. TDD: P1.
+
+### TEST-QB-005
+
+AC-QB-ISOLATES-CONCURRENT-WORKSPACE-AND-SESSION-CONTEXTS: Concurrent workspaces/sessions retain separate endpoints, credentials, session linkage, and request IDs. Steering, delayed callbacks, replay, resume and clear/end preserve the captured workspace, agent, MCP session, request and event attribution. With multiple delivered open turns an implicit write is request_ambiguous; a foreign request is request_unknown. A mint-only request is not an implicit write target; explicit valid targeting still works without canceling another open turn. TEST-QB-005: isolates_concurrent_workspace_and_session_contexts. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-ISOLATES-CONCURRENT-WORKSPACE-AND-SESSION-CONTEXTS: Concurrent workspaces/sessions retain separate endpoints, credentials, session linkage, and request IDs. Steering, delayed callbacks, replay, resume and clear/end preserve the captured workspace, agent, MCP session, request and event attribution. With multiple delivered open turns an implicit write is request_ambiguous; a foreign request is request_unknown. A mint-only request is not an implicit write target; explicit valid targeting still works without canceling another open turn. TEST-QB-005: isolates_concurrent_workspace_and_session_contexts. TDD: P1.
+
+### TEST-QB-006
+
+AC-QB-PRESERVES-REQUIRED-GUIDANCE-AND-REJECTS-FALSE-EMPTY-RESULTS: Required skills/guidance precede work and survive requests/compaction; unavailable guidance is not false successful emptiness. Assert the complete pinned skill inventory, memory descriptor output and effective requirements in actual provider requests after prompt replacement, rebuild and compaction; successful empty memory alone permits None. Marker/bootstrap prompt text is absent, and unrelated skills do not execute automatically. TEST-QB-006: preserves_required_guidance_and_rejects_false_empty_results. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PRESERVES-REQUIRED-GUIDANCE-AND-REJECTS-FALSE-EMPTY-RESULTS: Required skills/guidance precede work and survive requests/compaction; unavailable guidance is not false successful emptiness. Assert the complete pinned skill inventory, memory descriptor output and effective requirements in actual provider requests after prompt replacement, rebuild and compaction; successful empty memory alone permits None. Marker/bootstrap prompt text is absent, and unrelated skills do not execute automatically. TEST-QB-006: preserves_required_guidance_and_rejects_false_empty_results. TDD: P1.
+
+### TEST-QB-007
+
+AC-QB-OPENS-LINKED-REQUEST-TURN-BEFORE-AGENT-WORK: Every actual user request opens a linked turn with the full request text before agent work, using a deterministic provisional title derived from the request that is never empty and never the literal User prompt; before completion the turn carries a summary title meeting completion obligation (d). TEST-QB-007: opens_linked_request_turn_before_agent_work. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-OPENS-LINKED-REQUEST-TURN-BEFORE-AGENT-WORK: Every actual user request opens a linked turn with the full request text before agent work, using a deterministic provisional title derived from the request that is never empty and never the literal User prompt; before completion the turn carries a summary title meeting completion obligation (d). TEST-QB-007: opens_linked_request_turn_before_agent_work. TDD: P1.
+
+### TEST-QB-008
+
+AC-QB-RECORDS-ORDERED-ACTIONS-AND-SEPARATE-DECISIONS: Outcomes/errors/cancellation/decisions retain status, ordering, and separate action/decision classification. tool_execution is emitted only after the server/REPL/plugin taxonomy prerequisite is verified. One explicit decision has the same identity and conclusion in designDecisions, decision dialog and design_decision action after replay; tool activity alone does not invent a decision. Out-of-order acknowledgments cannot reorder stored events or transfer a canceled/terminal turn outcome to another request. TEST-QB-008: records_ordered_actions_and_separate_decisions. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RECORDS-ORDERED-ACTIONS-AND-SEPARATE-DECISIONS: Outcomes/errors/cancellation/decisions retain status, ordering, and separate action/decision classification. tool_execution is emitted only after the server/REPL/plugin taxonomy prerequisite is verified. One explicit decision has the same identity and conclusion in designDecisions, decision dialog and design_decision action after replay; tool activity alone does not invent a decision. Out-of-order acknowledgments cannot reorder stored events or transfer a canceled/terminal turn outcome to another request. TEST-QB-008: records_ordered_actions_and_separate_decisions. TDD: P1.
+
+### TEST-QB-009
+
+AC-QB-DISTINGUISHES-CONFIRMED-AUDIT-FROM-PENDING-RECOVERY: Pending/synthetic acknowledgments are not confirmed persistence; recovery retains records and avoids duplicate application. Crash/restart at capture, pending-to-minted rebinding, submission, server commit, receipt handling and retirement retains immutable event identity, payload and per-turn order. At-least-once replay applies one logical event and never changes its request attribution. Confirmed and verified-unchanged receipts require matching root identities, event/payload and positive committed revision; duplicate requestIds and identical resubmission follow the agreed C3 outcomes. Alias recovery survives clear/restart and is not forgotten before durable consumer acknowledgment. Queued, rejected, lost, quarantined or retry-capped mandatory evidence remains visible and blocks successful completion; an empty queue cannot erase a retained rejection. TEST-QB-009: distinguishes_confirmed_audit_from_pending_recovery. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-DISTINGUISHES-CONFIRMED-AUDIT-FROM-PENDING-RECOVERY: Pending/synthetic acknowledgments are not confirmed persistence; recovery retains records and avoids duplicate application. Crash/restart at capture, pending-to-minted rebinding, submission, server commit, receipt handling and retirement retains immutable event identity, payload and per-turn order. At-least-once replay applies one logical event and never changes its request attribution. Confirmed and verified-unchanged receipts require matching root identities, event/payload and positive committed revision; duplicate requestIds and identical resubmission follow the agreed C3 outcomes. Alias recovery survives clear/restart and is not forgotten before durable consumer acknowledgment. Queued, rejected, lost, quarantined or retry-capped mandatory evidence remains visible and blocks successful completion; an empty queue cannot erase a retained rejection. TEST-QB-009: distinguishes_confirmed_audit_from_pending_recovery. TDD: P1.
+
+### TEST-QB-010
+
+AC-QB-GATES-ALL-SUCCESSFUL-COMPLETION-PATHS: Successful final-answer payloads/success events remain withheld until required checks pass; blocked or incomplete diagnostics remain deliverable without claiming success. Test successful, correctable-incomplete and infrastructure-blocked outcomes through each final-delivery path. A corrected final attempt uses the same open request and only succeeds after every applicable obligation is verified; unchanged incomplete attempts stop at the existing bounded limit. Infrastructure failure exposes supported recovery without allowing ordinary work or discarding audit evidence. TEST-QB-010: gates_all_successful_completion_paths. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-GATES-ALL-SUCCESSFUL-COMPLETION-PATHS: Successful final-answer payloads/success events remain withheld until required checks pass; blocked or incomplete diagnostics remain deliverable without claiming success. Test successful, correctable-incomplete and infrastructure-blocked outcomes through each final-delivery path. A corrected final attempt uses the same open request and only succeeds after every applicable obligation is verified; unchanged incomplete attempts stop at the existing bounded limit. Infrastructure failure exposes supported recovery without allowing ordinary work or discarding audit evidence. TEST-QB-010: gates_all_successful_completion_paths. TDD: P1.
+
+### TEST-QB-011
+
+AC-QB-BLOCKS-COMPLETION-ON-FAILED-MISSING-OR-STALE-VERIFICATION: Code/doc edits and command-made changes invalidate stale evidence; failed/missing applicable checks block completion. The signed policy selects every applicable runner from package ownership and dependency scope, including non-sdk VS Code suites, all distinct desktop runners and required native checks. Evidence binds policy digest and pre/post source fingerprints; changes during verification invalidate it. Ignored receipt churn alone does not invalidate source evidence. Baseline failures, blocked chains and required platform/credential cases remain explicit blockers until resolved or changed by an operator decision. TEST-QB-011: blocks_completion_on_failed_missing_or_stale_verification. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-BLOCKS-COMPLETION-ON-FAILED-MISSING-OR-STALE-VERIFICATION: Code/doc edits and command-made changes invalidate stale evidence; failed/missing applicable checks block completion. The signed policy selects every applicable runner from package ownership and dependency scope, including non-sdk VS Code suites, all distinct desktop runners and required native checks. Evidence binds policy digest and pre/post source fingerprints; changes during verification invalidate it. Ignored receipt churn alone does not invalidate source evidence. Baseline failures, blocked chains and required platform/credential cases remain explicit blockers until resolved or changed by an operator decision. TEST-QB-011: blocks_completion_on_failed_missing_or_stale_verification. TDD: P1.
+
+### TEST-QB-012
+
+AC-QB-CLASSIFIES-OPERATIONS-AND-GATES-PHASE-CLOSURE-ON-VERIFIED-HV-RECEIPT: A host-owned classifier derives phaseId and phaseClosing from trusted governed TODO/task mutations and MCP records, never model prose. It classifies operationClass from that trusted state plus source fingerprints: any working-tree content change within the verification-policy scope is development, whether made by an edit tool or command; administrative turns have unchanged source contents and only TODO, requirement or session-record effects. Administrative turns carry no verification or HV obligation; development turns complete only after required verification passes for the current fingerprint; a mutation completing a task or setting done: true on a TODO listed as phase-gated by the signed workspace verification policy is rejected without a valid HV receipt; for this workspace the policy lists QB-AGENT-001 tasks prefixed P1: through P5: and Final:, and done: true on QB-AGENT-001; TODOs without a phase-gate entry carry no HV obligation. The named test rejects forged reviewer/root identities, model-selected phase selectors, partial or missing verdict persistence, absent scores and every sub-98 value without rounding; it accepts valid lexical scores only under the agreed lossless numeric contract. Canonical task readback must match the attempted phase transition and current verified plan/base/head; read failure or mismatch leaves that transition pending. Administrative reconciliation never satisfies a product AC or silently closes a phase. TEST-QB-012: classifies_operations_and_gates_phase_closure_on_verified_hv_receipt (administrative, development, valid receipt, forged receipt, stale receipt). TDD: P1. Valid receipt: read back through the supported plugin from a completed MCP turn whose session agent identity is the configured reviewer identity (ClaudeCode), not the host identity; its stored verdict records OverallVerdict AGREE, accuracy and completeness >=98, and plan hash, base SHA and head SHA equal to the closing state. The host binds model-facing session tools to its own agentIdentity and sessionId; tool arguments cannot set agent, sourceType or sessionId. An administrator or unrestricted user-authorized shell with the raw marker key can bypass the application and forge server records; this on-disk credential bypass is outside the application-level guarantee and is documented as a limit under AC-QB-CHECKS-DOCUMENTED-COMMANDS-DEFAULTS-AND-CONTRACTS.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-CLASSIFIES-OPERATIONS-AND-GATES-PHASE-CLOSURE-ON-VERIFIED-HV-RECEIPT: A host-owned classifier derives phaseId and phaseClosing from trusted governed TODO/task mutations and MCP records, never model prose. It classifies operationClass from that trusted state plus source fingerprints: any working-tree content change within the verification-policy scope is development, whether made by an edit tool or command; administrative turns have unchanged source contents and only TODO, requirement or session-record effects. Administrative turns carry no verification or HV obligation; development turns complete only after required verification passes for the current fingerprint; a mutation completing a task or setting done: true on a TODO listed as phase-gated by the signed workspace verification policy is rejected without a valid HV receipt; for this workspace the policy lists QB-AGENT-001 tasks prefixed P1: through P5: and Final:, and done: true on QB-AGENT-001; TODOs without a phase-gate entry carry no HV obligation. The named test rejects forged reviewer/root identities, model-selected phase selectors, partial or missing verdict persistence, absent scores and every sub-98 value without rounding; it accepts valid lexical scores only under the agreed lossless numeric contract. Canonical task readback must match the attempted phase transition and current verified plan/base/head; read failure or mismatch leaves that transition pending. Administrative reconciliation never satisfies a product AC or silently closes a phase. TEST-QB-012: classifies_operations_and_gates_phase_closure_on_verified_hv_receipt (administrative, development, valid receipt, forged receipt, stale receipt). TDD: P1. Valid receipt: read back through the supported plugin from a completed MCP turn whose session agent identity is the configured reviewer identity (ClaudeCode), not the host identity; its stored verdict records OverallVerdict AGREE, accuracy and completeness >=98, and plan hash, base SHA and head SHA equal to the closing state. The host binds model-facing session tools to its own agentIdentity and sessionId; tool arguments cannot set agent, sourceType or sessionId. An administrator or unrestricted user-authorized shell with the raw marker key can bypass the application and forge server records; this on-disk credential bypass is outside the application-level guarantee and is documented as a limit under AC-QB-CHECKS-DOCUMENTED-COMMANDS-DEFAULTS-AND-CONTRACTS.
+
+### TEST-QB-013
+
+AC-QB-REQUIRES-GOVERNANCE-ACROSS-APPLICATION-ENTRYPOINTS: All CLI modes, VS Code, desktop, hub, schedules/connectors, and agent examples cannot construct an ungoverned agent. Cover the complete named host/example inventory and every start, fork, restore, message, schedule, connector, delegate and self-invocation path, including initialization before the first chat. Required governance is installed before any auto-running entry module can create an agent; shipped self-invocation uses the governed executable and cannot escape through PATH or upstream environment overrides. TEST-QB-013: requires_governance_across_application_entrypoints. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REQUIRES-GOVERNANCE-ACROSS-APPLICATION-ENTRYPOINTS: All CLI modes, VS Code, desktop, hub, schedules/connectors, and agent examples cannot construct an ungoverned agent. Cover the complete named host/example inventory and every start, fork, restore, message, schedule, connector, delegate and self-invocation path, including initialization before the first chat. Required governance is installed before any auto-running entry module can create an agent; shipped self-invocation uses the governed executable and cannot escape through PATH or upstream environment overrides. TEST-QB-013: requires_governance_across_application_entrypoints. TDD: P1.
+
+### TEST-QB-014
+
+AC-QB-PRESERVES-GOVERNANCE-THROUGH-REBUILD-AND-DELEGATION: Resume/mode changes/rebuilding/subagents/teams preserve mandatory policy and isolated lifecycle state. TEST-QB-014: preserves_governance_through_rebuild_and_delegation. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PRESERVES-GOVERNANCE-THROUGH-REBUILD-AND-DELEGATION: Resume/mode changes/rebuilding/subagents/teams preserve mandatory policy and isolated lifecycle state. TEST-QB-014: preserves_governance_through_rebuild_and_delegation. TDD: P1.
+
+### TEST-QB-015
+
+AC-QB-REJECTS-REMOTE-HOSTS-WITHOUT-REQUIRED-POLICY: Incompatible remote hosts are refused; no ungoverned fallback. An identity or policy-digest mismatch refuses attachment without retiring, modifying or reusing the other daemon, including during reconnect and build changes. Compatible connection still passes through the same trust and lifecycle checks. TEST-QB-015: rejects_remote_hosts_without_required_policy. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REJECTS-REMOTE-HOSTS-WITHOUT-REQUIRED-POLICY: Incompatible remote hosts are refused; no ungoverned fallback. An identity or policy-digest mismatch refuses attachment without retiring, modifying or reusing the other daemon, including during reconnect and build changes. Compatible connection still passes through the same trust and lifecycle checks. TEST-QB-015: rejects_remote_hosts_without_required_policy. TDD: P1.
+
+### TEST-QB-016
+
+AC-QB-MAKES-NO-PROHIBITED-CLINE-SERVICE-REQUESTS: Startup/settings/work/resume/reconnect/refresh make zero prohibited Cline Cloud/control/telemetry requests, including with old credentials/caches. Exercise process networking, webview/browser initialization, native updater and background callbacks from fresh and legacy configurations on every shipped host. Seed excluded credentials/caches and prove zero prohibited traffic without deleting or migrating upstream files; permitted direct-provider traffic is distinguishable from prohibited service traffic. TEST-QB-016: makes_no_prohibited_cline_service_requests. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-MAKES-NO-PROHIBITED-CLINE-SERVICE-REQUESTS: Startup/settings/work/resume/reconnect/refresh make zero prohibited Cline Cloud/control/telemetry requests, including with old credentials/caches. Exercise process networking, webview/browser initialization, native updater and background callbacks from fresh and legacy configurations on every shipped host. Seed excluded credentials/caches and prove zero prohibited traffic without deleting or migrating upstream files; permitted direct-provider traffic is distinguishable from prohibited service traffic. TEST-QB-016: makes_no_prohibited_cline_service_requests. TDD: P1.
+
+### TEST-QB-017
+
+AC-QB-REJECTS-CLINE-CLOUD-EXECUTION-AND-CONTROL-PATHS: Hosted inference/cloud agents/account dependencies/remote config/feature flags/uploads cannot be re-enabled by settings/fallback. TEST-QB-017: rejects_cline_cloud_execution_and_control_paths. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REJECTS-CLINE-CLOUD-EXECUTION-AND-CONTROL-PATHS: Hosted inference/cloud agents/account dependencies/remote config/feature flags/uploads cannot be re-enabled by settings/fallback. TEST-QB-017: rejects_cline_cloud_execution_and_control_paths. TDD: P1.
+
+### TEST-QB-018
+
+AC-QB-RUNS-PERMITTED-EXECUTION-WITHOUT-CLINE-ACCOUNT: Local hub, direct providers, compatible self-controlled remote hosts work without a Cline account. Include positive authenticated direct-provider execution, configured proxy use and compatible hub/remote operation; missing or invalid direct-provider credentials produce an actionable failure, never a Cline account fallback or silent provider substitution. TEST-QB-018: runs_permitted_execution_without_cline_account. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RUNS-PERMITTED-EXECUTION-WITHOUT-CLINE-ACCOUNT: Local hub, direct providers, compatible self-controlled remote hosts work without a Cline account. Include positive authenticated direct-provider execution, configured proxy use and compatible hub/remote operation; missing or invalid direct-provider credentials produce an actionable failure, never a Cline account fallback or silent provider substitution. TEST-QB-018: runs_permitted_execution_without_cline_account. TDD: P1.
+
+### TEST-QB-019
+
+AC-QB-READS-THE-EXPLICITLY-LINKED-MCP-SESSION: Inspect the active conversation's linked MCP session, not the latest unrelated session or chat transcript. TEST-QB-019: reads_the_explicitly_linked_mcp_session. TDD: P2.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-READS-THE-EXPLICITLY-LINKED-MCP-SESSION: Inspect the active conversation's linked MCP session, not the latest unrelated session or chat transcript. TEST-QB-019: reads_the_explicitly_linked_mcp_session. TDD: P2.
+
+### TEST-QB-020
+
+AC-QB-PROJECTS-COMPLETE-SESSION-LOG-DETAILS: Model includes IDs/titles/statuses/interpretation/response/actions/decisions/dialog and confirmed versus pending persistence. The full projection also retains requestClass, agentReview, hostileReview, root linkage and update/persistence state where present. Detail expansion keeps actions, decisions and dialog distinct; a missing field, pending acknowledgment or failed read cannot be represented as a complete confirmed record. TEST-QB-020: projects_complete_session_log_details. TDD: P2; UI regressions P3/P4.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PROJECTS-COMPLETE-SESSION-LOG-DETAILS: Model includes IDs/titles/statuses/interpretation/response/actions/decisions/dialog and confirmed versus pending persistence. The full projection also retains requestClass, agentReview, hostileReview, root linkage and update/persistence state where present. Detail expansion keeps actions, decisions and dialog distinct; a missing field, pending acknowledgment or failed read cannot be represented as a complete confirmed record. TEST-QB-020: projects_complete_session_log_details. TDD: P2; UI regressions P3/P4.
+
+### TEST-QB-021
+
+AC-QB-RETRIEVES-LARGE-LOGS-WITH-BOUNDED-DETAIL-READS: Large logs support bounded retrieval/detail expansion without omitted records or model calls. Verify default and maximum page bounds for turn lists and each detail section, stable revision across pages, and no duplicates or omitted records when new turns arrive concurrently. Wrong-context or expired cursors are rejected and restarted under the documented snapshot contract without combining revisions or substituting queryHistory. Missing supported paging capability blocks P2 acceptance. TEST-QB-021: retrieves_large_logs_with_bounded_detail_reads. TDD: P2.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RETRIEVES-LARGE-LOGS-WITH-BOUNDED-DETAIL-READS: Large logs support bounded retrieval/detail expansion without omitted records or model calls. Verify default and maximum page bounds for turn lists and each detail section, stable revision across pages, and no duplicates or omitted records when new turns arrive concurrently. Wrong-context or expired cursors are rejected and restarted under the documented snapshot contract without combining revisions or substituting queryHistory. Missing supported paging capability blocks P2 acceptance. TEST-QB-021: retrieves_large_logs_with_bounded_detail_reads. TDD: P2.
+
+### TEST-QB-022
+
+AC-QB-PROJECTS-WORKSPACE-TODO-LIST-AND-DETAILS: Show IDs/title/priority/completion/remaining work/subtasks/dependencies where present. TEST-QB-022: projects_workspace_todo_list_and_details. TDD: P2.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PROJECTS-WORKSPACE-TODO-LIST-AND-DETAILS: Show IDs/title/priority/completion/remaining work/subtasks/dependencies where present. TEST-QB-022: projects_workspace_todo_list_and_details. TDD: P2.
+
+### TEST-QB-023
+
+AC-QB-FILTERS-AND-BROWSES-TODOS-WITHOUT-MUTATION: Filter open/completed items and select details without mutating TODOs or selecting agent active TODO. TEST-QB-023: filters_and_browses_todos_without_mutation. TDD: P2.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-FILTERS-AND-BROWSES-TODOS-WITHOUT-MUTATION: Filter open/completed items and select details without mutating TODOs or selecting agent active TODO. TEST-QB-023: filters_and_browses_todos_without_mutation. TDD: P2.
+
+### TEST-QB-024
+
+AC-QB-DISTINGUISHES-TODO-EMPTY-ERROR-AND-AGENDA-STATES: Empty/unavailable/error are distinct; MCP TODOs are not conflated with Agenda tasks. TEST-QB-024: distinguishes_todo_empty_error_and_agenda_states. TDD: P2.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-DISTINGUISHES-TODO-EMPTY-ERROR-AND-AGENDA-STATES: Empty/unavailable/error are distinct; MCP TODOs are not conflated with Agenda tasks. TEST-QB-024: distinguishes_todo_empty_error_and_agenda_states. TDD: P2.
+
+### TEST-QB-025
+
+AC-QB-ROUTES-PANEL-READS-THROUGH-SHARED-PLUGIN-SERVICE: Both hosts use the same supported plugin read service; no direct storage reads, duplicate raw-REST client, or browser MCP secrets. TEST-QB-025: routes_panel_reads_through_shared_plugin_service. TDD: P2; host regressions P3/P4.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-ROUTES-PANEL-READS-THROUGH-SHARED-PLUGIN-SERVICE: Both hosts use the same supported plugin read service; no direct storage reads, duplicate raw-REST client, or browser MCP secrets. TEST-QB-025: routes_panel_reads_through_shared_plugin_service. TDD: P2; host regressions P3/P4.
+
+### TEST-QB-026
+
+AC-QB-REFRESHES-WITHOUT-OVERLAPS-OR-CROSS-CONTEXT-RESULTS: Events/reconnect/manual/configured polling refresh data without overlap; discard old-context replies; failures retain only matching-context last-good data with stale/error state. Manual refresh and events coalesce with the active request; reconnect/configuration/workspace/session changes invalidate old generations, including late successful replies after cancellation. Hiding or disposing the view stops display polling; revealing resumes in the current context. Polling bounds and default match QbrainSettings, and failed reads never become empty successes. TEST-QB-026: refreshes_without_overlaps_or_cross_context_results. TDD: P2.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REFRESHES-WITHOUT-OVERLAPS-OR-CROSS-CONTEXT-RESULTS: Events/reconnect/manual/configured polling refresh data without overlap; discard old-context replies; failures retain only matching-context last-good data with stale/error state. Manual refresh and events coalesce with the active request; reconnect/configuration/workspace/session changes invalidate old generations, including late successful replies after cancellation. Hiding or disposing the view stops display polling; revealing resumes in the current context. Polling bounds and default match QbrainSettings, and failed reads never become empty successes. TEST-QB-026: refreshes_without_overlaps_or_cross_context_results. TDD: P2.
+
+### TEST-QB-027
+
+AC-QB-KEEPS-PANEL-REFRESH-INDEPENDENT-OF-AGENT-EXECUTION: Browsing/refresh create no model calls or agent turns; hidden stops needless display polling, not audit/enforcement. TEST-QB-027: keeps_panel_refresh_independent_of_agent_execution. TDD: P2.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-KEEPS-PANEL-REFRESH-INDEPENDENT-OF-AGENT-EXECUTION: Browsing/refresh create no model calls or agent turns; hidden stops needless display polling, not audit/enforcement. TEST-QB-027: keeps_panel_refresh_independent_of_agent_execution. TDD: P2.
+
+### TEST-QB-028
+
+AC-QB-RENDERS-QBRAIN-INTEGRATION-CONFIGURATION-AND-STATUS: TUI qbrain.ai tab and desktop section show effective endpoint/workspace/source, connection test, trust, version, and readiness. TEST-QB-028: renders_qbrain_integration_configuration_and_status. TDD: P2; desktop composition regression P4.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RENDERS-QBRAIN-INTEGRATION-CONFIGURATION-AND-STATUS: TUI qbrain.ai tab and desktop section show effective endpoint/workspace/source, connection test, trust, version, and readiness. TEST-QB-028: renders_qbrain_integration_configuration_and_status. TDD: P2; desktop composition regression P4.
+
+### TEST-QB-029
+
+AC-QB-PROTECTS-SECRETS-AND-REVALIDATES-CONNECTION-CHANGES: Mask secrets and keep them out of preferences/logs; connection changes follow supported bootstrap/configuration and revalidate trust without directly editing signed marker fields. Test nonempty marker keys/signatures across settings, display, diagnostics, provider-bound inputs/results and audit output, including stream-chunk splits, without corrupting backend authentication. A delayed old connection test cannot mark the new context ready; failed revalidation keeps ordinary work blocked with supported recovery. TEST-QB-029: protects_secrets_and_revalidates_connection_changes. TDD: P2. Staged P1: host output-boundary credential protection must pass before real marker/provider credentials are used; P2 retains settings UI and final acceptance.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PROTECTS-SECRETS-AND-REVALIDATES-CONNECTION-CHANGES: Mask secrets and keep them out of preferences/logs; connection changes follow supported bootstrap/configuration and revalidate trust without directly editing signed marker fields. Test nonempty marker keys/signatures across settings, display, diagnostics, provider-bound inputs/results and audit output, including stream-chunk splits, without corrupting backend authentication. A delayed old connection test cannot mark the new context ready; failed revalidation keeps ordinary work blocked with supported recovery. TEST-QB-029: protects_secrets_and_revalidates_connection_changes. TDD: P2. Staged P1: host output-boundary credential protection must pass before real marker/provider credentials are used; P2 retains settings UI and final acceptance.
+
+### TEST-QB-030
+
+AC-QB-REJECTS-SETTINGS-THAT-WEAKEN-GOVERNANCE: Settings cannot disable/skip/continue ungoverned/re-enable Cline Cloud. TEST-QB-030: rejects_settings_that_weaken_governance. TDD: P2.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REJECTS-SETTINGS-THAT-WEAKEN-GOVERNANCE: Settings cannot disable/skip/continue ungoverned/re-enable Cline Cloud. TEST-QB-030: rejects_settings_that_weaken_governance. TDD: P2.
+
+### TEST-QB-031
+
+AC-QB-SELECTS-PANEL-ORIENTATION-FROM-FULL-TERMINAL-ASPECT: Orientation uses full terminal columns/rows: at startup ratio >=2.5 selects horizontal and a lower ratio selects vertical; on every later resize, whether Visible, Compact or Hidden, horizontal switches to vertical only below 2.4 and vertical to horizontal only above 2.6; panel fit follows TUI layout, visibility, dimensions and controls target/space. TEST-QB-031: selects_panel_orientation_from_full_terminal_aspect. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-SELECTS-PANEL-ORIENTATION-FROM-FULL-TERMINAL-ASPECT: Orientation uses full terminal columns/rows: at startup ratio >=2.5 selects horizontal and a lower ratio selects vertical; on every later resize, whether Visible, Compact or Hidden, horizontal switches to vertical only below 2.4 and vertical to horizontal only above 2.6; panel fit follows TUI layout, visibility, dimensions and controls target/space. TEST-QB-031: selects_panel_orientation_from_full_terminal_aspect. TDD: P3.
+
+### TEST-QB-032
+
+AC-QB-PRESERVES-INTERACTION-STATE-DURING-TERMINAL-RESIZE: Live resizing changes orientation without losing draft/cursor/focus/selection/streaming/scroll. TEST-QB-032: preserves_interaction_state_during_terminal_resize. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PRESERVES-INTERACTION-STATE-DURING-TERMINAL-RESIZE: Live resizing changes orientation without losing draft/cursor/focus/selection/streaming/scroll. TEST-QB-032: preserves_interaction_state_during_terminal_resize. TDD: P3.
+
+### TEST-QB-033
+
+AC-QB-FITS-CONTENT-TO-PANES-AND-HANDLES-SMALL-TERMINALS: Chat/tool contents fit allocated panes; tiny-terminal compact mode protects prompt/approval controls. At narrow and tiny allocations, including insufficient space for a compact strip, output stays within its allocated cells and controls remain reachable through the existing prompt/approval path; insufficient display room never auto-approves or loses the pending approval. Returning to usable space restores the requested layout and interaction state. TEST-QB-033: fits_content_to_panes_and_handles_small_terminals. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-FITS-CONTENT-TO-PANES-AND-HANDLES-SMALL-TERMINALS: Chat/tool contents fit allocated panes; tiny-terminal compact mode protects prompt/approval controls. At narrow and tiny allocations, including insufficient space for a compact strip, output stays within its allocated cells and controls remain reachable through the existing prompt/approval path; insufficient display room never auto-approves or loses the pending approval. Returning to usable space restores the requested layout and interaction state. TEST-QB-033: fits_content_to_panes_and_handles_small_terminals. TDD: P3.
+
+### TEST-QB-034
+
+AC-QB-CYCLES-EACH-ORIENTATION-THROUGH-TWO-EDGES-AND-HIDDEN: Flip exactly right -> left -> hidden -> right and bottom -> top -> hidden -> bottom. TEST-QB-034: cycles_each_orientation_through_two_edges_and_hidden. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-CYCLES-EACH-ORIENTATION-THROUGH-TWO-EDGES-AND-HIDDEN: Flip exactly right -> left -> hidden -> right and bottom -> top -> hidden -> bottom. TEST-QB-034: cycles_each_orientation_through_two_edges_and_hidden. TDD: P3.
+
+### TEST-QB-035
+
+AC-QB-PRESERVES-HIDDEN-STATE-ACROSS-ASPECT-CHANGES: Hidden persists across aspect changes; reveal uses current cycle's first edge and retains dimensions/data-view state. TEST-QB-035: preserves_hidden_state_across_aspect_changes. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PRESERVES-HIDDEN-STATE-ACROSS-ASPECT-CHANGES: Hidden persists across aspect changes; reveal uses current cycle's first edge and retains dimensions/data-view state. TEST-QB-035: preserves_hidden_state_across_aspect_changes. TDD: P3.
+
+### TEST-QB-036
+
+AC-QB-HIDES-PRESENTATION-WITHOUT-DISABLING-GOVERNANCE: Hide returns panel focus to prompt/reclaims space without weakening governance; resize does not reveal. TEST-QB-036: hides_presentation_without_disabling_governance. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-HIDES-PRESENTATION-WITHOUT-DISABLING-GOVERNANCE: Hide returns panel focus to prompt/reclaims space without weakening governance; resize does not reveal. TEST-QB-036: hides_presentation_without_disabling_governance. TDD: P3.
+
+### TEST-QB-037
+
+AC-QB-VALIDATES-INDEPENDENT-COLUMN-AND-LINE-PREFERENCES: Settings accept independent positive-integer columns/lines plus Auto and reject invalid input. TEST-QB-037: validates_independent_column_and_line_preferences. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-VALIDATES-INDEPENDENT-COLUMN-AND-LINE-PREFERENCES: Settings accept independent positive-integer columns/lines plus Auto and reject invalid input. TEST-QB-037: validates_independent_column_and_line_preferences. TDD: P3.
+
+### TEST-QB-038
+
+AC-QB-CLAMPS-EFFECTIVE-SIZE-WITHOUT-LOSING-REQUESTED-SIZE: Explicit sizes are not bound by Auto ranges and follow TUI layout, visibility, dimensions and controls target/space fit (shown at min(target, space) when space >=min(target, panel minimum), otherwise Compact); clamping or Compact never overwrites the requested size, restored when room returns. TEST-QB-038: clamps_effective_size_without_losing_requested_size. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-CLAMPS-EFFECTIVE-SIZE-WITHOUT-LOSING-REQUESTED-SIZE: Explicit sizes are not bound by Auto ranges and follow TUI layout, visibility, dimensions and controls target/space fit (shown at min(target, space) when space >=min(target, panel minimum), otherwise Compact); clamping or Compact never overwrites the requested size, restored when room returns. TEST-QB-038: clamps_effective_size_without_losing_requested_size. TDD: P3.
+
+### TEST-QB-039
+
+AC-QB-RESTORES-INDEPENDENT-AUTO-SIZING: Auto uses planned adaptive defaults; resetting one dimension leaves the other unchanged. TEST-QB-039: restores_independent_auto_sizing. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RESTORES-INDEPENDENT-AUTO-SIZING: Auto uses planned adaptive defaults; resetting one dimension leaves the other unchanged. TEST-QB-039: restores_independent_auto_sizing. TDD: P3.
+
+### TEST-QB-040
+
+AC-QB-RESIZES-THE-ACTIVE-DIMENSION-WITH-DEFAULT-SHORTCUTS: When visible and non-Compact, Ctrl+Plus/Ctrl+Equal expands and Ctrl+Minus shrinks one column/line by position; while Hidden/Compact these commands leave requested dimensions unchanged. TEST-QB-040: resizes_the_active_dimension_with_default_shortcuts. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RESIZES-THE-ACTIVE-DIMENSION-WITH-DEFAULT-SHORTCUTS: When visible and non-Compact, Ctrl+Plus/Ctrl+Equal expands and Ctrl+Minus shrinks one column/line by position; while Hidden/Compact these commands leave requested dimensions unchanged. TEST-QB-040: resizes_the_active_dimension_with_default_shortcuts. TDD: P3.
+
+### TEST-QB-041
+
+AC-QB-HANDLES-REPEAT-LIMITS-AND-AUTO-TO-EXPLICIT-RESIZE: Repeats respect limits; first Auto resize starts from displayed size and changes only that orientation to explicit. TEST-QB-041: handles_repeat_limits_and_auto_to_explicit_resize. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-HANDLES-REPEAT-LIMITS-AND-AUTO-TO-EXPLICIT-RESIZE: Repeats respect limits; first Auto resize starts from displayed size and changes only that orientation to explicit. TEST-QB-041: handles_repeat_limits_and_auto_to_explicit_resize. TDD: P3.
+
+### TEST-QB-042
+
+AC-QB-RESIZES-WITHOUT-INPUT-OR-MODAL-INTERFERENCE: Consume resizing events without prompt/cursor edits; suspend while modal/approval owns input. Exercise emitted terminal events, not configuration strings alone. Ambiguous legacy control bytes are not guessed as resize chords, reserved input remains with its owner, and swallowed chords retain the existing palette route. TEST-QB-042: resizes_without_input_or_modal_interference. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RESIZES-WITHOUT-INPUT-OR-MODAL-INTERFERENCE: Consume resizing events without prompt/cursor edits; suspend while modal/approval owns input. Exercise emitted terminal events, not configuration strings alone. Ambiguous legacy control bytes are not guessed as resize chords, reserved input remains with its owner, and swallowed chords retain the existing palette route. TEST-QB-042: resizes_without_input_or_modal_interference. TDD: P3.
+
+### TEST-QB-043
+
+AC-QB-SUPPORTS-CUSTOM-PANEL-BINDINGS-AND-DEFAULT-RESET: Redefine cycle/expand/shrink/focus/switch-view/refresh and restore defaults. TEST-QB-043: supports_custom_panel_bindings_and_default_reset. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-SUPPORTS-CUSTOM-PANEL-BINDINGS-AND-DEFAULT-RESET: Redefine cycle/expand/shrink/focus/switch-view/refresh and restore defaults. TEST-QB-043: supports_custom_panel_bindings_and_default_reset. TDD: P3.
+
+### TEST-QB-044
+
+AC-QB-REJECTS-CONFLICTING-OR-INVALID-KEY-BINDINGS: Detect duplicates, alias-equivalent/invalid/reserved conflicts without silently replacing controls. TEST-QB-044: rejects_conflicting_or_invalid_key_bindings. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REJECTS-CONFLICTING-OR-INVALID-KEY-BINDINGS: Detect duplicates, alias-equivalent/invalid/reserved conflicts without silently replacing controls. TEST-QB-044: rejects_conflicting_or_invalid_key_bindings. TDD: P3.
+
+### TEST-QB-045
+
+AC-QB-KEEPS-SHORTCUT-HELP-AND-DISPATCH-CONSISTENT: Help/palette show actual bindings; focus-aware routing and palette fallback work when terminals swallow chords. TEST-QB-045: keeps_shortcut_help_and_dispatch_consistent. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-KEEPS-SHORTCUT-HELP-AND-DISPATCH-CONSISTENT: Help/palette show actual bindings; focus-aware routing and palette fallback work when terminals swallow chords. TEST-QB-045: keeps_shortcut_help_and_dispatch_consistent. TDD: P3.
+
+### TEST-QB-046
+
+AC-QB-RESTORES-PANEL-PREFERENCES-IN-A-NEW-INVOCATION: New processes restore width/height/edges/visibility/data-view/custom keys after adjustments. TEST-QB-046: restores_panel_preferences_in_a_new_invocation. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RESTORES-PANEL-PREFERENCES-IN-A-NEW-INVOCATION: New processes restore width/height/edges/visibility/data-view/custom keys after adjustments. TEST-QB-046: restores_panel_preferences_in_a_new_invocation. TDD: P3.
+
+### TEST-QB-047
+
+AC-QB-PERSISTS-REQUESTED-PREFERENCES-NOT-TRANSIENT-LAYOUT: Fit/aspect/hide/reveal cannot overwrite unrelated saved preferences. Concurrent processes patch different fields without losing either saved choice; explicit preference changes persist while transient fit does not. Crash before or after replacement leaves a complete old or new valid preference document, never a truncated mixture; restart reports any unsaved state honestly. TEST-QB-047: persists_requested_preferences_not_transient_layout. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PERSISTS-REQUESTED-PREFERENCES-NOT-TRANSIENT-LAYOUT: Fit/aspect/hide/reveal cannot overwrite unrelated saved preferences. Concurrent processes patch different fields without losing either saved choice; explicit preference changes persist while transient fit does not. Crash before or after replacement leaves a complete old or new valid preference document, never a truncated mixture; restart reports any unsaved state honestly. TEST-QB-047: persists_requested_preferences_not_transient_layout. TDD: P3.
+
+### TEST-QB-048
+
+AC-QB-HANDLES-CORRUPT-PREFERENCES-AND-FAILED-SAVES-HONESTLY: Invalid fields recover without erasing other settings; failed saves are reported, not claimed persisted. Exercise invalid types, non-finite/fractional dimensions, malformed binding lists, corrupt/truncated files, unsupported schema versions, permission failure and interrupted saves. Preserve unrelated valid fields and recoverable original content; do not silently rewrite an unsupported version as successfully migrated. The user can recover/reset through the existing settings path. TEST-QB-048: handles_corrupt_preferences_and_failed_saves_honestly. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-HANDLES-CORRUPT-PREFERENCES-AND-FAILED-SAVES-HONESTLY: Invalid fields recover without erasing other settings; failed saves are reported, not claimed persisted. Exercise invalid types, non-finite/fractional dimensions, malformed binding lists, corrupt/truncated files, unsupported schema versions, permission failure and interrupted saves. Preserve unrelated valid fields and recoverable original content; do not silently rewrite an unsupported version as successfully migrated. The user can recover/reset through the existing settings path. TEST-QB-048: handles_corrupt_preferences_and_failed_saves_honestly. TDD: P3.
+
+### TEST-QB-049
+
+AC-QB-INTEGRATES-DATA-VIEWS-WITHOUT-RESETTING-DESKTOP-CHAT: Opening Session Log or TODO views keeps the active chat thread pane mounted and preserves draft, stream and scroll; existing Sessions history navigation remains unchanged. TEST-QB-049: integrates_data_views_without_resetting_desktop_chat. TDD: P4.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-INTEGRATES-DATA-VIEWS-WITHOUT-RESETTING-DESKTOP-CHAT: Opening Session Log or TODO views keeps the active chat thread pane mounted and preserves draft, stream and scroll; existing Sessions history navigation remains unchanged. TEST-QB-049: integrates_data_views_without_resetting_desktop_chat. TDD: P4.
+
+### TEST-QB-050
+
+AC-QB-SCOPES-DESKTOP-DATA-TO-SELECTED-EXECUTION-CONTEXT: Local/remote environment/workspace/session scope and reconnect/stale/error behavior follow the shared service. During an active stream, switch environment/workspace/session and reconnect while a previous list/detail/settings response is delayed. The rendered result and readiness belong only to the current context; prior data is never displayed under the new context, and chat preservation follows AC-QB-INTEGRATES-DATA-VIEWS-WITHOUT-RESETTING-DESKTOP-CHAT. TEST-QB-050: scopes_desktop_data_to_selected_execution_context. TDD: P4.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-SCOPES-DESKTOP-DATA-TO-SELECTED-EXECUTION-CONTEXT: Local/remote environment/workspace/session scope and reconnect/stale/error behavior follow the shared service. During an active stream, switch environment/workspace/session and reconnect while a previous list/detail/settings response is delayed. The rendered result and readiness belong only to the current context; prior data is never displayed under the new context, and chat preservation follows AC-QB-INTEGRATES-DATA-VIEWS-WITHOUT-RESETTING-DESKTOP-CHAT. TEST-QB-050: scopes_desktop_data_to_selected_execution_context. TDD: P4.
+
+### TEST-QB-051
+
+AC-QB-PRESERVES-ACCESSIBLE-READ-ONLY-SIDEBAR-BEHAVIOR: Keyboard/mouse/detail/collapse/narrow behavior remain usable; browsing is read-only and never weakens policy. TEST-QB-051: preserves_accessible_read_only_sidebar_behavior. TDD: P4.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PRESERVES-ACCESSIBLE-READ-ONLY-SIDEBAR-BEHAVIOR: Keyboard/mouse/detail/collapse/narrow behavior remain usable; browsing is read-only and never weakens policy. TEST-QB-051: preserves_accessible_read_only_sidebar_behavior. TDD: P4.
+
+### TEST-QB-052
+
+AC-QB-USES-CLINE-QB-IDENTITY-ACROSS-SHIPPED-SURFACES: CLI command/help, TUI, VS Code display, desktop labels, hub diagnostics, the hub browser dashboard and all agent-bearing examples consistently identify cline-qb. TEST-QB-052: uses_cline_qb_identity_across_shipped_surfaces. TDD: P5.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-USES-CLINE-QB-IDENTITY-ACROSS-SHIPPED-SURFACES: CLI command/help, TUI, VS Code display, desktop labels, hub diagnostics, the hub browser dashboard and all agent-bearing examples consistently identify cline-qb. TEST-QB-052: uses_cline_qb_identity_across_shipped_surfaces. TDD: P5.
+
+### TEST-QB-053
+
+AC-QB-ISOLATES-CLINE-QB-STATE-AND-GOVERNS-COMPATIBILITY-ENTRYPOINTS: cline-qb is an independently installed derivative application that operates without an upstream Cline installation and coexists with one when present. It uses its own isolated state root, environment names, hub endpoint and application identifiers while keeping internal wire identifiers compatible where safe; upstream ~/.cline data and upstream extension/webview storage are never read implicitly, migrated or modified, and every retained compatibility launch path is governed. cline-qb never takes ownership of, repoints, aliases as its own storage, migrates, overwrites or deletes any Cline-owned folder or data. Installation, startup, normal operation, recovery, update and uninstall leave absent upstream roots absent and seeded Cline folders, contents, ownership, permissions and link targets unchanged; Cline remains independently usable. Product isolation does not change or redirect the operator HOME or Cline paths. Before P1 closure, every inventoried host resolver and consumer must exclude upstream user roots, redirected Documents/Cline, ~/Cline/Rules and upstream extension/webview state from automatic reads, creation, migration, cleanup and uninstall. Test absent and seeded roots, constructor/webview startup, projectless fallback/import, hooks, legacy custom-instruction migration and delayed callbacks. Retain permitted governed contribution reads from shared workspace .cline/.clinerules/.agents and vendor-neutral ~/.agents, including .clinerules/workflows in both rule and workflow discovery; compatibility reads grant no ownership and do not authorize using those locations for cline-qb-owned state or rewriting their contributions. Generic SDK defaults remain compatible through host injection. P1 establishes the runtime isolation cases; P5 owns final all-host branding, compatibility and installed-artifact acceptance. TEST-QB-053: isolates_cline_qb_state_and_governs_compatibility_entrypoints. TDD stages: P1 runtime storage isolation; P5 all-host identity and installed-artifact acceptance. Final acceptance owner P5.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-ISOLATES-CLINE-QB-STATE-AND-GOVERNS-COMPATIBILITY-ENTRYPOINTS: cline-qb is an independently installed derivative application that operates without an upstream Cline installation and coexists with one when present. It uses its own isolated state root, environment names, hub endpoint and application identifiers while keeping internal wire identifiers compatible where safe; upstream ~/.cline data and upstream extension/webview storage are never read implicitly, migrated or modified, and every retained compatibility launch path is governed. cline-qb never takes ownership of, repoints, aliases as its own storage, migrates, overwrites or deletes any Cline-owned folder or data. Installation, startup, normal operation, recovery, update and uninstall leave absent upstream roots absent and seeded Cline folders, contents, ownership, permissions and link targets unchanged; Cline remains independently usable. Product isolation does not change or redirect the operator HOME or Cline paths. Before P1 closure, every inventoried host resolver and consumer must exclude upstream user roots, redirected Documents/Cline, ~/Cline/Rules and upstream extension/webview state from automatic reads, creation, migration, cleanup and uninstall. Test absent and seeded roots, constructor/webview startup, projectless fallback/import, hooks, legacy custom-instruction migration and delayed callbacks. Retain permitted governed contribution reads from shared workspace .cline/.clinerules/.agents and vendor-neutral ~/.agents, including .clinerules/workflows in both rule and workflow discovery; compatibility reads grant no ownership and do not authorize using those locations for cline-qb-owned state or rewriting their contributions. Generic SDK defaults remain compatible through host injection. P1 establishes the runtime isolation cases; P5 owns final all-host branding, compatibility and installed-artifact acceptance. TEST-QB-053: isolates_cline_qb_state_and_governs_compatibility_entrypoints. TDD stages: P1 runtime storage isolation; P5 all-host identity and installed-artifact acceptance. Final acceptance owner P5.
+
+### TEST-QB-054
+
+AC-QB-CHECKS-DOCUMENTED-COMMANDS-DEFAULTS-AND-CONTRACTS: Docs accurately cover mandatory policy, no Cline Cloud, panels/settings/keys/persistence/recovery and limitations. TEST-QB-054: checks_documented_commands_defaults_and_contracts. TDD: P5, executable examples/contract assertions plus phase-closing doc review; text-search alone does not establish prose accuracy.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-CHECKS-DOCUMENTED-COMMANDS-DEFAULTS-AND-CONTRACTS: Docs accurately cover mandatory policy, no Cline Cloud, panels/settings/keys/persistence/recovery and limitations. TEST-QB-054: checks_documented_commands_defaults_and_contracts. TDD: P5, executable examples/contract assertions plus phase-closing doc review; text-search alone does not establish prose accuracy.
+
+### TEST-QB-055
+
+AC-QB-VERIFIES-REQUIRED-ASSETS-AND-POLICY-IN-PACKAGED-ARTIFACTS: CLI/extension/desktop/execution-host artifacts contain required plugin/skills and start governed. Verify the complete pinned asset manifest, per-file digests, licenses/provenance, executable architecture/RID and matching REPL without a shared .NET prerequisite or startup download. Required builds missing a target fail; unsupported targets fail packaging. No primary marker, private cache/receipts, credentials or test fixture/key is shipped. Record executed versus static-only target validation separately under the existing runner-availability policy, never call static inspection execution. TEST-QB-055: verifies_required_assets_and_policy_in_packaged_artifacts. TDD: P5.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-VERIFIES-REQUIRED-ASSETS-AND-POLICY-IN-PACKAGED-ARTIFACTS: CLI/extension/desktop/execution-host artifacts contain required plugin/skills and start governed. Verify the complete pinned asset manifest, per-file digests, licenses/provenance, executable architecture/RID and matching REPL without a shared .NET prerequisite or startup download. Required builds missing a target fail; unsupported targets fail packaging. No primary marker, private cache/receipts, credentials or test fixture/key is shipped. Record executed versus static-only target validation separately under the existing runner-availability policy, never call static inspection execution. TEST-QB-055: verifies_required_assets_and_policy_in_packaged_artifacts. TDD: P5.
+
+### TEST-QB-056
+
+AC-QB-REJECTS-UPSTREAM-REPLACEMENT-UPDATE-PATHS: Updates cannot replace cline-qb with ordinary Cline; automatic updating stays inactive without approved cline-qb source. Before the first implementation push, fork publication workflows are inert. Source and installed artifacts make no automatic upstream update requests and cannot replace any host identity or governed executable; any future approved update source must still preserve the required signed integration contract. TEST-QB-056: rejects_upstream_replacement_update_paths. TDD: P5.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REJECTS-UPSTREAM-REPLACEMENT-UPDATE-PATHS: Updates cannot replace cline-qb with ordinary Cline; automatic updating stays inactive without approved cline-qb source. Before the first implementation push, fork publication workflows are inert. Source and installed artifacts make no automatic upstream update requests and cannot replace any host identity or governed executable; any future approved update source must still preserve the required signed integration contract. TEST-QB-056: rejects_upstream_replacement_update_paths. TDD: P5.
+
+### TEST-QB-057
+
+AC-QB-PASSES-PACKAGED-GOVERNANCE-AND-UI-ACCEPTANCE-MATRIX: Packaged scenarios satisfy full fresh/restored settings, failure/recovery, concurrency, no-Cline-Cloud acceptance matrix. Evidence identifies each artifact digest, target, source/pin and linked UC basic/alternative flow. Fresh, restored, concurrent and failure/recovery runs exercise the installed entrypoints; all built targets without a runner retain the explicit static-only limitation and all required available-runner cases must execute. No missing required case or stale source-only receipt satisfies this criterion. TEST-QB-057: passes_packaged_governance_and_ui_acceptance_matrix. TDD: P5.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PASSES-PACKAGED-GOVERNANCE-AND-UI-ACCEPTANCE-MATRIX: Packaged scenarios satisfy full fresh/restored settings, failure/recovery, concurrency, no-Cline-Cloud acceptance matrix. Evidence identifies each artifact digest, target, source/pin and linked UC basic/alternative flow. Fresh, restored, concurrent and failure/recovery runs exercise the installed entrypoints; all built targets without a runner retain the explicit static-only limitation and all required available-runner cases must execute. No missing required case or stale source-only receipt satisfies this criterion. TEST-QB-057: passes_packaged_governance_and_ui_acceptance_matrix. TDD: P5.
+
+### TEST-QB-058
+
+AC-QB-BUILDS-COMPACT-TOOL-INVOCATION-SUMMARIES: Deterministic summaries compress long/multiline/batched/unknown-tool inputs without model cooperation. TEST-QB-058: builds_compact_tool_invocation_summaries. TDD: P2.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-BUILDS-COMPACT-TOOL-INVOCATION-SUMMARIES: Deterministic summaries compress long/multiline/batched/unknown-tool inputs without model cooperation. TEST-QB-058: builds_compact_tool_invocation_summaries. TDD: P2.
+
+### TEST-QB-059
+
+AC-QB-PRESERVES-TOOL-PAYLOADS-WHILE-COMPRESSING-PRESENTATION: Compression leaves execution inputs, model results, audit payloads, and required full-command approval/detail access unchanged under existing security policies. TEST-QB-059: preserves_tool_payloads_while_compressing_presentation. TDD: P2, host regression P3/P4/P5.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PRESERVES-TOOL-PAYLOADS-WHILE-COMPRESSING-PRESENTATION: Compression leaves execution inputs, model results, audit payloads, and required full-command approval/detail access unchanged under existing security policies. TEST-QB-059: preserves_tool_payloads_while_compressing_presentation. TDD: P2, host regression P3/P4/P5.
+
+### TEST-QB-060
+
+AC-QB-RENDERS-SINGLE-ROW-INVOCATION-HEADERS-ACROSS-HOSTS: Invocation headers occupy at most one visual row in CLI/TUI, desktop, and VS Code with narrow panes, live updates, and restored history. TEST-QB-060: renders_single_row_invocation_headers_across_hosts. TDD stages: P3 TUI/CLI rendering; P4 desktop rendering; P5 VS Code/packaged rendering. Final acceptance owner P5; do not mark this AC satisfied after only one host passes.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RENDERS-SINGLE-ROW-INVOCATION-HEADERS-ACROSS-HOSTS: Invocation headers occupy at most one visual row in CLI/TUI, desktop, and VS Code with narrow panes, live updates, and restored history. TEST-QB-060: renders_single_row_invocation_headers_across_hosts. TDD stages: P3 TUI/CLI rendering; P4 desktop rendering; P5 VS Code/packaged rendering. Final acceptance owner P5; do not mark this AC satisfied after only one host passes.
+
+### TEST-QB-061
+
+AC-QB-PREVENTS-LEGACY-ACCOUNT-ONBOARDING-REACTIVATION: Desktop onboarding contains no Cline account sign-in, account-key, hosted recommendation, subscription-upsell or account-backed GitHub activation path. Legacy identity, enabled feature flags and a restored GitHub onboarding step cannot issue account/control requests or select a hosted provider; the operator can configure a direct provider or skip without an invented connection. TEST-QB-061: prevents_legacy_account_onboarding_reactivation. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PREVENTS-LEGACY-ACCOUNT-ONBOARDING-REACTIVATION: Desktop onboarding contains no Cline account sign-in, account-key, hosted recommendation, subscription-upsell or account-backed GitHub activation path. Legacy identity, enabled feature flags and a restored GitHub onboarding step cannot issue account/control requests or select a hosted provider; the operator can configure a direct provider or skip without an invented connection. TEST-QB-061: prevents_legacy_account_onboarding_reactivation. TDD: P1.
+
+### TEST-QB-062
+
+AC-QB-OFFERS-ONLY-COMPATIBLE-DIRECT-ONBOARDING-FORMS: A setup form offers only permitted providers whose declared authentication and required configuration it can collect. The desktop key-only form excludes hosted aliases, alternate authentication and mandatory endpoint configuration; supported providers needing those fields remain reachable through Settings. Failed save never advances or selects a fallback; successful explicit selection preserves its provider/model. TEST-QB-062: offers_only_compatible_direct_onboarding_forms. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-OFFERS-ONLY-COMPATIBLE-DIRECT-ONBOARDING-FORMS: A setup form offers only permitted providers whose declared authentication and required configuration it can collect. The desktop key-only form excludes hosted aliases, alternate authentication and mandatory endpoint configuration; supported providers needing those fields remain reachable through Settings. Failed save never advances or selects a fallback; successful explicit selection preserves its provider/model. TEST-QB-062: offers_only_compatible_direct_onboarding_forms. TDD: P1.
+
+### TEST-QB-063
+
+AC-QB-SURFACES-SCHEDULE-CATALOG-FAILURE-WITHOUT-FALLBACK: Empty, failed, delayed or disabled desktop schedule catalogs never synthesize an enabled provider or model. Catalog failures expose the error and a Settings recovery action or instruction. Excluded provider aliases are absent even in stale catalog data, and no excluded provider discovery is initiated. TEST-QB-063: surfaces_schedule_catalog_failure_without_fallback. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-SURFACES-SCHEDULE-CATALOG-FAILURE-WITHOUT-FALLBACK: Empty, failed, delayed or disabled desktop schedule catalogs never synthesize an enabled provider or model. Catalog failures expose the error and a Settings recovery action or instruction. Excluded provider aliases are absent even in stale catalog data, and no excluded provider discovery is initiated. TEST-QB-063: surfaces_schedule_catalog_failure_without_fallback. TDD: P1.
+
+### TEST-QB-064
+
+AC-QB-PRESERVES-EXPLICIT-SCHEDULE-PROVIDER-MODEL-SELECTION: Schedule creation requires an explicit permitted provider and model, or a previously explicit remembered pair still available in that same provider catalog. Missing provider/model blocks submission with an actionable message and no mutation. Editing or catalog refresh preserves the existing permitted pair, without choosing the first catalog entry or borrowing another provider model. Valid direct create/update preserves that exact pair. TEST-QB-064: preserves_explicit_schedule_provider_model_selection. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PRESERVES-EXPLICIT-SCHEDULE-PROVIDER-MODEL-SELECTION: Schedule creation requires an explicit permitted provider and model, or a previously explicit remembered pair still available in that same provider catalog. Missing provider/model blocks submission with an actionable message and no mutation. Editing or catalog refresh preserves the existing permitted pair, without choosing the first catalog entry or borrowing another provider model. Valid direct create/update preserves that exact pair. TEST-QB-064: preserves_explicit_schedule_provider_model_selection. TDD: P1.
+
+### TEST-QB-065
+
+AC-QB-REQUIRES-EXPLICIT-REPLACEMENT-OF-HOSTED-SCHEDULE-SELECTION: Editing a legacy hosted schedule presents an actionable exclusion diagnostic and requires an explicit direct provider/model replacement before saving. Opening, canceling or failed validation neither activates the hosted provider nor silently rewrites the stored schedule. The replacement uses only the operator-selected permitted pair. TEST-QB-065: requires_explicit_replacement_of_hosted_schedule_selection. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REQUIRES-EXPLICIT-REPLACEMENT-OF-HOSTED-SCHEDULE-SELECTION: Editing a legacy hosted schedule presents an actionable exclusion diagnostic and requires an explicit direct provider/model replacement before saving. Opening, canceling or failed validation neither activates the hosted provider nor silently rewrites the stored schedule. The replacement uses only the operator-selected permitted pair. TEST-QB-065: requires_explicit_replacement_of_hosted_schedule_selection. TDD: P1.
+
+### TEST-QB-066
+
+AC-QB-KEEPS-MIGRATED-SCHEDULE-MODEL-SELECTION-ATOMIC: When a schedule contains the structured modelSelection field, its provider/model pair is authoritative as a unit. Missing or malformed members remain incomplete and block saving until explicitly repaired; they never inherit a provider or model from legacy scalar fields. Schedules without the structured field retain their explicit legacy direct pair. Mixed-format and partially migrated records cannot combine identities from different provider selections. TEST-QB-066: keeps_migrated_schedule_model_selection_atomic. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-KEEPS-MIGRATED-SCHEDULE-MODEL-SELECTION-ATOMIC: When a schedule contains the structured modelSelection field, its provider/model pair is authoritative as a unit. Missing or malformed members remain incomplete and block saving until explicitly repaired; they never inherit a provider or model from legacy scalar fields. Schedules without the structured field retain their explicit legacy direct pair. Mixed-format and partially migrated records cannot combine identities from different provider selections. TEST-QB-066: keeps_migrated_schedule_model_selection_atomic. TDD: P1.
+
+### TEST-QB-067
+
+AC-QB-REQUIRES-EXPLICIT-DIRECT-DESKTOP-RECOVERY: Desktop chat composition and recovery never fetch or subscribe to hosted feature flags, activate hosted execution from legacy state, or offer account-backed recovery links. Hosted-target attempts show an actionable exclusion and leave the selected direct provider/model and stored history unchanged. Moving from an unavailable hosted history session to permitted execution requires an explicit new local or self-controlled remote session; it does not silently reinterpret the old session. Explicit local recovery preserves a permitted captured or remembered provider/model pair, leaves missing selection incomplete for Settings, and never chooses a hosted or first-catalog fallback. TEST-QB-067: requires_explicit_direct_desktop_recovery. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-REQUIRES-EXPLICIT-DIRECT-DESKTOP-RECOVERY: Desktop chat composition and recovery never fetch or subscribe to hosted feature flags, activate hosted execution from legacy state, or offer account-backed recovery links. Hosted-target attempts show an actionable exclusion and leave the selected direct provider/model and stored history unchanged. Moving from an unavailable hosted history session to permitted execution requires an explicit new local or self-controlled remote session; it does not silently reinterpret the old session. Explicit local recovery preserves a permitted captured or remembered provider/model pair, leaves missing selection incomplete for Settings, and never chooses a hosted or first-catalog fallback. TEST-QB-067: requires_explicit_direct_desktop_recovery. TDD: P1.
+
+### TEST-QB-068
+
+AC-QB-ISOLATES-COMPILED-STARTUP-AND-IGNORES-UPSTREAM-OVERRIDES: Compiled desktop normal and configured-proxy startup use the selected cline-qb state and hub namespace, ignoring inherited upstream CLINE_* overrides. Executable validation uses a distinct temporary home, private state/discovery paths and OS-assigned ports, inherits no operator provider/account credentials, and cannot read or modify the operator home or attach to an operator hub. Seeded upstream canaries remain byte-identical with no new files after either readiness or a blocked startup. Missing trusted runtime identity blocks before publishing readiness; it is not accepted as a successful startup. Both positive readiness cases remain required once reviewed signed runtime dependencies are available. TEST-QB-068: isolates_compiled_startup_and_ignores_upstream_overrides. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-ISOLATES-COMPILED-STARTUP-AND-IGNORES-UPSTREAM-OVERRIDES: Compiled desktop normal and configured-proxy startup use the selected cline-qb state and hub namespace, ignoring inherited upstream CLINE_* overrides. Executable validation uses a distinct temporary home, private state/discovery paths and OS-assigned ports, inherits no operator provider/account credentials, and cannot read or modify the operator home or attach to an operator hub. Seeded upstream canaries remain byte-identical with no new files after either readiness or a blocked startup. Missing trusted runtime identity blocks before publishing readiness; it is not accepted as a successful startup. Both positive readiness cases remain required once reviewed signed runtime dependencies are available. TEST-QB-068: isolates_compiled_startup_and_ignores_upstream_overrides. TDD: P1.
+
+### TEST-QB-069
+
+AC-QB-PRESERVES-EXACT-REQUEST-AND-FINAL-RESULT-WITH-COMPLETE-TURN-COVERAGE: For every actual user request, including steering, the confirmed record preserves its complete request and final response text prepared for delivery, under the captured workspace, native session, MCP session and request identities, subject only to the existing secret policy and this operator-approved storage normalization: U+2013 and U+2014 become U+002D. Those two Unicode dash characters must not be stored; do not bypass the REPL normalization with escaping. After that policy, server readback is ordinally identical to the full expected text, preserving all other Unicode, Markdown, whitespace and newlines without trimming or summarization. A title or summary may be separate metadata but never substitutes for the response. Completion checks the expected request/event/result set, not only empty queues or equal counts. Missing, summarized, truncated, duplicated, misattributed or otherwise modified content blocks successful completion and remains visible for recovery. Cancellation without a final result does not invent one. Replay preserves one logical record and the same normalized full text. A crash after persistence but before delivery must not be represented as proof that the operator received the response. TEST cases: Both prohibited dash characters normalize to ASCII hyphens; literal and escaped input cannot retain prohibited dashes; existing ASCII hyphens and unrelated Unicode remain unchanged; exact whitespace/newline/Markdown response; same-count wrong request; summary substituted for result; omitted ingress event with zero pending counters; steering before/after response persistence; two sessions with identical text; timeout before/after server commit; crash before actual delivery; redaction identical on both output boundaries. TEST-QB-069: preserves_exact_request_and_final_result_with_complete_turn_coverage. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-PRESERVES-EXACT-REQUEST-AND-FINAL-RESULT-WITH-COMPLETE-TURN-COVERAGE: For every actual user request, including steering, the confirmed record preserves its complete request and final response text prepared for delivery, under the captured workspace, native session, MCP session and request identities, subject only to the existing secret policy and this operator-approved storage normalization: U+2013 and U+2014 become U+002D. Those two Unicode dash characters must not be stored; do not bypass the REPL normalization with escaping. After that policy, server readback is ordinally identical to the full expected text, preserving all other Unicode, Markdown, whitespace and newlines without trimming or summarization. A title or summary may be separate metadata but never substitutes for the response. Completion checks the expected request/event/result set, not only empty queues or equal counts. Missing, summarized, truncated, duplicated, misattributed or otherwise modified content blocks successful completion and remains visible for recovery. Cancellation without a final result does not invent one. Replay preserves one logical record and the same normalized full text. A crash after persistence but before delivery must not be represented as proof that the operator received the response. TEST cases: Both prohibited dash characters normalize to ASCII hyphens; literal and escaped input cannot retain prohibited dashes; existing ASCII hyphens and unrelated Unicode remain unchanged; exact whitespace/newline/Markdown response; same-count wrong request; summary substituted for result; omitted ingress event with zero pending counters; steering before/after response persistence; two sessions with identical text; timeout before/after server commit; crash before actual delivery; redaction identical on both output boundaries. TEST-QB-069: preserves_exact_request_and_final_result_with_complete_turn_coverage. TDD: P1.
+
+### TEST-QB-070
+
+AC-QB-VERIFIES-COMPLETE-PINNED-POWERSHELL-RUNTIME-OFFLINE: For the approved PowerShell shared-core contract, an ordinary governed launch on a clean supported host works using the pinned, verified runtime and every mandatory startup module/asset supplied by the artifact, without a user module cache, startup installation or runtime download. Runtime, module, host-interface and platform compatibility are checked together before readiness. Missing, incompatible or shadowed prerequisites give an actionable blocked state without an ungoverned fallback. Preserve the agreed C1-C12 observable behavior through migration. P1 proves the integration on its available execution host; P5 verifies every declared package target using the existing executed-versus-static-only matrix and its honest limitations. TEST cases: Empty module cache and no network; incompatible pwsh/module/REPL versions; wrong architecture; PATH or module shadow; omitted YAML or PowerShell.MCP dependency; supported diagnostic recovery; clean packaged launch; all required target builds present. TEST-QB-070: verifies_complete_pinned_powershell_runtime_offline. TDD: P1. Staged regressions: P5.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-VERIFIES-COMPLETE-PINNED-POWERSHELL-RUNTIME-OFFLINE: For the approved PowerShell shared-core contract, an ordinary governed launch on a clean supported host works using the pinned, verified runtime and every mandatory startup module/asset supplied by the artifact, without a user module cache, startup installation or runtime download. Runtime, module, host-interface and platform compatibility are checked together before readiness. Missing, incompatible or shadowed prerequisites give an actionable blocked state without an ungoverned fallback. Preserve the agreed C1-C12 observable behavior through migration. P1 proves the integration on its available execution host; P5 verifies every declared package target using the existing executed-versus-static-only matrix and its honest limitations. TEST cases: Empty module cache and no network; incompatible pwsh/module/REPL versions; wrong architecture; PATH or module shadow; omitted YAML or PowerShell.MCP dependency; supported diagnostic recovery; clean packaged launch; all required target builds present. TEST-QB-070: verifies_complete_pinned_powershell_runtime_offline. TDD: P1. Staged regressions: P5.
+
+### TEST-QB-071
+
+AC-QB-ISOLATES-ALL-VERIFICATION-PROCESSES-FROM-OPERATOR-APPLICATION-STATE: Every required verification fixture and its child processes use isolated application state and explicitly selected test identities, workspace, discovery endpoints and ports before application initialization. Tests must not read live operator credentials, attach to a live operator hub or change operator application state. Seeded external-state canaries and inventories remain unchanged after success, assertion failure, timeout and cancellation. Cleanup affects only resources owned by that test run. Any intentionally live integration fixture uses an explicitly provisioned test account/workspace and cannot silently inherit the operator account. Read-only compiler/package caches may be shared when they contain no operator application identity or mutable product state. TEST cases: Pre-import environment capture; account feature-flag callback; real HOME inherited by a child; parallel fixtures; wrong discovery file/port; failure and timeout cleanup; mocked negative fixture plus a real compiled positive launch; canaries outside the test root. TEST-QB-071: isolates_all_verification_processes_from_operator_application_state. TDD: P1. Staged regressions: P2, P3, P4, P5.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-ISOLATES-ALL-VERIFICATION-PROCESSES-FROM-OPERATOR-APPLICATION-STATE: Every required verification fixture and its child processes use isolated application state and explicitly selected test identities, workspace, discovery endpoints and ports before application initialization. Tests must not read live operator credentials, attach to a live operator hub or change operator application state. Seeded external-state canaries and inventories remain unchanged after success, assertion failure, timeout and cancellation. Cleanup affects only resources owned by that test run. Any intentionally live integration fixture uses an explicitly provisioned test account/workspace and cannot silently inherit the operator account. Read-only compiler/package caches may be shared when they contain no operator application identity or mutable product state. TEST cases: Pre-import environment capture; account feature-flag callback; real HOME inherited by a child; parallel fixtures; wrong discovery file/port; failure and timeout cleanup; mocked negative fixture plus a real compiled positive launch; canaries outside the test root. TEST-QB-071: isolates_all_verification_processes_from_operator_application_state. TDD: P1. Staged regressions: P2, P3, P4, P5.
+
+### TEST-QB-072
+
+AC-QB-INVALIDATES-LIVE-AUTHORIZATION-AFTER-TRUST-OR-POLICY-CHANGE: At each ordinary execution and completion authorization boundary, a live context whose relevant signed trust, credentials, artifact authorization or policy has changed cannot authorize new work using its previous validation. It must revalidate the applicable current state or block with supported recovery. In-flight effects and late callbacks retain their original attribution and cannot mark a replacement context ready. Recovery retains the original audit records and cannot silently rebind them to another identity. An unaffected concurrent context continues normally. Supported changes, detection boundaries and in-flight outcome rules must be specified by the slice contract before implementation. TEST cases: Marker/key/policy change between initialization and tool execution; change between verification and completion; change while a tool is already executing; delayed response from old context; failed revalidation; unrelated concurrent workspace; restart with an old outbox. TEST-QB-072: invalidates_live_authorization_after_trust_or_policy_change. TDD: P1.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-INVALIDATES-LIVE-AUTHORIZATION-AFTER-TRUST-OR-POLICY-CHANGE: At each ordinary execution and completion authorization boundary, a live context whose relevant signed trust, credentials, artifact authorization or policy has changed cannot authorize new work using its previous validation. It must revalidate the applicable current state or block with supported recovery. In-flight effects and late callbacks retain their original attribution and cannot mark a replacement context ready. Recovery retains the original audit records and cannot silently rebind them to another identity. An unaffected concurrent context continues normally. Supported changes, detection boundaries and in-flight outcome rules must be specified by the slice contract before implementation. TEST cases: Marker/key/policy change between initialization and tool execution; change between verification and completion; change while a tool is already executing; delayed response from old context; failed revalidation; unrelated concurrent workspace; restart with an old outbox. TEST-QB-072: invalidates_live_authorization_after_trust_or_policy_change. TDD: P1.
+
+### TEST-QB-073
+
+AC-QB-RETRIEVES-COMPLETE-TODO-PAGES-UNDER-REFRESH-AND-FILTER-CHANGES: A workspace TODO list larger than one page is retrievable completely under the selected filter without silent omission or duplicate items. Concurrent insertion, update, completion or deletion during traversal produces either a coherent supported view or an explicit restart/stale outcome, never a falsely confirmed complete list. Context/filter changes invalidate late pages. Missing selected items are reported as missing rather than replaced by unrelated items. Traversal and refresh do not mutate TODOs or active work selection. Page bounds and the consistency/restart contract are defined before the read-service slice is implemented. TEST cases: Zero, one, exact-page and multiple-page lists; update/delete at a page boundary; completed filter changes; reused foreign cursor; expired traversal; late old-context page; missing selected item; no model turn or TODO mutation. TEST-QB-073: retrieves_complete_todo_pages_under_refresh_and_filter_changes. TDD: P2. Staged regressions: P3, P4.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RETRIEVES-COMPLETE-TODO-PAGES-UNDER-REFRESH-AND-FILTER-CHANGES: A workspace TODO list larger than one page is retrievable completely under the selected filter without silent omission or duplicate items. Concurrent insertion, update, completion or deletion during traversal produces either a coherent supported view or an explicit restart/stale outcome, never a falsely confirmed complete list. Context/filter changes invalidate late pages. Missing selected items are reported as missing rather than replaced by unrelated items. Traversal and refresh do not mutate TODOs or active work selection. Page bounds and the consistency/restart contract are defined before the read-service slice is implemented. TEST cases: Zero, one, exact-page and multiple-page lists; update/delete at a page boundary; completed filter changes; reused foreign cursor; expired traversal; late old-context page; missing selected item; no model turn or TODO mutation. TEST-QB-073: retrieves_complete_todo_pages_under_refresh_and_filter_changes. TDD: P2. Staged regressions: P3, P4.
+
+### TEST-QB-074
+
+AC-QB-RENDERS-SESSION-LOG-AND-TODO-CONTENT-AS-INERT-DATA: Session Log and TODO content is displayed as data. ANSI/OSC/CSI sequences, HTML, scripts, remote resources and instruction-like text in server fields cannot execute code, alter terminal/window/clipboard state, initiate automatic network access, invoke a tool, mutate records or approve an action. Renderers safely represent such content while preserving the canonical value and existing explicit detail/copy security rules. This holds for summary, detail, error, loading-to-loaded updates and restored views in both TUI and desktop. TEST cases: OSC clipboard and hyperlink escapes; CSI cursor controls; HTML/script and remote image content; malformed Unicode; instruction-like text; status/error field injection; narrow live/restored views; explicit safe detail and copy. TEST-QB-074: renders_session_log_and_todo_content_as_inert_data. TDD: P2. Staged regressions: P3, P4.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RENDERS-SESSION-LOG-AND-TODO-CONTENT-AS-INERT-DATA: Session Log and TODO content is displayed as data. ANSI/OSC/CSI sequences, HTML, scripts, remote resources and instruction-like text in server fields cannot execute code, alter terminal/window/clipboard state, initiate automatic network access, invoke a tool, mutate records or approve an action. Renderers safely represent such content while preserving the canonical value and existing explicit detail/copy security rules. This holds for summary, detail, error, loading-to-loaded updates and restored views in both TUI and desktop. TEST cases: OSC clipboard and hyperlink escapes; CSI cursor controls; HTML/script and remote image content; malformed Unicode; instruction-like text; status/error field injection; narrow live/restored views; explicit safe detail and copy. TEST-QB-074: renders_session_log_and_todo_content_as_inert_data. TDD: P2. Staged regressions: P3, P4.
+
+### TEST-QB-075
+
+AC-QB-RECOVERS-PREFERENCE-WRITE-PROGRESS-AFTER-WRITER-FAILURE: After a preference writer terminates unexpectedly at any persistence step, a new invocation can read a complete valid old or new document and make a subsequent valid save within the slice contract recovery bound, without manual deletion of abandoned coordination state. Recovery cannot steal a live writer ownership or discard unrelated valid fields. If the environment prevents recovery, report the unsaved state and keep usable last-good presentation instead of hanging or claiming persistence. The recovery bound and writer-ownership outcomes are fixed before implementation; no particular locking mechanism is prescribed. TEST cases: Kill before temporary write, during write, before/after replacement and while holding any coordination resource; restart then save; concurrent live writer; permission failure; unrelated-field preservation; bounded failure diagnostic. TEST-QB-075: recovers_preference_write_progress_after_writer_failure. TDD: P3.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-RECOVERS-PREFERENCE-WRITE-PROGRESS-AFTER-WRITER-FAILURE: After a preference writer terminates unexpectedly at any persistence step, a new invocation can read a complete valid old or new document and make a subsequent valid save within the slice contract recovery bound, without manual deletion of abandoned coordination state. Recovery cannot steal a live writer ownership or discard unrelated valid fields. If the environment prevents recovery, report the unsaved state and keep usable last-good presentation instead of hanging or claiming persistence. The recovery bound and writer-ownership outcomes are fixed before implementation; no particular locking mechanism is prescribed. TEST cases: Kill before temporary write, during write, before/after replacement and while holding any coordination resource; restart then save; concurrent live writer; permission failure; unrelated-field preservation; bounded failure diagnostic. TEST-QB-075: recovers_preference_write_progress_after_writer_failure. TDD: P3.
+
+### TEST-QB-076
+
+AC-QB-BOUNDS-INDIVIDUAL-RECORD-AND-DETAIL-PAYLOAD-PROCESSING: A single oversized or malformed record, detail value or streamed response cannot cause unbounded transport buffering or UI work. The slice contract defines supported byte/item limits and recoverable boundary outcomes before implementation. Supported complete data remains available without silent loss; an over-limit or malformed response is explicitly failed/stale with actionable expansion or recovery behavior and is never shown as confirmed complete truncated data. Cancellation/context change releases work and prevents late rendering under another context. Ordinary navigation and governance remain responsive. TEST cases: One huge item in a small page; exact byte limit and one over; many small items; malformed encoding; endless chunk stream; cancellation midway; repeated expansion; old-context completion; full supported data remains available. TEST-QB-076: bounds_individual_record_and_detail_payload_processing. TDD: P2. Staged regressions: P3, P4.
+
+**Acceptance Criteria:**
+- [ ] AC-QB-BOUNDS-INDIVIDUAL-RECORD-AND-DETAIL-PAYLOAD-PROCESSING: A single oversized or malformed record, detail value or streamed response cannot cause unbounded transport buffering or UI work. The slice contract defines supported byte/item limits and recoverable boundary outcomes before implementation. Supported complete data remains available without silent loss; an over-limit or malformed response is explicitly failed/stale with actionable expansion or recovery behavior and is never shown as confirmed complete truncated data. Cancellation/context change releases work and prevents late rendering under another context. Ordinary navigation and governance remain responsive. TEST cases: One huge item in a small page; exact byte limit and one over; many small items; malformed encoding; endless chunk stream; cancellation midway; repeated expansion; old-context completion; full supported data remains available. TEST-QB-076: bounds_individual_record_and_detail_payload_processing. TDD: P2. Staged regressions: P3, P4.

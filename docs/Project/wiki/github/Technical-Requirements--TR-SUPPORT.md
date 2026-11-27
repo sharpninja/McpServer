@@ -1,0 +1,18 @@
+# TR-SUPPORT
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-SUPPORT-010E
+
+**Stateless lifecycle controller + client + tool adapters** — SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
+**Covered by:** FR: FR-SUPPORT-010E; TEST: TEST-SUPPORT-010E
+**Status:** pending
+Scope: layer-1+
+
+## TR-SUPPORT-010F
+
+**Merge-on-null mapping for partial submits** — MapDtoToEntity merges non-null scalars; UpsertTurns passes mergeOmittedFields:true; collections append-only.
+**Covered by:** FR: FR-SUPPORT-010F, FR-SUPPORT-015; TEST: TEST-SUPPORT-010F, TEST-SUPPORT-015
+**Status:** pending
+Scope: layer-1+
+

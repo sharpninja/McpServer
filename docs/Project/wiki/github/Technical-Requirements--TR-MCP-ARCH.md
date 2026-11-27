@@ -1,0 +1,24 @@
+# TR-MCP-ARCH
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-ARCH-001
+
+ASP.NET Core 9 server with HTTP and STDIO MCP transport.
+**Covered by:** FR: FR-MCP-007, FR-SUPPORT-010
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-ARCH-002
+
+**DI Single Source of Truth and Pull-Based Change Notification** — Architecture audit and remediation across `McpServer.Support.Mcp` SHALL enforce:
+- Stateful services, registries, managers, and providers must be DI-owned (`singleton` or `scoped`) and must not be instantiated via `new` or `ActivatorUtilities.CreateInstance` outside composition-root registration paths.
+- Authoritative mutable state must have a single owner in DI; peer services must pull current state from that owner instead of receiving pushed state payloads.
+- Observable state contracts must expose change signaling via `INotifyPropertyChanged` for data-availability/change notification, without embedding mutable payload transfer in event arguments.
+- Race-condition remediation must prioritize ownership/lifetime design in DI (single owner + pull model); fire-and-forget propagation and ad-hoc synchronization used as state-sharing mechanisms are prohibited.
+- Automated validation must cover DI registration lifetimes and notification semantics for remediated services.
+
+**Status:** 🔴 Planned
+**Covered by:** FR: FR-MCP-059
+Scope: layer-1+
+

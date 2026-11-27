@@ -1,0 +1,60 @@
+# TR-MCP-WS
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-WS-002
+
+**Workspace Service** — CRUD operations for workspace entities persisted in EF Core SQLite. Auto-port assignment starts at base 7147 and increments from the current maximum registered port. Init scaffolding creates the workspace directory, `docs/Project/TODO.yaml`, `docs/sessions/`, `docs/external/`, and `mcp.db`.
+**Covered by:** FR: FR-MCP-009
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-WS-003
+
+**Workspace Process Manager** — Manages workspace marker file lifecycle. On startup, generates tokens and writes `AGENTS-README-FIRST.yaml` marker files for all registered workspaces - all pointing to the single shared host port. On stop, removes marker files. No longer spawns child `WebApplication` instances (replaced by single-app multi-tenant model, see TR-MCP-MT-001 through TR-MCP-MT-003).
+**Covered by:** FR: FR-MCP-011
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-WS-004
+
+**Workspace Controller** — REST API at `/mcpserver/workspace` with Base64URL-encoded path keys. Provides create, read, update, delete, init, start, stop, status, and prompt (GET/PUT) endpoints. All `/mcpserver/*` routes protected by `WorkspaceAuthMiddleware` (per-workspace token).
+**Covered by:** FR: FR-MCP-009
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-WS-005
+
+**Marker File Service** — `MarkerFileService.WriteMarkerAsync` writes `AGENTS-README-FIRST.yaml` to the workspace root. All markers point to the same shared host port. Uses Handlebars.Net templating with full workspace context. The marker template MUST be loaded from `templates/prompt-templates.yaml` via `PromptTemplateService` (id: `default-marker-prompt`). **CRITICAL**: If the template cannot be loaded (missing file, invalid YAML, or missing ID), the service must log a critical error and shut down the server immediately. Fallback to hardcoded templates is PROHIBITED. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, per-workspace auth token (`apiKey`), and a machine-readable `prompt` block. Agents should send `X-Workspace-Path` header for workspace targeting.
+**Covered by:** FR: FR-MCP-018
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-WS-006
+
+**Workspace Host Controller Isolation** — *Obsolete.* Replaced by single-app multi-tenant model (TR-MCP-MT-002). `ExcludeControllerFeatureProvider` can be removed.
+**Covered by:** FR: FR-MCP-019
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-WS-007
+
+**Workspace Auto-Start on Service Startup** — `WorkspaceProcessManager`, as an `IHostedService`, queries all registered workspaces on `StartAsync` and writes marker files for each. Failures on individual workspace marker writes are logged and skipped rather than aborting global startup.
+**Covered by:** FR: FR-MCP-011, FR-MCP-020
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-WS-008
+
+**Workspace Auto-Init and Auto-Start on Creation** — `WorkspaceController` POST calls `WorkspaceService.InitAsync` to scaffold the directory structure, then calls `WorkspaceProcessManager.StartAsync` to bring the host online, all within a single request, before returning 201 Created.
+**Covered by:** FR: FR-MCP-021
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-WS-009
+
+**Primary Workspace Detection and IsEnabled Gating** — `WorkspaceProcessManager.IHostedService.StartAsync` resolves the primary workspace: first by `IsPrimary = true` + lowest port among enabled workspaces; then by lowest-port enabled workspace if none is marked primary. For the primary workspace, only a marker file is written - no child `WebApplication` is created. Workspaces with `IsEnabled = false` are skipped during auto-start but can be started manually.
+**Covered by:** FR: FR-MCP-025
+**Status:** pending
+Scope: layer-1+
+

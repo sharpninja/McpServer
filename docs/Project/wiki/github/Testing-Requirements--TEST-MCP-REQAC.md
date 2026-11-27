@@ -1,0 +1,24 @@
+# TEST-MCP-REQAC
+
+[Back to Testing Requirements](Testing-Requirements)
+
+## TEST-MCP-REQAC
+
+### TEST-MCP-REQAC-001
+
+Creating FR/TR/TEST with acceptanceCriteria and reading them back returns an identical AcceptanceCriterion list (id/text/isSatisfied/evidence), workspace-scoped.
+
+
+### TEST-MCP-REQAC-002
+
+Null or empty acceptanceCriteria round-trips as an empty list with no null leakage.
+
+
+### TEST-MCP-REQAC-003
+
+The requirements document renderer emits a deterministic Acceptance Criteria block and the parser tolerates it without throwing.
+
+
+### TEST-MCP-REQAC-004
+
+copy-from-todo copies a TODO's acceptance criteria onto a requirement verbatim.

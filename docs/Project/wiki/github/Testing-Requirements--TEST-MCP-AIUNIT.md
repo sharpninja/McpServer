@@ -1,0 +1,28 @@
+# TEST-MCP-AIUNIT
+
+[Back to Testing Requirements](Testing-Requirements)
+
+## TEST-MCP-AIUNIT
+
+### TEST-MCP-AIUNIT-001
+
+Add tests in tests/Build.Tests/ covering:
+- Build target properties AiCodeReview and AiProjectReview exist.
+- WriteAiUnitReviewMarkdownFromData produces correct MD file with prompt + response sections.
+- CreateAiUnitClient (internal or exposed) constructs without throw when given valid IConfiguration stub (mocked config for ActiveStrategy, Strategies section); returns non-null client-like object.
+- Optional: stubbed SendAsync test verifies that the returned client is called with correct FrontierRequest shape for given reviewType.
+
+These tests must pass with mocks before the real client construction logic is filled (BDP).
+
+
+### TEST-MCP-AIUNIT-002
+
+aiUnit must independently review warning suppression governance decisions, requirements traceability, TODO state, generated artifacts, and source suppression inventory.
+
+**Acceptance Criteria:**
+- [x] The aiUnit prompt names FR-MCP-139, TR-MCP-QUALITY-001, TEST-MCP-AIUNIT-002, and PLAN-WARNREMEDIATION-001. (evidence: tests/McpServer.Review.Tests/AiReviewTests.cs)
+- [x] The aiUnit prompt instructs review of requirements exports, TODO state, source suppression inventory, and the dedicated NUKE target. (evidence: tests/McpServer.Review.Tests/AiReviewTests.cs and build/Build.AiWarningSuppressionReview.cs)
+- [x] The aiUnit prompt requires structured findings for missing approvals, unapproved suppressions, unmatched acceptance criteria, TODO drift, and missing validation evidence. (evidence: tests/McpServer.Review.Tests/AiReviewTests.cs)
+- [x] The aiUnit review can be invoked directly through the AiWarningSuppressionReview NUKE target. (evidence: build/Build.AiWarningSuppressionReview.cs)
+- [ ] A completed warning remediation closeout must include the aiUnit review result or documented blocker before PLAN-WARNREMEDIATION-001 is marked done.
+- [ ] Named tests exist: Build_HasNormalizeGeneratedMigrationObsoletePragmasTarget; NormalizeGeneratedMigrationTarget_UsesMockCatalogAndAtomicWriter; NormalizeGeneratedMigrationObsoletePragmas_ReplacesOnlyExactPairsWithBlankLines; NormalizeGeneratedMigrationObsoletePragmas_IgnoresNonGeneratedAndNonMigrationFiles; NormalizeGeneratedMigrationObsoletePragmas_IsIdempotent; ValidateWarningSuppressions_GeneratedMigrationPragmas_FailsReadOnlyWithoutMutation.

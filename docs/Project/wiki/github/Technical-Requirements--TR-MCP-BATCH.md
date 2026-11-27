@@ -1,0 +1,18 @@
+# TR-MCP-BATCH
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-BATCH-001
+
+**Robust Bash plugin batch records normalization** — Bash-style MCP server plugin wrappers SHALL normalize requirement batch records from unindented YAML sequences, indented YAML sequences, and inline JSON arrays before schema validation and typed request conversion.
+**Covered by:** FR: FR-MCP-113, FR-MCP-BATCH-001, FR-MCP-PLUGIN-BATCH-001; TEST: TEST-MCP-153, TEST-MCP-BATCH-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-BATCH-109
+
+**Requirements batch endpoint and workflow support** — REST controllers, RequirementsClient, repository implementations, and REPL workflow dispatch shall expose atomic per-kind and mixed requirements batch create/update operations with all-or-nothing validation and structured batch result errors.
+**Covered by:** FR: FR-MCP-109; TEST: TEST-MCP-145, TEST-MCP-146
+**Status:** pending
+Scope: layer-1+
+

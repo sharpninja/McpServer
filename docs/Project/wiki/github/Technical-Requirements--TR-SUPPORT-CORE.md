@@ -1,0 +1,35 @@
+# TR-SUPPORT-CORE
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-SUPPORT-CORE-014
+
+**Stateless lifecycle controller with client and tool adapters** — SessionLogController exposes open/begin/complete/fail endpoints keyed by ids; SessionLogClient and MCP tools delegate to these endpoints; UpsertTurnAsync underpins all lifecycle operations to provide a single point of truth for turn state transitions.
+**Covered by:** FR: FR-SUPPORT-014; TEST: TEST-SUPPORT-014
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] SessionLogController exposes open/begin/complete/fail lifecycle endpoints keyed by ids
+- [ ] SessionLogClient delegates to SessionLogController lifecycle endpoints
+- [ ] MCP tools delegate to SessionLogController lifecycle endpoints
+- [ ] UpsertTurnAsync is the single point of truth for all turn state transitions
+
+## TR-SUPPORT-CORE-015
+
+**Merge-on-null mapping for partial submits** — MapDtoToEntity merges non-null scalars when mapping DTOs to entities; UpsertTurns passes mergeOmittedFields:true to enable partial updates; collections use append-only semantics to preserve existing items when partial submits occur.
+**Covered by:** FR: FR-SUPPORT-015; TEST: TEST-SUPPORT-015
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] MapDtoToEntity merges only non-null scalars from DTO to entity
+- [ ] UpsertTurns passes mergeOmittedFields:true to enable partial updates
+- [ ] Collections use append-only semantics during partial submits
+- [ ] Existing entity fields not present in DTO remain unchanged
+
+## TR-SUPPORT-CORE-016
+
+**TR-SUPPORT-CORE-016** — Placeholder requirement backfilled for TODO link TR-SUPPORT-CORE-016.
+**Covered by:** FR: FR-SUPPORT-016; TEST: TEST-SUPPORT-024
+**Status:** pending
+Scope: layer-1+
+

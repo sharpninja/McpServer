@@ -1,0 +1,58 @@
+# TR-MCP-DB
+
+[Back to Technical Requirements](Technical-Requirements)
+
+## TR-MCP-DB-001
+
+**Database-authoritative workspace registry** — Workspaces must be stored in a canonical Workspaces table as the source of truth, with appsettings workspace entries generated only as informational projections after successful database commits.
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-DB-002
+
+**Workspace foreign-key integrity** — Every persistent table with WorkspaceId must have a canonical Workspaces foreign key with Restrict or NoAction delete behavior. The FK is required for non-memory tables, including global rows represented by the reserved empty WorkspaceId row and federation mappings. MemoryEntity and MemoryIndexEntity are explicit scope exceptions: Global rows have null WorkspaceId under TR-MCP-MEMORY-001 and the memory index contract; Workspace rows have non-null WorkspaceId, which must reference Workspaces. The index workspace stamp must match its parent memory.
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every persistent WorkspaceId column other than the memory-scope exceptions has a required canonical Workspaces FK with Restrict or NoAction deletion.
+- [ ] MemoryEntity and MemoryIndexEntity retain null WorkspaceId for Global rows and require a non-null workspace for Workspace rows.
+- [ ] MemoryEntity and MemoryIndexEntity have optional canonical Workspaces FKs that reject orphan non-null WorkspaceId values and do not cascade on workspace deletion.
+- [ ] MemoryIndexEntity WorkspaceId mirrors its parent MemoryEntity WorkspaceId on create, update, and reindex; tests reject a mismatched owner stamp.
+
+## TR-MCP-DB-003
+
+**Soft deletes for persistent MCP data** — Persistent MCP domain deletes must be logical deletes with deletion metadata and Restrict or NoAction relationships, never physical row removal or cascade delete for durable domain state.
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] MemoryVersionEntity and MemoryIndexEntity required MemoryId foreign keys use Restrict or NoAction, and physical schema constraints agree on all supported providers.
+- [ ] Soft-deleting a memory preserves its version and index rows for audit and recovery; no durable memory row is physically removed by FK cascade.
+- [ ] Corrective migrations preserve existing memory, version, and index row counts and reject or repair orphan relationships before adding constraints.
+
+## TR-MCP-DB-004
+
+**Generic audit ledger for mutable data** — Every mutable persistent database entity must emit append-only audit rows with workspace, entity key, action, actor/source, timestamps, and previous/current snapshots, while TODO-specific audit history remains compatible.
+**Covered by:** FR: FR-MCP-105, FR-MCP-AUDIT-001; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006, TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-DB-005
+
+**TODO and requirement relational links** — TODO requirement references and requirement traceability links must be stored as relational rows with FKs to TODO lifecycle anchors and Requirements, with missing referenced requirements backfilled before FK enforcement.
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-DB-006
+
+**Concurrent turn deletes serialized per session** — Concurrent sessionlog_delete_turn operations on a single session SHALL be serialized through a process-wide per-session gate so a burst (observed: 13 parallel deletes) cannot exhaust or poison the SQL Server connection pool; deletes on different sessions SHALL still run concurrently; the deployed SqlClient ConnectRetryCount=6/ConnectRetryInterval=10s defaults SHALL be preserved. Acceptance Criteria: (AC1) acquiring the per-session lock for the same key blocks a second acquirer until release, while a different key acquires without blocking (KeyedAsyncLock); (AC2) DeleteTurnAsync continues to soft-delete a turn and refresh the parent turn count correctly under the lock. Origin: BUG-TRIAGE-079 (concurrent gated deletes poisoned the pool with SqlClient error 19 then 40 for ~3 minutes while SQL Server stayed up). Note: pool poisoning is a SQL-Server-runtime property not unit-reproducible; the deterministic serialization proof is the KeyedAsyncLock unit test, with SessionLogService.DeleteTurnAsync wrapped in the per-session lock keyed by sourceType/sessionId. Validated by TEST-MCP-DB-006.
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
+**Status:** pending
+Scope: layer-1+
+
+<!-- mcp-wiki-footer:begin -->
+This wiki was generated by QBrain. [Explore the QBrain project on GitHub](https://github.com/sharpninja/McpServer).
+<!-- mcp-wiki-footer:end -->
