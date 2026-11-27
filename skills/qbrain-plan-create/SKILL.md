@@ -7,13 +7,16 @@ description: Create a new BDPv4 implementation plan in Codex Plan mode using the
 
 Produce a decision-complete proposal where the evidence supports it. Leave genuine blockers visible. Planning is not implementation, approval, or authorization to change QBrain.
 
-Use the user-selected or current authoritative template and schema together. If unavailable, use the repository’s [v0.6 template](../../docs/plans/BDPv4-QBrain-Implementation-Plan-Template.yaml) and [matching schema](../../docs/plans/BDPv4-QBrain-Implementation-Plan.schema.json). Follow the template's agent header; this skill governs the new-plan workflow and Plan mode boundary.
+Use the user-selected or current authoritative template and schema together. If unavailable, use the repository’s [v0.7 template](../../docs/plans/BDPv4-QBrain-Implementation-Plan-Template.yaml) and [matching schema](../../docs/plans/BDPv4-QBrain-Implementation-Plan.schema.json). Follow the template's agent header; this skill governs the new-plan workflow and Plan mode boundary.
 
 ## Plan mode boundary
 
 - Inspect the relevant checkout, instructions, requirements, architecture, tests and approved constraints using read-only discovery. Use the workspace's supported trusted QBrain read path. Do not edit the repo, create TODOs, advance gates, write receipts to QBrain, or start implementation while Plan mode forbids those changes. Do not switch modes yourself or use another tool to evade the boundary.
 - Ask the user only for a material decision you cannot resolve from authoritative sources: scope, a public contract, an important tradeoff, or authority to proceed. Present concrete choices and a recommendation when useful. Keep evidence and inference distinct.
 - Put the proposal in the host's plan output format. When a file cannot be written, provide the canonical YAML in the plan response or as a clearly labeled handoff for the authorized write step; state where it belongs. Never claim a proposed path, ID reservation, approval, or receipt was persisted.
+
+
+**Single-slice phases:** Use an inline `delivery.phases[].defaultSlice` with the exact QBrain TODO ID, and omit `sliceTodoIds` for that phase. For an explicit breakdown, set `sliceTodoIds` and define those TODOs in `delivery.slices`; do not mix both forms within one phase. Omit the top-level slice list when every phase uses an inline default. Both forms use the same artifact and receipt links, TDD gates, and independent stage-exit HV.
 
 ## Build the plan
 

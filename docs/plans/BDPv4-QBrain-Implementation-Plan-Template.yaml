@@ -28,8 +28,12 @@
 #    slice. For no UI impact, record why. Propose missing artifacts in their
 #    owning sources only within the authorized planning scope.
 # 4. Sequence the work. Give every phase a canonical phaseId. Use the real
-#    QBrain TODO ID as the canonical slice ID; do not assign a second ID. Keep
-#    live task state and TODO dependencies in QBrain. Register each artifact once
+#    QBrain TODO ID as the canonical slice ID; do not assign a second ID.
+#    For each phase choose one inline defaultSlice or a nonempty sliceTodoIds
+#    list resolving to delivery.slices. Never use both in the same phase.
+#    Omit delivery.slices when every phase uses the inline form. An inline
+#    default is a normal slice for TODOs, artifacts, receipts, TDD and HV.
+#    Keep live task state and TODO dependencies in QBrain. Register each artifact once
 #    under its canonical artifactId, then link its versions to the slices that
 #    consume or produce them. Record gate timing and prior versions. Link FR/TR/TEST/UC
 #    and qualified AC IDs to checks and architecture; do not duplicate their
@@ -60,7 +64,7 @@
 # Drafts may contain nulls and empty lists. Resolve applicable fields before approval.
 # This is a proposed BDPv4 plan format, not a native QBrain import or API payload.
 ---
-schemaVersion: "0.6"
+schemaVersion: "0.7"
 kind: BdpImplementationPlan
 
 metadata:
@@ -174,7 +178,7 @@ identity:
   artifactId: "Required, unique and stable for the logical artifact. Reuse its authoritative ID if one exists; otherwise allocate ART-<AREA>-<NAME>-<NNN> in the owning workspace. Never derive identity from filename or revision."
   artifactVersionId: "Required, unique within this plan, and bound to exactly one canonical artifactId. Pin dependency edges to this version ID."
   phaseId: "Required, unique in the owning workspace and stable across revisions. For a new phase allocate PHASE-<AREA>-<NNN>; keep display name and order separate."
-  sliceId: "Use delivery.slices[].todoId, the exact canonical QBrain TODO ID. The template does not define a second field or identifier."
+  sliceId: "Use the exact QBrain TODO ID in the inline defaultSlice.todoId or in delivery.slices[].todoId. Do not allocate a second slice ID."
   rules:
     - "Reuse established IDs across plans. Keep IDs when artifacts or phases are renamed, moved, reordered or revised; never recycle retired IDs."
     - "One registry record owns each logical identity. Reject duplicate definitions, placeholder or unresolved IDs at plan readiness; references may repeat."
@@ -186,32 +190,33 @@ delivery:
       title: null
       objective: null
       riskRetired: null
-      sliceTodoIds:
-        - "AREA-SLICE-001"
+      # One inline default or a nonempty list of explicit sliceTodoIds.
+      defaultSlice:
+        todoId: "AREA-SLICE-001"
+        ownerRef: null
+        behaviorBoundary: null
+        requirementRefs:
+          functional: []
+          technical: []
+          testing: []
+          useCases: []
+        architectureRefs: []
+        c4ElementRefs: []
+        uiTraceRefs: []
+        acceptanceTrace:
+          - requirementId: "<owning requirement ID>"
+            criterionId: "<AC ID in that requirement>"
+            testRequirementIds: []
+            unitTestRefs: []
+            separateValidationRefs: []
+        gateIds:
+          - "slice-entry"
+          - "mocks-validated"
+          - "implementation-exit"
       exitGateIds:
         - "phase-exit"
-  slices:
-    - todoId: "AREA-SLICE-001"
-      ownerRef: null
-      behaviorBoundary: null
-      requirementRefs:
-        functional: []
-        technical: []
-        testing: []
-        useCases: []
-      architectureRefs: []
-      c4ElementRefs: []
-      uiTraceRefs: []
-      acceptanceTrace:
-        - requirementId: "<owning requirement ID>"
-          criterionId: "<AC ID in that requirement>"
-          testRequirementIds: []
-          unitTestRefs: []
-          separateValidationRefs: []
-      gateIds:
-        - "slice-entry"
-        - "mocks-validated"
-        - "implementation-exit"
+  # For phases using sliceTodoIds, define the referenced TODOs in slices.
+  # Omit slices if every phase uses defaultSlice. Mixed phases are allowed.
   # Phase 0 is optional. Add it only when the project calls for an audited
   # readiness or bootstrap phase. Do not make deployment its default criterion.
 
@@ -288,7 +293,7 @@ gates:
       - "Resolve UI applicability explicitly. No UI work is exempt by omission; for no UI impact, record the reason."
       - "Resolve contradictory requirements and architecture in their owning artifacts."
       - "Resolve all scope, contract, slice, acceptance trace and gate references."
-      - "Verify canonical identity and uniqueness for artifacts, phases and slices. Check phase membership, resolve every slice reference to exactly one QBrain TODO, and reject aliases, placeholders and undefined IDs."
+      - "Verify canonical identity and uniqueness for artifacts, phases and slices. Resolve every phase to its inline default or explicit slices, never both. Match every effective slice ID to exactly one QBrain TODO and one phase; reject orphan or duplicate definitions, aliases, placeholders and undefined IDs."
       - "Validate the artifact-to-slice mapping: outputs have an owner, required inputs become available before use, and no dependency contradicts the QBrain work order."
       - "Confirm QBrain TODO dependencies are resolvable and acyclic."
       - "Complete self-review and review the assembled plan against the modeled architecture before requesting human approval."
@@ -339,7 +344,7 @@ gates:
     checkRefs: []
     evidenceRef: null
     pass:
-      - "All required slices in this phase have passed their exits. Check the combined deliverables against the phase objective and its declared risk and scope."
+      - "All effective slices in this phase have passed their exits, including the inline default when used. Check the combined deliverables against the phase objective, risk and scope; the phase review stays separate."
   - id: "validation-exit"
     level: "phase"
     kind: "stage-exit"

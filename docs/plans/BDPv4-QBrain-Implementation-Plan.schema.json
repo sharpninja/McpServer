@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:byrd-dev-process:qbrain:implementation-plan:0.6",
-  "title": "BDPv4 + QBrain Implementation Plan, v0.6",
+  "$id": "urn:byrd-dev-process:qbrain:implementation-plan:0.7",
+  "title": "BDPv4 + QBrain Implementation Plan, v0.7",
   "description": "Validates the data from a single YAML document parsed as a JSON-compatible mapping. Default validation accepts the blank draft template, including placeholders and nulls. Use #/$defs/approvalCandidate for filled planning data and #/$defs/executionCandidate when an approval reference is required. The YAML agent header remains comments. The canonical plan uses an external QBrain tracking reference; a generated copy may embed a read-only tracking snapshot and receipt index.",
-  "$comment": "Reject duplicate YAML mapping keys before validation. Independently verify canonical ID uniqueness by field, version lineage, reference resolution, phase/slice membership, artifact producer cardinality and readiness order, DAG cycles, QBrain parity, C4/SVG/storyboard files, test coverage, and current approval and HV receipts. Structural validation is not plan readiness or execution authorization. A semantic validator must resolve receipt IDs, verify scope and freshness against authoritative records and derive aggregate milestones. An embedded snapshot is not an approval candidate.",
+  "$comment": "Reject duplicate YAML mapping keys before validation. Independently verify canonical ID uniqueness by field, version lineage, reference resolution, phase/slice membership, artifact producer cardinality and readiness order, DAG cycles, QBrain parity, C4/SVG/storyboard files, test coverage, and current approval and HV receipts. Structural validation is not plan readiness or execution authorization. A semantic validator must resolve receipt IDs, verify scope and freshness against authoritative records and derive aggregate milestones. An embedded snapshot is not an approval candidate. Resolve phase membership and effective slice IDs across both forms; reject unused explicit slices and duplicated IDs, and verify identical gates and evidence for inline defaults.",
   "$ref": "#/$defs/plan",
   "$defs": {
     "nonEmptyText": {
@@ -108,6 +108,9 @@
           },
           "uniqueItems": true,
           "minItems": 1
+        },
+        "defaultSlice": {
+          "$ref": "#/$defs/slice"
         }
       },
       "required": [
@@ -115,10 +118,32 @@
         "title",
         "objective",
         "riskRetired",
-        "sliceTodoIds",
         "exitGateIds"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "defaultSlice"
+          ],
+          "not": {
+            "required": [
+              "sliceTodoIds"
+            ]
+          }
+        },
+        {
+          "required": [
+            "sliceTodoIds"
+          ],
+          "not": {
+            "required": [
+              "defaultSlice"
+            ]
+          }
+        }
+      ],
+      "description": "Choose an inline default slice or reference a nonempty list of separately declared slice TODOs, not both."
     },
     "acceptanceTrace": {
       "type": "object",
@@ -912,7 +937,7 @@
       "type": "object",
       "properties": {
         "schemaVersion": {
-          "const": "0.6"
+          "const": "0.7"
         },
         "kind": {
           "const": "BdpImplementationPlan"
@@ -1307,15 +1332,45 @@
               "items": {
                 "$ref": "#/$defs/slice"
               },
-              "minItems": 1,
               "uniqueItems": true
             }
           },
           "required": [
-            "phases",
-            "slices"
+            "phases"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "phases": {
+                    "contains": {
+                      "required": [
+                        "sliceTodoIds"
+                      ]
+                    }
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "slices"
+                ],
+                "properties": {
+                  "slices": {
+                    "minItems": 1
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "slices": {
+                    "maxItems": 0
+                  }
+                }
+              }
+            }
+          ]
         },
         "artifactDependencies": {
           "$ref": "#/$defs/artifactMap"
@@ -2349,6 +2404,39 @@
                         "type": "string",
                         "minLength": 1,
                         "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                      },
+                      "defaultSlice": {
+                        "type": "object",
+                        "properties": {
+                          "ownerRef": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                          },
+                          "behaviorBoundary": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^(?!\\s*$)(?!\\s*<[^>]+>\\s*$).+"
+                          },
+                          "acceptanceTrace": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "requirementId": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/+\\-]*$"
+                                },
+                                "criterionId": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/+\\-]*$"
+                                }
+                              }
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -2405,10 +2493,7 @@
                     }
                   }
                 }
-              },
-              "required": [
-                "slices"
-              ]
+              }
             }
           },
           "required": [
