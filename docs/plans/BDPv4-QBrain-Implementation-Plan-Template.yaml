@@ -55,7 +55,10 @@
 #    implementation. For native Task Groups:
 #    - At slice-entry verify only inputs needed for design and mocks. Design
 #      and mock-test members in parallel while Planning when those inputs are
-#      available, even with unfinished execution predecessors. At execution-entry
+#      available, even with unfinished execution predecessors. Every v0.8
+#      implementation slice lists execution-entry and implementation-exit in
+#      its own gateIds, inline or explicit. Verification-only slices do not
+#      declare implementation gates. At execution-entry
 #      verify implementation inputs and execution prerequisites; for native
 #      Tasks do this at Ready -> Started, with every member's current design
 #      and applicable mock evidence. Verification-only Tasks need reviewed
@@ -337,6 +340,7 @@ gates:
       - "Resolve all scope, contract, slice, acceptance trace and gate references."
       - "Verify canonical identity and uniqueness for artifacts, phases and slices. Resolve every phase to its inline default or explicit slices, never both. Match each effective slice to one phase and one exact QBrain TODO or native Task Group. Resolve each group in the plan workspace under its umbrella TODO; reject duplicate definitions, cross-plan or cross-workspace groups, orphan references, aliases, placeholders, and unresolved references."
       - "Validate the artifact-to-slice mapping: outputs have an owner, required inputs become available before use, and no dependency contradicts the QBrain work order."
+      - "Verify every slice that implements behavior or consumes an input at execution-entry lists the implementation gate chain in its own gateIds. Do not omit implementation-exit to bypass the check; confirm any verification-only scope."
       - "Confirm applicable QBrain TODO, Task Group and Task prerequisites are resolvable and acyclic."
       - "Complete self-review and review the assembled plan against the modeled architecture before requesting human approval."
   - id: "authorized-to-start"
