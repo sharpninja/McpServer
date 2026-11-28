@@ -32,3 +32,9 @@ Add `-FunctionalRequirements`, `-TechnicalRequirements` or `-DependsOn` using th
 ## 3. Bind and verify
 
 Record the exact returned TODO ID and durable readback, including source binding, FR/TR references and actual prerequisites. Then populate `sliceRef: { kind: todo, todoId: "<returned ID>" }` in the v0.8 slice, using the same typed identity in explicit phase lists and all applicable artifact edges and receipt scopes. Do not rewrite historical receipts or mark anything complete. Re-parse and run the companion schema plus workspace, gate and graph checks. Report independently: identities bound, structural validity, and remaining readiness blockers such as design or storyboard evidence. A schema-valid TODO-backed plan does not bypass approval or execute work.
+
+## 4. Reconcile the ledger after binding and on resume
+
+Re-read every expected TODO by its exact ID and confirm the workspace, owning plan, phase/slice, scope and source anchor. Reconcile those readbacks with the saved YAML, including phase references and typed artifact edges. Regenerate the current binding-blocker summary from that evidence, not from prior prose. Move superseded pending entries or paragraphs to dated history without discarding proposals, approvals, exact TODO IDs or receipts. Keep ambiguous, unavailable or mismatched readbacks unresolved; do not repeat creates for IDs already verified. Preserve unrelated current blockers, including separate design and trace evidence gaps.
+
+For a verified zero-based legacy roster, see the [handoff crosswalk](migration.md#after-migration-plan-ready-handoff). Do not prepare an HV packet or request HV while creation or migration remains incomplete.
