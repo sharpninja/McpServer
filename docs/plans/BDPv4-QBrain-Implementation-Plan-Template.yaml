@@ -99,10 +99,16 @@
 #    cycles, reconcile coverage and gate applicability, and save the draft.
 #    Verify artifact availability before use. When an artifact changes, derive
 #    the affected slices and receipts from the map; do not maintain a second list.
-#    Run the applicable planning checks and independent reviews when
-#    authorized and available. Report the plan path and revision, verified
-#    evidence, and blockers. Request human approval of the exact revision
-#    after plan readiness passes. Do not implement under an unapproved plan.
+#    Finish initial creation or migration before preparing any HV packet or
+#    requesting HV. Schema validation, reference resolution, TODO readback,
+#    and ledger reconciliation are preflight, not HV. If the plan is still a
+#    draft or required bindings are unresolved, report the blockers and stop
+#    before HV. Once creation or migration is complete, pin the exact saved
+#    plan and review inputs at an immutable Git revision, then prepare
+#    plan-ready HV when authorized and available. Collect execution evidence
+#    at its declared gates, not for plan-ready. Report the plan path, revision,
+#    verified evidence, and blockers. Request human approval of the exact
+#    revision after plan readiness passes. Do not implement under an unapproved plan.
 #
 # END AGENT PROMPT
 #

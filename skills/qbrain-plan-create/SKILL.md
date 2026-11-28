@@ -9,6 +9,8 @@ Produce a decision-complete proposal where the evidence supports it. Leave genui
 
 Use the user-selected or current authoritative template and schema together. If unavailable, use the repository’s [v0.8 template](../../docs/plans/BDPv4-QBrain-Implementation-Plan-Template.yaml) and [matching schema](../../docs/plans/BDPv4-QBrain-Implementation-Plan.schema.json). Follow the template's agent header; this skill governs the new-plan workflow and Plan mode boundary.
 
+**HV sequencing:** Finish creating or migrating the canonical plan before preparing any hostile validation (HV) packet or requesting HV. Schema validation, reference resolution, TODO readback and ledger reconciliation are preflight, not HV. If the plan is still a draft or required bindings are unresolved, report the blockers and stop before HV. Once creation or migration is complete, pin the exact saved plan and its review inputs at an immutable Git revision before preparing `plan-ready` HV. Collect execution evidence only at its declared gates.
+
 ## Plan mode boundary
 
 - Inspect the relevant checkout, instructions, requirements, architecture, tests and approved constraints using read-only discovery. Use the workspace's supported trusted QBrain read path. Do not edit the repo, create TODOs, advance gates, write receipts to QBrain, or start implementation while Plan mode forbids those changes. Do not switch modes yourself or use another tool to evade the boundary.
